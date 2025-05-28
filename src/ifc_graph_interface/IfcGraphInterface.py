@@ -1,5 +1,6 @@
 import ifcopenshell
 import ifcopenshell.api.project
+import ifcopenshell.util.schema
 
 import ast
 
@@ -132,7 +133,7 @@ class IfcGraphInterface:
                 PrimaryNode(GlobalId=entity.GlobalId,
                             EntityType=entity.is_a(),
                             p21_id=f"#{entity.id()}",
-                            timestamp=timestamp).save() 
+                            timestamp=timestamp).save()
             elif entity.is_a("IfcRelationship"):
                 ConnectionNode(GlobalId=entity.GlobalId,
                                 EntityType=entity.is_a(),
@@ -141,7 +142,7 @@ class IfcGraphInterface:
             elif entity.id() != 0: # For security. ID 0 is used for Inline Entities, see InlineNode
                 SecondaryNode(EntityType=entity.is_a(),
                                 p21_id=f"#{entity.id()}",
-                                timestamp=timestamp).save()  
+                                timestamp=timestamp).save()
             else: # Nothing created here because Inline IFC entities (e.g. IfcArcIndex) is not in model entites, still listed for better understandability
                 InlineNode(EntityType=entity.is_a(),
                                 timestamp=timestamp).save()
@@ -149,6 +150,15 @@ class IfcGraphInterface:
         # Second iteration over all STEP entities: Go through all attributes and either append them to the node or create relationships with other nodes.
         for entity in model:
             info = entity.get_info()
+
+            # Get full entity attribute schema
+            entity_attributes = ifcopenshell.util.schema.get_declaration(entity).all_attributes()
+            # Iterate over all possible ifc attributes of the entity.
+            for attribute in entity_attributes:
+                # Check if the attribute is in the list (we dont want to change these) or in info (we will set those later, as they are populated).
+                if attribute.name() not in ("GlobalId", "EntityType", "type", "p21_id", "id", "inline_id", "timestamp") and attribute.name() not in info:
+                    # Set the value as placeholder so every possible attribute fo ran IFC entity exists in the node or its relations.
+                    setattr(node, attribute.name(), "$")
 
             node = GenericNode.nodes.get(p21_id=f"#{entity.id()}", timestamp=timestamp)
 
