@@ -26,7 +26,7 @@ class IfcGraphInterface:
         if isinstance(val, ifcopenshell.entity_instance):
             # If the entity id is 0, it is an inline entity like IfcArcIndex or IfcPlaneAngleMeasure.
             if val.id() == 0:
-                # Create a new node of type InlineNode for inline entities with a uuid, as 
+                # Create a new node of type InlineNode for inline entities
                 ref = InlineNode(EntityType=val.is_a(),
                                 timestamp=timestamp).save()
                 # Create a connection from the node to the newly created inline node.
