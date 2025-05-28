@@ -1,0 +1,43 @@
+@prefix schema: <http://schema.org/> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix bot:   <https://w3id.org/bot#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix beo:   <https://pi.pauwel.be/voc/buildingelement#> .
+@prefix opm:   <https://w3id.org/opm#> .
+@prefix lbd:   <https://linkebuildingdata.org/LBD#> .
+@prefix props: <http://lbd.arch.rwth-aachen.de/props#> .
+@prefix geo:   <http://www.opengis.net/ont/geosparql#> .
+@prefix seas:  <https://w3id.org/seas/> .
+@prefix unit:  <http://qudt.org/vocab/unit/> .
+@prefix IFC4-PSD: <https://www.linkedbuildingdata.net/IFC4-PSD#> .
+@prefix smls:  <https://w3id.org/def/smls-owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix inst:  <https://www.ugent.be/myAwesomeFirstBIMProject#> .
+@prefix mep:   <http://pi.pauwel.be/voc/distributionelement#> .
+@prefix furn:  <http://pi.pauwel.be/voc/furniture#> .
+@prefix prov:  <http://www.w3.org/ns/prov#> .
+
+inst:nameIfcRoot_aa4019f8-2584-44a1-a132-c17dfff69c41
+        a                opm:Property ;
+        seas:evaluation  inst:state_nameIfcRoot_aa4019f8-2584-44a1-a132-c17dfff69c41_1625839984557 .
+
+inst:state_nameIfcRoot_aa4019f8-2584-44a1-a132-c17dfff69c41_1625839984557
+        a                     opm:CurrentPropertyState ;
+        schema:value          "site" ;
+        prov:generatedAtTime  "2021-07-09T16:13:04.5573245" .
+
+inst:site_aa4019f8-2584-44a1-a132-c17dfff69c41
+        a                      bot:Site ;
+        props:globalIdIfcRoot  inst:globalIdIfcRoot_aa4019f8-2584-44a1-a132-c17dfff69c41 ;
+        props:nameIfcRoot      inst:nameIfcRoot_aa4019f8-2584-44a1-a132-c17dfff69c41 ;
+        owl:sameAs             inst:IfcSite_4 .
+
+inst:state_globalIdIfcRoot_aa4019f8-2584-44a1-a132-c17dfff69c41_1625839984557
+        a                     opm:CurrentPropertyState ;
+        schema:value          "2gG1du9OH4eQ4omNt$zfn1" ;
+        prov:generatedAtTime  "2021-07-09T16:13:04.5573245" .
+
+inst:globalIdIfcRoot_aa4019f8-2584-44a1-a132-c17dfff69c41
+        a                opm:Property ;
+        seas:evaluation  inst:state_globalIdIfcRoot_aa4019f8-2584-44a1-a132-c17dfff69c41_1625839984557 .

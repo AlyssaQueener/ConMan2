@@ -1,0 +1,31 @@
+ISO-10303-21;
+HEADER;
+FILE_DESCRIPTION(('ViewDefinition [Ifc4NotAssigned]'),'2;1');
+FILE_NAME(
+/* name */ 'spatial.ifc',
+/* time_stamp */ '2021-06-08T11:45:52',
+/* author */ ('Sebastian Esser'),
+/* organization */ ('Unknown'),
+/* preprocessor_version */ 'GeometryGymIFC v0.1.11.0 by Geometry Gym Pty Ltd built 2021-04-21T10:08:28',
+/* originating_system */ 'ConsoleCreateSpatialSimple v1.0.0.0',
+/* authorization */ 'None');
+
+FILE_SCHEMA (('IFC4'));
+ENDSEC;
+
+DATA;
+#1= IFCCARTESIANPOINT((0.0,0.0,0.0));
+#2= IFCAXIS2PLACEMENT3D(#1,$,$);
+#3= IFCLOCALPLACEMENT($,#2);
+#4= IFCSITE('26Cl3lOED4FO9zProHxIMZ',#10,'Site entity',$,$,#3,$,$,$,$,$,$,$,$);
+#5= IFCPERSON('Sebastian Esser','Sebastian Esser',$,$,$,$,$,$);
+#6= IFCORGANIZATION($,'TUMCMS',$,$,$);
+#7= IFCPERSONANDORGANIZATION(#5,#6,$);
+#8= IFCAPPLICATION(#9,' v1.0.0.0','Graph2IfcTranslator','Graph2IfcTranslator');
+#9= IFCORGANIZATION($,'TUMCMS',$,$,$);
+#10= IFCOWNERHISTORY(#7,#8,$,.ADDED.,1623145551,$,$,1623145551);
+#11= IFCPROJECT('3PAWryzZjCFAxwjyrqaXcu',#10,'Project entity',$,$,$,$,$,$);
+#12= IFCRELAGGREGATES('1hvDMNclL4_9qoszOkH7vW',#10,$,$,#11,(#4));
+ENDSEC;
+
+END-ISO-10303-21;

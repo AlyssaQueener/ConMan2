@@ -1,0 +1,2081 @@
+{
+  "fileSchema": "IFC.JSON-5a",
+  "originatingSystem": "IFC2JSON_python",
+  "timeStamp": "2020-09-03T09:13:48",
+  "data": [
+    {
+      "type": "Project",
+      "globalId": "3189a403-0968-478f-aadd-21a0a25d19d1",
+      "name": "2018_01",
+      "phase": "Projekt  Status",
+      "unitsInContext": {
+        "type": "UnitAssignment",
+        "units": [
+          {
+            "type": "SIUnit",
+            "unitType": "LENGTHUNIT",
+            "name": "METRE",
+            "dimensions": {
+              "LengthExponent": 1
+            }
+          },
+          {
+            "type": "SIUnit",
+            "unitType": "AREAUNIT",
+            "name": "SQUARE_METRE",
+            "dimensions": {
+              "LengthExponent": 2
+            }
+          },
+          {
+            "type": "SIUnit",
+            "unitType": "VOLUMEUNIT",
+            "name": "CUBIC_METRE",
+            "dimensions": {
+              "LengthExponent": 3
+            }
+          },
+          {
+            "type": "ConversionBasedUnit",
+            "dimensions": {
+              "type": "DimensionalExponents"
+            },
+            "unitType": "PLANEANGLEUNIT",
+            "name": "DEGREE",
+            "conversionFactor": {
+              "type": "MeasureWithUnit",
+              "valueComponent": {
+                "type": "RatioMeasure",
+                "value": 0.0174532925199433
+              },
+              "unitComponent": {
+                "type": "SIUnit",
+                "unitType": "PLANEANGLEUNIT",
+                "name": "RADIAN"
+              }
+            }
+          },
+          {
+            "type": "SIUnit",
+            "unitType": "MASSUNIT",
+            "prefix": "KILO",
+            "name": "GRAM",
+            "dimensions": {
+              "MassExponent": 1
+            }
+          },
+          {
+            "type": "DerivedUnit",
+            "elements": [
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "MASSUNIT",
+                  "prefix": "KILO",
+                  "name": "GRAM",
+                  "dimensions": {
+                    "MassExponent": 1
+                  }
+                },
+                "exponent": 1
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "LENGTHUNIT",
+                  "name": "METRE",
+                  "dimensions": {
+                    "LengthExponent": 1
+                  }
+                },
+                "exponent": -3
+              }
+            ],
+            "unitType": "MASSDENSITYUNIT"
+          },
+          {
+            "type": "DerivedUnit",
+            "elements": [
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "LENGTHUNIT",
+                  "name": "METRE",
+                  "dimensions": {
+                    "LengthExponent": 1
+                  }
+                },
+                "exponent": 4
+              }
+            ],
+            "unitType": "MOMENTOFINERTIAUNIT"
+          },
+          {
+            "type": "SIUnit",
+            "unitType": "TIMEUNIT",
+            "name": "SECOND",
+            "dimensions": {
+              "TimeExponent": 1
+            }
+          },
+          {
+            "type": "SIUnit",
+            "unitType": "FREQUENCYUNIT",
+            "name": "HERTZ",
+            "dimensions": {
+              "TimeExponent": -1
+            }
+          },
+          {
+            "type": "SIUnit",
+            "unitType": "THERMODYNAMICTEMPERATUREUNIT",
+            "name": "DEGREE_CELSIUS",
+            "dimensions": {
+              "ThermodynamicTemperatureExponent": 1
+            }
+          },
+          {
+            "type": "DerivedUnit",
+            "elements": [
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "MASSUNIT",
+                  "prefix": "KILO",
+                  "name": "GRAM",
+                  "dimensions": {
+                    "MassExponent": 1
+                  }
+                },
+                "exponent": 1
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "THERMODYNAMICTEMPERATUREUNIT",
+                  "name": "KELVIN",
+                  "dimensions": {
+                    "ThermodynamicTemperatureExponent": 1
+                  }
+                },
+                "exponent": -1
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "TIMEUNIT",
+                  "name": "SECOND",
+                  "dimensions": {
+                    "TimeExponent": 1
+                  }
+                },
+                "exponent": -3
+              }
+            ],
+            "unitType": "THERMALTRANSMITTANCEUNIT"
+          },
+          {
+            "type": "DerivedUnit",
+            "elements": [
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "LENGTHUNIT",
+                  "name": "METRE",
+                  "dimensions": {
+                    "LengthExponent": 1
+                  }
+                },
+                "exponent": 3
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "TIMEUNIT",
+                  "name": "SECOND",
+                  "dimensions": {
+                    "TimeExponent": 1
+                  }
+                },
+                "exponent": -1
+              }
+            ],
+            "unitType": "VOLUMETRICFLOWRATEUNIT"
+          },
+          {
+            "type": "SIUnit",
+            "unitType": "ELECTRICCURRENTUNIT",
+            "name": "AMPERE",
+            "dimensions": {
+              "ElectricCurrentExponent": 1
+            }
+          },
+          {
+            "type": "SIUnit",
+            "unitType": "ELECTRICVOLTAGEUNIT",
+            "name": "VOLT",
+            "dimensions": {
+              "LengthExponent": 2,
+              "MassExponent": 1,
+              "TimeExponent": -3,
+              "ElectricCurrentExponent": -1
+            }
+          },
+          {
+            "type": "SIUnit",
+            "unitType": "POWERUNIT",
+            "name": "WATT",
+            "dimensions": {
+              "LengthExponent": 2,
+              "MassExponent": 1,
+              "TimeExponent": -3
+            }
+          },
+          {
+            "type": "SIUnit",
+            "unitType": "FORCEUNIT",
+            "prefix": "KILO",
+            "name": "NEWTON",
+            "dimensions": {
+              "LengthExponent": 1,
+              "MassExponent": 1,
+              "TimeExponent": -2
+            }
+          },
+          {
+            "type": "SIUnit",
+            "unitType": "ILLUMINANCEUNIT",
+            "name": "LUX",
+            "dimensions": {
+              "LengthExponent": -2,
+              "LuminousIntensityExponent": 1
+            }
+          },
+          {
+            "type": "SIUnit",
+            "unitType": "LUMINOUSFLUXUNIT",
+            "name": "LUMEN",
+            "dimensions": {
+              "LuminousIntensityExponent": 1
+            }
+          },
+          {
+            "type": "SIUnit",
+            "unitType": "LUMINOUSINTENSITYUNIT",
+            "name": "CANDELA",
+            "dimensions": {
+              "LuminousIntensityExponent": 1
+            }
+          },
+          {
+            "type": "DerivedUnit",
+            "elements": [
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "MASSUNIT",
+                  "prefix": "KILO",
+                  "name": "GRAM",
+                  "dimensions": {
+                    "MassExponent": 1
+                  }
+                },
+                "exponent": -1
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "LENGTHUNIT",
+                  "name": "METRE",
+                  "dimensions": {
+                    "LengthExponent": 1
+                  }
+                },
+                "exponent": -2
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "TIMEUNIT",
+                  "name": "SECOND",
+                  "dimensions": {
+                    "TimeExponent": 1
+                  }
+                },
+                "exponent": 3
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "LUMINOUSFLUXUNIT",
+                  "name": "LUMEN",
+                  "dimensions": {
+                    "LuminousIntensityExponent": 1
+                  }
+                },
+                "exponent": 1
+              }
+            ],
+            "unitType": "USERDEFINED",
+            "userDefinedType": "Luminous Efficacy"
+          },
+          {
+            "type": "DerivedUnit",
+            "elements": [
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "LENGTHUNIT",
+                  "name": "METRE",
+                  "dimensions": {
+                    "LengthExponent": 1
+                  }
+                },
+                "exponent": 1
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "TIMEUNIT",
+                  "name": "SECOND",
+                  "dimensions": {
+                    "TimeExponent": 1
+                  }
+                },
+                "exponent": -1
+              }
+            ],
+            "unitType": "LINEARVELOCITYUNIT"
+          },
+          {
+            "type": "MonetaryUnit",
+            "currency": "\u20ac"
+          },
+          {
+            "type": "SIUnit",
+            "unitType": "PRESSUREUNIT",
+            "name": "PASCAL",
+            "dimensions": {
+              "LengthExponent": -1,
+              "MassExponent": 1,
+              "TimeExponent": -2
+            }
+          },
+          {
+            "type": "DerivedUnit",
+            "elements": [
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "LENGTHUNIT",
+                  "name": "METRE",
+                  "dimensions": {
+                    "LengthExponent": 1
+                  }
+                },
+                "exponent": -2
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "MASSUNIT",
+                  "prefix": "KILO",
+                  "name": "GRAM",
+                  "dimensions": {
+                    "MassExponent": 1
+                  }
+                },
+                "exponent": 1
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "TIMEUNIT",
+                  "name": "SECOND",
+                  "dimensions": {
+                    "TimeExponent": 1
+                  }
+                },
+                "exponent": -2
+              }
+            ],
+            "unitType": "USERDEFINED",
+            "userDefinedType": "Friction Loss"
+          },
+          {
+            "type": "DerivedUnit",
+            "elements": [
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "MASSUNIT",
+                  "prefix": "KILO",
+                  "name": "GRAM",
+                  "dimensions": {
+                    "MassExponent": 1
+                  }
+                },
+                "exponent": 1
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "LENGTHUNIT",
+                  "name": "METRE",
+                  "dimensions": {
+                    "LengthExponent": 1
+                  }
+                },
+                "exponent": 1
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "TIMEUNIT",
+                  "name": "SECOND",
+                  "dimensions": {
+                    "TimeExponent": 1
+                  }
+                },
+                "exponent": -2
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "LENGTHUNIT",
+                  "name": "METRE",
+                  "dimensions": {
+                    "LengthExponent": 1
+                  }
+                },
+                "exponent": -1
+              }
+            ],
+            "unitType": "LINEARFORCEUNIT"
+          },
+          {
+            "type": "DerivedUnit",
+            "elements": [
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "MASSUNIT",
+                  "prefix": "KILO",
+                  "name": "GRAM",
+                  "dimensions": {
+                    "MassExponent": 1
+                  }
+                },
+                "exponent": 1
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "LENGTHUNIT",
+                  "name": "METRE",
+                  "dimensions": {
+                    "LengthExponent": 1
+                  }
+                },
+                "exponent": 1
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "TIMEUNIT",
+                  "name": "SECOND",
+                  "dimensions": {
+                    "TimeExponent": 1
+                  }
+                },
+                "exponent": -2
+              },
+              {
+                "type": "DerivedUnitElement",
+                "unit": {
+                  "type": "SIUnit",
+                  "unitType": "LENGTHUNIT",
+                  "name": "METRE",
+                  "dimensions": {
+                    "LengthExponent": 1
+                  }
+                },
+                "exponent": -2
+              }
+            ],
+            "unitType": "PLANARFORCEUNIT"
+          }
+        ]
+      },
+      "isDecomposedBy": [
+        {
+          "type": "Site",
+          "ref": "3189a403-0968-478f-aadd-21a0a25d19d3"
+        }
+      ]
+    },
+    {
+      "type": "Site",
+      "globalId": "3189a403-0968-478f-aadd-21a0a25d19d3",
+      "name": "Default",
+      "compositionType": "ELEMENT",
+      "refLatitude": [
+        48,
+        8,
+        15,
+        359802
+      ],
+      "refLongitude": [
+        11,
+        34,
+        47,
+        783432
+      ],
+      "decomposes": {
+        "type": "Project",
+        "ref": "3189a403-0968-478f-aadd-21a0a25d19d1"
+      },
+      "Reference": "Projektinformationen",
+      "isDefinedBy": [
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "58c5250f-eea9-4a28-813f-ad33147829fd",
+          "relatedObjects": [
+            {
+              "type": "Site",
+              "ref": "3189a403-0968-478f-aadd-21a0a25d19d3"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "cad7151c-0839-4652-9763-3f6a55e17009",
+            "name": "Pset_SiteCommon",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Identifier",
+                  "value": "Projektinformationen"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "containsElements": [
+        {
+          "type": "Wall",
+          "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a2ae"
+        },
+        {
+          "type": "Wall",
+          "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a274"
+        },
+        {
+          "type": "Wall",
+          "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a26c"
+        },
+        {
+          "type": "Wall",
+          "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a206"
+        },
+        {
+          "type": "Wall",
+          "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561add2"
+        },
+        {
+          "type": "Wall",
+          "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561ad9f"
+        }
+      ]
+    },
+    {
+      "type": "Wall",
+      "globalId": "edb32f5d-71ee-4b1c-9e9f-5d583561a2ae",
+      "name": "Basiswand:Ziegel+WD hart 300+160:2459519",
+      "objectType": "Basiswand:Ziegel+WD hart 300+160",
+      "tag": "2459519",
+      "predefinedType": "NOTDEFINED",
+      "hasAssociations": {
+        "type": "MaterialLayerSet",
+        "materialLayers": [
+          {
+            "type": "MaterialLayer",
+            "material": {
+              "type": "Material",
+              "name": "D\u00e4mmung - hart",
+              "category": "Generisch"
+            },
+            "layerThickness": 0.16,
+            "name": "D\u00e4mmung - hart",
+            "category": "Generisch"
+          },
+          {
+            "type": "MaterialLayer",
+            "material": {
+              "type": "Material",
+              "name": "Mauerwerk - Ziegel",
+              "category": "Generisch"
+            },
+            "layerThickness": 0.3,
+            "name": "Mauerwerk - Ziegel",
+            "category": "Generisch"
+          }
+        ],
+        "layerSetName": "Basiswand:Ziegel+WD hart 300+160"
+      },
+      "isTypedBy": {
+        "type": "WallType",
+        "ref": "63783349-fd8d-4b25-a0e9-b8d509940747"
+      },
+      "Reference": "Ziegel+WD hart 300+160",
+      "ThermalTransmittance": 0.154285714285714,
+      "IsExternal": true,
+      "isDefinedBy": [
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "8bce5725-b227-4ca0-8517-ef0cd748feb7",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a2ae"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "ElementQuantity",
+            "globalId": "90260249-0fa2-4a8e-abb5-d5654a9f427b",
+            "name": "Qto_WallBaseQuantities",
+            "quantities": [
+              {
+                "type": "QuantityLength",
+                "name": "Height",
+                "lengthValue": 3.0
+              },
+              {
+                "type": "QuantityLength",
+                "name": "Length",
+                "lengthValue": 10.9283011158771
+              },
+              {
+                "type": "QuantityLength",
+                "name": "Width",
+                "lengthValue": 0.46
+              },
+              {
+                "type": "QuantityArea",
+                "name": "GrossFootprintArea",
+                "areaValue": 4.92834781283787
+              },
+              {
+                "type": "QuantityVolume",
+                "name": "NetVolume",
+                "volumeValue": 15.0810555399104
+              },
+              {
+                "type": "QuantityArea",
+                "name": "NetSideArea",
+                "areaValue": 32.7849033476313
+              },
+              {
+                "type": "QuantityArea",
+                "name": "NetSideArea",
+                "areaValue": 32.1413987793774
+              },
+              {
+                "type": "QuantityVolume",
+                "name": "NetVolume",
+                "volumeValue": 14.7850434385136
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "7ca21cf9-51c7-464c-8377-6d7075df83fa",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a2ae"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "4a6c7cf5-92a6-4c02-9c2d-505c379e70c4",
+            "name": "Pset_EnvironmentalImpactIndicators",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Identifier",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "187d638b-8cf4-4dda-ac89-e060ca9e1ee3",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a2ae"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "ef9c66ab-fdb8-47eb-a7c7-c894dd4dfb5d",
+            "name": "Pset_ReinforcementBarPitchOfWall",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Label",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "3f901b55-efc7-4d65-8a5f-9d37974e78de",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a2ae"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "edb32f5d-71ee-4b1c-9e9f-56a53561a2ae",
+            "name": "Pset_WallCommon",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Identifier",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              },
+              {
+                "type": "PropertySingleValue",
+                "name": "ThermalTransmittance",
+                "nominalValue": {
+                  "type": "ThermalTransmittanceMeasure",
+                  "value": 0.154285714285714
+                }
+              },
+              {
+                "type": "PropertySingleValue",
+                "name": "IsExternal",
+                "nominalValue": {
+                  "type": "Boolean",
+                  "value": true
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "containedInStructure": {
+        "type": "Site",
+        "ref": "3189a403-0968-478f-aadd-21a0a25d19d3"
+      }
+    },
+    {
+      "type": "WallType",
+      "globalId": "63783349-fd8d-4b25-a0e9-b8d509940747",
+      "name": "Basiswand:Ziegel+WD hart 300+160",
+      "hasPropertySets": [
+        {
+          "type": "PropertySet",
+          "globalId": "e15fb2bd-bbc9-42cd-a2a3-626d37a9e190",
+          "name": "Pset_EnvironmentalImpactIndicators",
+          "hasProperties": [
+            {
+              "type": "PropertySingleValue",
+              "name": "Reference",
+              "nominalValue": {
+                "type": "Identifier",
+                "value": "Ziegel+WD hart 300+160"
+              }
+            }
+          ]
+        },
+        {
+          "type": "PropertySet",
+          "globalId": "a94f0f32-c485-409a-acbf-6597c3069819",
+          "name": "Pset_ReinforcementBarPitchOfWall",
+          "hasProperties": [
+            {
+              "type": "PropertySingleValue",
+              "name": "Reference",
+              "nominalValue": {
+                "type": "Label",
+                "value": "Ziegel+WD hart 300+160"
+              }
+            }
+          ]
+        },
+        {
+          "type": "PropertySet",
+          "globalId": "63783349-fd8d-4b25-a0e9-b32809940747",
+          "name": "Pset_WallCommon",
+          "hasProperties": [
+            {
+              "type": "PropertySingleValue",
+              "name": "Reference",
+              "nominalValue": {
+                "type": "Identifier",
+                "value": "Ziegel+WD hart 300+160"
+              }
+            },
+            {
+              "type": "PropertySingleValue",
+              "name": "ThermalTransmittance",
+              "nominalValue": {
+                "type": "ThermalTransmittanceMeasure",
+                "value": 0.154285714285714
+              }
+            }
+          ]
+        }
+      ],
+      "tag": "712304",
+      "predefinedType": "NOTDEFINED",
+      "hasAssociations": {
+        "type": "MaterialLayerSet",
+        "materialLayers": [
+          {
+            "type": "MaterialLayer",
+            "material": {
+              "type": "Material",
+              "name": "D\u00e4mmung - hart",
+              "category": "Generisch"
+            },
+            "layerThickness": 0.16,
+            "name": "D\u00e4mmung - hart",
+            "category": "Generisch"
+          },
+          {
+            "type": "MaterialLayer",
+            "material": {
+              "type": "Material",
+              "name": "Mauerwerk - Ziegel",
+              "category": "Generisch"
+            },
+            "layerThickness": 0.3,
+            "name": "Mauerwerk - Ziegel",
+            "category": "Generisch"
+          }
+        ],
+        "layerSetName": "Basiswand:Ziegel+WD hart 300+160"
+      },
+      "types": [
+        {
+          "type": "RelDefinesByType",
+          "globalId": "1fd43e69-3715-4752-b844-f3003fe15fe2",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a2ae"
+            },
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a274"
+            },
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a26c"
+            },
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a206"
+            },
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561add2"
+            }
+          ],
+          "relatingType": {
+            "type": "WallType",
+            "ref": "63783349-fd8d-4b25-a0e9-b8d509940747"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Wall",
+      "globalId": "edb32f5d-71ee-4b1c-9e9f-5d583561a274",
+      "name": "Basiswand:Ziegel+WD hart 300+160:2459557",
+      "objectType": "Basiswand:Ziegel+WD hart 300+160",
+      "tag": "2459557",
+      "predefinedType": "NOTDEFINED",
+      "hasAssociations": {
+        "type": "MaterialLayerSet",
+        "materialLayers": [
+          {
+            "type": "MaterialLayer",
+            "material": {
+              "type": "Material",
+              "name": "D\u00e4mmung - hart",
+              "category": "Generisch"
+            },
+            "layerThickness": 0.16,
+            "name": "D\u00e4mmung - hart",
+            "category": "Generisch"
+          },
+          {
+            "type": "MaterialLayer",
+            "material": {
+              "type": "Material",
+              "name": "Mauerwerk - Ziegel",
+              "category": "Generisch"
+            },
+            "layerThickness": 0.3,
+            "name": "Mauerwerk - Ziegel",
+            "category": "Generisch"
+          }
+        ],
+        "layerSetName": "Basiswand:Ziegel+WD hart 300+160"
+      },
+      "isTypedBy": {
+        "type": "WallType",
+        "ref": "63783349-fd8d-4b25-a0e9-b8d509940747"
+      },
+      "Reference": "Ziegel+WD hart 300+160",
+      "IsExternal": true,
+      "ThermalTransmittance": 0.154285714285714,
+      "isDefinedBy": [
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "d43ca1ce-af89-440c-82c2-79f4221e0cf1",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a274"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "ElementQuantity",
+            "globalId": "5ca984d1-85c9-43b3-94cb-49eab33fcd6b",
+            "name": "Qto_WallBaseQuantities",
+            "quantities": [
+              {
+                "type": "QuantityLength",
+                "name": "Height",
+                "lengthValue": 3.0
+              },
+              {
+                "type": "QuantityLength",
+                "name": "Length",
+                "lengthValue": 21.46
+              },
+              {
+                "type": "QuantityLength",
+                "name": "Width",
+                "lengthValue": 0.46
+              },
+              {
+                "type": "QuantityArea",
+                "name": "GrossFootprintArea",
+                "areaValue": 9.82226464976716
+              },
+              {
+                "type": "QuantityVolume",
+                "name": "NetVolume",
+                "volumeValue": 29.6148
+              },
+              {
+                "type": "QuantityArea",
+                "name": "NetSideArea",
+                "areaValue": 64.38
+              },
+              {
+                "type": "QuantityArea",
+                "name": "NetSideArea",
+                "areaValue": 64.38
+              },
+              {
+                "type": "QuantityVolume",
+                "name": "NetVolume",
+                "volumeValue": 29.4667939493015
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "883647e7-3421-407e-bb42-807dd0548674",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a274"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "999b150b-81bd-4d40-9340-9c5685518c4f",
+            "name": "Pset_EnvironmentalImpactIndicators",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Identifier",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "08a1b32c-c616-42a3-be0e-5a23c92f9ede",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a274"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "6e6c0e69-b039-464f-b64d-ed3b04d3e304",
+            "name": "Pset_ReinforcementBarPitchOfWall",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Label",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "611cb476-f734-4ac8-b870-bfcf947980cc",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a274"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "edb32f5d-71ee-4b1c-9e9f-56a53561a274",
+            "name": "Pset_WallCommon",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Identifier",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              },
+              {
+                "type": "PropertySingleValue",
+                "name": "IsExternal",
+                "nominalValue": {
+                  "type": "Boolean",
+                  "value": true
+                }
+              },
+              {
+                "type": "PropertySingleValue",
+                "name": "ThermalTransmittance",
+                "nominalValue": {
+                  "type": "ThermalTransmittanceMeasure",
+                  "value": 0.154285714285714
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "containedInStructure": {
+        "type": "Site",
+        "ref": "3189a403-0968-478f-aadd-21a0a25d19d3"
+      },
+      "representations": [
+        {
+          "type": "shapeRepresentation",
+          "ref": "fa1c980c-617c-4b73-8903-dfe97c063ec4"
+        }
+      ]
+    },
+    {
+      "type": "Wall",
+      "globalId": "edb32f5d-71ee-4b1c-9e9f-5d583561a26c",
+      "name": "Basiswand:Ziegel+WD hart 300+160:2459581",
+      "objectType": "Basiswand:Ziegel+WD hart 300+160",
+      "tag": "2459581",
+      "predefinedType": "NOTDEFINED",
+      "hasAssociations": {
+        "type": "MaterialLayerSet",
+        "materialLayers": [
+          {
+            "type": "MaterialLayer",
+            "material": {
+              "type": "Material",
+              "name": "D\u00e4mmung - hart",
+              "category": "Generisch"
+            },
+            "layerThickness": 0.16,
+            "name": "D\u00e4mmung - hart",
+            "category": "Generisch"
+          },
+          {
+            "type": "MaterialLayer",
+            "material": {
+              "type": "Material",
+              "name": "Mauerwerk - Ziegel",
+              "category": "Generisch"
+            },
+            "layerThickness": 0.3,
+            "name": "Mauerwerk - Ziegel",
+            "category": "Generisch"
+          }
+        ],
+        "layerSetName": "Basiswand:Ziegel+WD hart 300+160"
+      },
+      "isTypedBy": {
+        "type": "WallType",
+        "ref": "63783349-fd8d-4b25-a0e9-b8d509940747"
+      },
+      "Reference": "Ziegel+WD hart 300+160",
+      "IsExternal": true,
+      "ThermalTransmittance": 0.154285714285714,
+      "isDefinedBy": [
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "11ace7c7-1031-4a38-b943-7ddcaa215b0e",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a26c"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "ElementQuantity",
+            "globalId": "d4c210c5-e03d-4c38-ae1e-c6835c45887b",
+            "name": "Qto_WallBaseQuantities",
+            "quantities": [
+              {
+                "type": "QuantityLength",
+                "name": "Height",
+                "lengthValue": 3.0
+              },
+              {
+                "type": "QuantityLength",
+                "name": "Length",
+                "lengthValue": 5.46
+              },
+              {
+                "type": "QuantityLength",
+                "name": "Width",
+                "lengthValue": 0.46
+              },
+              {
+                "type": "QuantityArea",
+                "name": "GrossFootprintArea",
+                "areaValue": 2.5116
+              },
+              {
+                "type": "QuantityVolume",
+                "name": "NetVolume",
+                "volumeValue": 7.5348
+              },
+              {
+                "type": "QuantityArea",
+                "name": "NetSideArea",
+                "areaValue": 16.38
+              },
+              {
+                "type": "QuantityArea",
+                "name": "NetSideArea",
+                "areaValue": 16.38
+              },
+              {
+                "type": "QuantityVolume",
+                "name": "NetVolume",
+                "volumeValue": 7.53479999999999
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "e00c5e7a-856f-4974-afd9-d5a65dbc4a3d",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a26c"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "caa3e919-b18e-47f8-a50d-1ff8f59f899d",
+            "name": "Pset_EnvironmentalImpactIndicators",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Identifier",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "9934fead-e9ac-46d2-9916-234497522ef6",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a26c"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "bc4e9c28-3a8a-44e4-a7de-03da85351e02",
+            "name": "Pset_ReinforcementBarPitchOfWall",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Label",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "94b75411-0778-4666-9805-8268bad9235d",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a26c"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "edb32f5d-71ee-4b1c-9e9f-56a53561a26c",
+            "name": "Pset_WallCommon",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Identifier",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              },
+              {
+                "type": "PropertySingleValue",
+                "name": "IsExternal",
+                "nominalValue": {
+                  "type": "Boolean",
+                  "value": true
+                }
+              },
+              {
+                "type": "PropertySingleValue",
+                "name": "ThermalTransmittance",
+                "nominalValue": {
+                  "type": "ThermalTransmittanceMeasure",
+                  "value": 0.154285714285714
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "containedInStructure": {
+        "type": "Site",
+        "ref": "3189a403-0968-478f-aadd-21a0a25d19d3"
+      },
+      "representations": [
+        {
+          "type": "shapeRepresentation",
+          "ref": "c9583653-f8e7-45ef-9e09-dc2e0c265f7a"
+        }
+      ]
+    },
+    {
+      "type": "Wall",
+      "globalId": "edb32f5d-71ee-4b1c-9e9f-5d583561a206",
+      "name": "Basiswand:Ziegel+WD hart 300+160:2459607",
+      "objectType": "Basiswand:Ziegel+WD hart 300+160",
+      "tag": "2459607",
+      "predefinedType": "NOTDEFINED",
+      "hasAssociations": {
+        "type": "MaterialLayerSet",
+        "materialLayers": [
+          {
+            "type": "MaterialLayer",
+            "material": {
+              "type": "Material",
+              "name": "D\u00e4mmung - hart",
+              "category": "Generisch"
+            },
+            "layerThickness": 0.16,
+            "name": "D\u00e4mmung - hart",
+            "category": "Generisch"
+          },
+          {
+            "type": "MaterialLayer",
+            "material": {
+              "type": "Material",
+              "name": "Mauerwerk - Ziegel",
+              "category": "Generisch"
+            },
+            "layerThickness": 0.3,
+            "name": "Mauerwerk - Ziegel",
+            "category": "Generisch"
+          }
+        ],
+        "layerSetName": "Basiswand:Ziegel+WD hart 300+160"
+      },
+      "isTypedBy": {
+        "type": "WallType",
+        "ref": "63783349-fd8d-4b25-a0e9-b8d509940747"
+      },
+      "Reference": "Ziegel+WD hart 300+160",
+      "IsExternal": true,
+      "ThermalTransmittance": 0.154285714285714,
+      "isDefinedBy": [
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "eaa1152d-cb02-4b49-ae14-305717517cb9",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a206"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "ElementQuantity",
+            "globalId": "95f316be-f42d-41ba-b91b-548131a88579",
+            "name": "Qto_WallBaseQuantities",
+            "quantities": [
+              {
+                "type": "QuantityLength",
+                "name": "Height",
+                "lengthValue": 3.0
+              },
+              {
+                "type": "QuantityLength",
+                "name": "Length",
+                "lengthValue": 3.0
+              },
+              {
+                "type": "QuantityLength",
+                "name": "Width",
+                "lengthValue": 0.46
+              },
+              {
+                "type": "QuantityArea",
+                "name": "GrossFootprintArea",
+                "areaValue": 1.38
+              },
+              {
+                "type": "QuantityVolume",
+                "name": "NetVolume",
+                "volumeValue": 4.14
+              },
+              {
+                "type": "QuantityArea",
+                "name": "NetSideArea",
+                "areaValue": 9.00000000000001
+              },
+              {
+                "type": "QuantityArea",
+                "name": "NetSideArea",
+                "areaValue": 9.00000000000001
+              },
+              {
+                "type": "QuantityVolume",
+                "name": "NetVolume",
+                "volumeValue": 4.14
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "97f82852-0d75-4d1b-8665-f7e2658b1e75",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a206"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "5af45d39-42f7-4efc-87ac-124684af9971",
+            "name": "Pset_EnvironmentalImpactIndicators",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Identifier",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "2c4c2a17-6e13-41b9-b966-48f00d6c8c43",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a206"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "faf37fde-9c6d-469e-8709-08850a790bff",
+            "name": "Pset_ReinforcementBarPitchOfWall",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Label",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "0ea4ccf0-76e5-474f-8e08-6772c2427203",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561a206"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "edb32f5d-71ee-4b1c-9e9f-56a53561a206",
+            "name": "Pset_WallCommon",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Identifier",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              },
+              {
+                "type": "PropertySingleValue",
+                "name": "IsExternal",
+                "nominalValue": {
+                  "type": "Boolean",
+                  "value": true
+                }
+              },
+              {
+                "type": "PropertySingleValue",
+                "name": "ThermalTransmittance",
+                "nominalValue": {
+                  "type": "ThermalTransmittanceMeasure",
+                  "value": 0.154285714285714
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "containedInStructure": {
+        "type": "Site",
+        "ref": "3189a403-0968-478f-aadd-21a0a25d19d3"
+      },
+      "representations": [
+        {
+          "type": "shapeRepresentation",
+          "ref": "39d70edc-cb10-41ce-8f45-81289fc1f93e"
+        }
+      ]
+    },
+    {
+      "type": "Wall",
+      "globalId": "edb32f5d-71ee-4b1c-9e9f-5d583561add2",
+      "name": "Basiswand:Ziegel+WD hart 300+160:2459651",
+      "objectType": "Basiswand:Ziegel+WD hart 300+160",
+      "tag": "2459651",
+      "predefinedType": "NOTDEFINED",
+      "hasAssociations": {
+        "type": "MaterialLayerSet",
+        "materialLayers": [
+          {
+            "type": "MaterialLayer",
+            "material": {
+              "type": "Material",
+              "name": "D\u00e4mmung - hart",
+              "category": "Generisch"
+            },
+            "layerThickness": 0.16,
+            "name": "D\u00e4mmung - hart",
+            "category": "Generisch"
+          },
+          {
+            "type": "MaterialLayer",
+            "material": {
+              "type": "Material",
+              "name": "Mauerwerk - Ziegel",
+              "category": "Generisch"
+            },
+            "layerThickness": 0.3,
+            "name": "Mauerwerk - Ziegel",
+            "category": "Generisch"
+          }
+        ],
+        "layerSetName": "Basiswand:Ziegel+WD hart 300+160"
+      },
+      "isTypedBy": {
+        "type": "WallType",
+        "ref": "63783349-fd8d-4b25-a0e9-b8d509940747"
+      },
+      "Reference": "Ziegel+WD hart 300+160",
+      "IsExternal": true,
+      "ThermalTransmittance": 0.154285714285714,
+      "isDefinedBy": [
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "5b47ea04-352a-4adb-8d45-475ac19c6e51",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561add2"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "ElementQuantity",
+            "globalId": "d164685b-8441-4021-b9bf-1ecd3b9a410d",
+            "name": "Qto_WallBaseQuantities",
+            "quantities": [
+              {
+                "type": "QuantityLength",
+                "name": "Height",
+                "lengthValue": 3.0
+              },
+              {
+                "type": "QuantityLength",
+                "name": "Length",
+                "lengthValue": 3.79
+              },
+              {
+                "type": "QuantityLength",
+                "name": "Width",
+                "lengthValue": 0.46
+              },
+              {
+                "type": "QuantityArea",
+                "name": "GrossFootprintArea",
+                "areaValue": 1.7434
+              },
+              {
+                "type": "QuantityVolume",
+                "name": "NetVolume",
+                "volumeValue": 5.2302
+              },
+              {
+                "type": "QuantityArea",
+                "name": "NetSideArea",
+                "areaValue": 11.37
+              },
+              {
+                "type": "QuantityArea",
+                "name": "NetSideArea",
+                "areaValue": 11.37
+              },
+              {
+                "type": "QuantityVolume",
+                "name": "NetVolume",
+                "volumeValue": 5.2302
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "e2f88ea4-51b5-415d-b22e-38232035ec94",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561add2"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "5bdefdbc-d38b-4c22-9f9e-1024465d5177",
+            "name": "Pset_EnvironmentalImpactIndicators",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Identifier",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "5ea9be21-2bca-49f2-85e3-f24840c994ae",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561add2"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "51ff7734-ef1e-4c15-975d-a7f0c87ab460",
+            "name": "Pset_ReinforcementBarPitchOfWall",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Label",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "6cf00683-9146-4515-bb7b-6b4b355c3652",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561add2"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "edb32f5d-71ee-4b1c-9e9f-56a53561add2",
+            "name": "Pset_WallCommon",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Identifier",
+                  "value": "Ziegel+WD hart 300+160"
+                }
+              },
+              {
+                "type": "PropertySingleValue",
+                "name": "IsExternal",
+                "nominalValue": {
+                  "type": "Boolean",
+                  "value": true
+                }
+              },
+              {
+                "type": "PropertySingleValue",
+                "name": "ThermalTransmittance",
+                "nominalValue": {
+                  "type": "ThermalTransmittanceMeasure",
+                  "value": 0.154285714285714
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "containedInStructure": {
+        "type": "Site",
+        "ref": "3189a403-0968-478f-aadd-21a0a25d19d3"
+      },
+      "representations": [
+        {
+          "type": "shapeRepresentation",
+          "ref": "fe1685f6-fb5f-4cdf-a080-08e26fa37bc5"
+        }
+      ]
+    },
+    {
+      "type": "Wall",
+      "globalId": "edb32f5d-71ee-4b1c-9e9f-5d583561ad9f",
+      "name": "Basiswand:STB 250:2459726",
+      "objectType": "Basiswand:STB 250",
+      "tag": "2459726",
+      "predefinedType": "NOTDEFINED",
+      "hasAssociations": {
+        "type": "MaterialLayerSet",
+        "materialLayers": [
+          {
+            "type": "MaterialLayer",
+            "material": {
+              "type": "Material",
+              "name": "Ortbeton - bewehrt Verputzt",
+              "category": "Generisch"
+            },
+            "layerThickness": 0.25,
+            "name": "Ortbeton - bewehrt Verputzt",
+            "category": "Generisch"
+          }
+        ],
+        "layerSetName": "Basiswand:STB 250"
+      },
+      "isTypedBy": {
+        "type": "WallType",
+        "ref": "63783349-fd8d-4b25-a0e9-b8d509940750"
+      },
+      "Reference": "STB 250",
+      "IsExternal": true,
+      "ThermalTransmittance": 4.184,
+      "isDefinedBy": [
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "03c033ac-9902-4f78-8fbe-170d01f88d17",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561ad9f"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "ElementQuantity",
+            "globalId": "e020ad06-66f7-4a20-a533-0f50d35c17c0",
+            "name": "Qto_WallBaseQuantities",
+            "quantities": [
+              {
+                "type": "QuantityLength",
+                "name": "Height",
+                "lengthValue": 3.0
+              },
+              {
+                "type": "QuantityLength",
+                "name": "Length",
+                "lengthValue": 22.3133458379337
+              },
+              {
+                "type": "QuantityLength",
+                "name": "Width",
+                "lengthValue": 0.25
+              },
+              {
+                "type": "QuantityArea",
+                "name": "GrossFootprintArea",
+                "areaValue": 5.56376434516609
+              },
+              {
+                "type": "QuantityVolume",
+                "name": "NetVolume",
+                "volumeValue": 16.7350093784503
+              },
+              {
+                "type": "QuantityArea",
+                "name": "NetSideArea",
+                "areaValue": 66.9400375138012
+              },
+              {
+                "type": "QuantityArea",
+                "name": "NetSideArea",
+                "areaValue": 66.9400375138012
+              },
+              {
+                "type": "QuantityVolume",
+                "name": "NetVolume",
+                "volumeValue": 16.6912930354983
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "fd95bc2b-6105-4fbf-8a6c-90f6a15755f2",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561ad9f"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "e7a36b5f-ba73-4765-8c26-a496b9b6aeea",
+            "name": "Pset_EnvironmentalImpactIndicators",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Identifier",
+                  "value": "STB 250"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "5011199a-130a-4ed2-aba1-d1629fdada61",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561ad9f"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "7c9601cc-d907-4aae-a576-33bf03b7deeb",
+            "name": "Pset_ReinforcementBarPitchOfWall",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Label",
+                  "value": "STB 250"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "RelDefinesByProperties",
+          "globalId": "85d81842-057e-4cab-a212-84093566ca9d",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561ad9f"
+            }
+          ],
+          "relatingPropertyDefinition": {
+            "type": "PropertySet",
+            "globalId": "edb32f5d-71ee-4b1c-9e9f-56a53561ad9f",
+            "name": "Pset_WallCommon",
+            "hasProperties": [
+              {
+                "type": "PropertySingleValue",
+                "name": "IsExternal",
+                "nominalValue": {
+                  "type": "Boolean",
+                  "value": true
+                }
+              },
+              {
+                "type": "PropertySingleValue",
+                "name": "Reference",
+                "nominalValue": {
+                  "type": "Identifier",
+                  "value": "STB 250"
+                }
+              },
+              {
+                "type": "PropertySingleValue",
+                "name": "ThermalTransmittance",
+                "nominalValue": {
+                  "type": "ThermalTransmittanceMeasure",
+                  "value": 4.184
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "containedInStructure": {
+        "type": "Site",
+        "ref": "3189a403-0968-478f-aadd-21a0a25d19d3"
+      },
+      "representations": [
+        {
+          "type": "shapeRepresentation",
+          "ref": "9c175eef-4945-44c9-9eff-a0b5e083773d"
+        }
+      ]
+    },
+    {
+      "type": "WallType",
+      "globalId": "63783349-fd8d-4b25-a0e9-b8d509940750",
+      "name": "Basiswand:STB 250",
+      "hasPropertySets": [
+        {
+          "type": "PropertySet",
+          "globalId": "14a26fa0-078b-4421-883a-eb8b488bb1f8",
+          "name": "Pset_EnvironmentalImpactIndicators",
+          "hasProperties": [
+            {
+              "type": "PropertySingleValue",
+              "name": "Reference",
+              "nominalValue": {
+                "type": "Identifier",
+                "value": "STB 250"
+              }
+            }
+          ]
+        },
+        {
+          "type": "PropertySet",
+          "globalId": "34ffeba8-41d6-4ba4-9b46-eec0d39571de",
+          "name": "Pset_ReinforcementBarPitchOfWall",
+          "hasProperties": [
+            {
+              "type": "PropertySingleValue",
+              "name": "Reference",
+              "nominalValue": {
+                "type": "Label",
+                "value": "STB 250"
+              }
+            }
+          ]
+        },
+        {
+          "type": "PropertySet",
+          "globalId": "63783349-fd8d-4b25-a0e9-b32809940750",
+          "name": "Pset_WallCommon",
+          "hasProperties": [
+            {
+              "type": "PropertySingleValue",
+              "name": "Reference",
+              "nominalValue": {
+                "type": "Identifier",
+                "value": "STB 250"
+              }
+            },
+            {
+              "type": "PropertySingleValue",
+              "name": "ThermalTransmittance",
+              "nominalValue": {
+                "type": "ThermalTransmittanceMeasure",
+                "value": 4.184
+              }
+            }
+          ]
+        }
+      ],
+      "tag": "712295",
+      "predefinedType": "NOTDEFINED",
+      "hasAssociations": {
+        "type": "MaterialLayerSet",
+        "materialLayers": [
+          {
+            "type": "MaterialLayer",
+            "material": {
+              "type": "Material",
+              "name": "Ortbeton - bewehrt Verputzt",
+              "category": "Generisch"
+            },
+            "layerThickness": 0.25,
+            "name": "Ortbeton - bewehrt Verputzt",
+            "category": "Generisch"
+          }
+        ],
+        "layerSetName": "Basiswand:STB 250"
+      },
+      "types": [
+        {
+          "type": "RelDefinesByType",
+          "globalId": "09eedcce-a9d7-49df-8f40-5bd087c90539",
+          "relatedObjects": [
+            {
+              "type": "Wall",
+              "ref": "edb32f5d-71ee-4b1c-9e9f-5d583561ad9f"
+            }
+          ],
+          "relatingType": {
+            "type": "WallType",
+            "ref": "63783349-fd8d-4b25-a0e9-b8d509940750"
+          }
+        }
+      ]
+    },
+    {
+      "type": "shapeRepresentation",
+      "globalId": "fa1c980c-617c-4b73-8903-dfe97c063ec4",
+      "representationIdentifier": "Body",
+      "representationType": "OBJ",
+      "items": [
+        "v 31.16230687119949 10.8769532309058 0.0\nv 31.16230687119949 10.8769532309058 3.0\nv 31.16230687119949 11.336953230905799 3.0\nv 31.16230687119949 11.336953230905799 0.0\nv 9.916808393950786 11.336953230905799 3.0\nv 9.916808393950786 11.336953230905799 0.0\nv 9.70230687119949 10.8769532309058 3.0\nv 9.70230687119949 10.8769532309058 0.0\nv 30.70230687119949 10.8769532309058 3.0\nv 30.70230687119949 10.8769532309058 0.0\nf 1 0 3\nf 2 1 3\nf 2 3 5\nf 4 2 5\nf 4 5 7\nf 6 4 7\nf 6 7 9\nf 8 6 9\nf 8 9 0\nf 1 8 0\nf 7 5 9\nf 0 9 3\nf 9 5 3\nf 8 4 6\nf 2 8 1\nf 2 4 8\n"
+      ]
+    },
+    {
+      "type": "shapeRepresentation",
+      "globalId": "c9583653-f8e7-45ef-9e09-dc2e0c265f7a",
+      "representationIdentifier": "Body",
+      "representationType": "OBJ",
+      "items": [
+        "v 31.1623068711995 5.4169532309057 0.0\nv 31.1623068711995 5.4169532309057 3.0\nv 31.1623068711995 10.8769532309057 3.0\nv 31.1623068711995 10.8769532309057 0.0\nv 30.7023068711995 10.8769532309057 3.0\nv 30.7023068711995 10.8769532309057 0.0\nv 30.7023068711995 5.4169532309057 3.0\nv 30.7023068711995 5.4169532309057 0.0\nf 1 0 3\nf 2 1 3\nf 2 3 5\nf 4 2 5\nf 4 5 7\nf 6 4 7\nf 6 7 0\nf 1 6 0\nf 5 3 0\nf 7 5 0\nf 1 2 4\nf 1 4 6\n"
+      ]
+    },
+    {
+      "type": "shapeRepresentation",
+      "globalId": "39d70edc-cb10-41ce-8f45-81289fc1f93e",
+      "representationIdentifier": "Body",
+      "representationType": "OBJ",
+      "items": [
+        "v 27.7023068711995 5.41695323090572 0.0\nv 27.7023068711995 5.41695323090572 3.0\nv 30.7023068711995 5.41695323090572 3.0\nv 30.7023068711995 5.41695323090572 0.0\nv 30.7023068711995 5.876953230905721 3.0\nv 30.7023068711995 5.876953230905721 0.0\nv 27.7023068711995 5.876953230905721 3.0\nv 27.7023068711995 5.876953230905721 0.0\nf 1 0 3\nf 2 1 3\nf 2 3 5\nf 4 2 5\nf 4 5 7\nf 6 4 7\nf 6 7 0\nf 1 6 0\nf 5 3 0\nf 7 5 0\nf 1 2 4\nf 1 4 6\n"
+      ]
+    },
+    {
+      "type": "shapeRepresentation",
+      "globalId": "fe1685f6-fb5f-4cdf-a080-08e26fa37bc5",
+      "representationIdentifier": "Body",
+      "representationType": "OBJ",
+      "items": [
+        "v 28.1623068711995 1.6269532309057197 0.0\nv 28.1623068711995 1.6269532309057197 3.0\nv 28.1623068711995 5.41695323090572 3.0\nv 28.1623068711995 5.41695323090572 0.0\nv 27.7023068711995 5.41695323090572 3.0\nv 27.7023068711995 5.41695323090572 0.0\nv 27.7023068711995 1.6269532309057197 3.0\nv 27.7023068711995 1.6269532309057197 0.0\nf 1 0 3\nf 2 1 3\nf 2 3 5\nf 4 2 5\nf 4 5 7\nf 6 4 7\nf 6 7 0\nf 1 6 0\nf 5 3 0\nf 7 5 0\nf 1 2 4\nf 1 4 6\n"
+      ]
+    },
+    {
+      "type": "shapeRepresentation",
+      "globalId": "9c175eef-4945-44c9-9eff-a0b5e083773d",
+      "representationIdentifier": "Body",
+      "representationType": "OBJ",
+      "items": [
+        "v 5.505537947804502 1.87695323090572 0.0\nv 5.505537947804502 1.87695323090572 3.0\nv 5.388961033265801 1.62695323090572 3.0\nv 5.388961033265801 1.62695323090572 0.0\nv 27.7023068711995 1.62695323090572 3.0\nv 27.7023068711995 1.62695323090572 0.0\nv 27.7023068711995 1.87695323090572 3.0\nv 27.7023068711995 1.87695323090572 0.0\nf 1 0 3\nf 2 1 3\nf 2 3 5\nf 4 2 5\nf 4 5 7\nf 6 4 7\nf 6 7 0\nf 1 6 0\nf 7 5 0\nf 0 5 3\nf 1 4 6\nf 2 4 1\n"
+      ]
+    }
+  ]
+}

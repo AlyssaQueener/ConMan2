@@ -1,0 +1,701 @@
+{
+  "style": {
+    "font-family": "sans-serif",
+    "background-color": "#ffffff",
+    "background-image": "",
+    "background-size": "100%",
+    "node-color": "#ffffff",
+    "border-width": 4,
+    "border-color": "#000000",
+    "radius": 50,
+    "node-padding": 5,
+    "node-margin": 2,
+    "outside-position": "auto",
+    "node-icon-image": "",
+    "node-background-image": "",
+    "icon-position": "inside",
+    "icon-size": 64,
+    "caption-position": "inside",
+    "caption-max-width": 200,
+    "caption-color": "#000000",
+    "caption-font-size": 50,
+    "caption-font-weight": "normal",
+    "label-position": "inside",
+    "label-display": "pill",
+    "label-color": "#000000",
+    "label-background-color": "#ffffff",
+    "label-border-color": "#000000",
+    "label-border-width": 4,
+    "label-font-size": 40,
+    "label-padding": 5,
+    "label-margin": 4,
+    "directionality": "directed",
+    "detail-position": "inline",
+    "detail-orientation": "parallel",
+    "arrow-width": 5,
+    "arrow-color": "#000000",
+    "margin-start": 5,
+    "margin-end": 5,
+    "margin-peer": 20,
+    "attachment-start": "normal",
+    "attachment-end": "normal",
+    "relationship-icon-image": "",
+    "type-color": "#000000",
+    "type-background-color": "#ffffff",
+    "type-border-color": "#000000",
+    "type-border-width": 0,
+    "type-font-size": 16,
+    "type-padding": 5,
+    "property-position": "outside",
+    "property-alignment": "colon",
+    "property-color": "#000000",
+    "property-font-size": 16,
+    "property-font-weight": "normal"
+  },
+  "nodes": [
+    {
+      "id": "n84",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "caption": "84",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "UnitType": "VOLUMEUNIT",
+        "Name": "CUBIC_METRE",
+        "EntityType": "IfcSIUnit"
+      }
+    },
+    {
+      "id": "n83",
+      "position": {
+        "x": 100,
+        "y": 0
+      },
+      "caption": "83",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "UnitType": "AREAUNIT",
+        "Name": "SQUARE_METRE",
+        "EntityType": "IfcSIUnit"
+      }
+    },
+    {
+      "id": "n82",
+      "position": {
+        "x": 200,
+        "y": 0
+      },
+      "caption": "82",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "UnitType": "PLANEANGLEUNIT",
+        "Name": "RADIAN",
+        "EntityType": "IfcSIUnit"
+      }
+    },
+    {
+      "id": "n81",
+      "position": {
+        "x": 300,
+        "y": 0
+      },
+      "caption": "81",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "UnitType": "LENGTHUNIT",
+        "Name": "METRE",
+        "EntityType": "IfcSIUnit"
+      }
+    },
+    {
+      "id": "n80",
+      "position": {
+        "x": 400,
+        "y": 0
+      },
+      "caption": "80",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "EntityType": "IfcUnitAssignment"
+      }
+    },
+    {
+      "id": "n21",
+      "position": {
+        "x": 500,
+        "y": 0
+      },
+      "caption": "21",
+      "style": {
+        "border-color": "#68bc00",
+        "radius": 20
+      },
+      "properties": {
+        "GlobalId": "3FNv6N_ur0zQ8tygS1XDuH",
+        "Name": "Site",
+        "Description": "Site Container for Elements",
+        "EntityType": "IfcRelContainedInSpatialStructure"
+      }
+    },
+    {
+      "id": "n20",
+      "position": {
+        "x": 600,
+        "y": 0
+      },
+      "caption": "20",
+      "style": {
+        "border-color": "#0062b1",
+        "radius": 20
+      },
+      "properties": {
+        "GlobalId": "3xn$Io5tr8TOYxqxH15Rkg",
+        "Name": "Cuboid1",
+        "EntityType": "IfcBuildingElementProxy"
+      }
+    },
+    {
+      "id": "n19",
+      "position": {
+        "x": 700,
+        "y": 0
+      },
+      "caption": "19",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "EntityType": "IfcLocalPlacement"
+      }
+    },
+    {
+      "id": "n18",
+      "position": {
+        "x": 800,
+        "y": 0
+      },
+      "caption": "18",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "EntityType": "IfcAxis2Placement3D"
+      }
+    },
+    {
+      "id": "n17",
+      "position": {
+        "x": 900,
+        "y": 0
+      },
+      "caption": "17",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "Coordinates": "(2.0, 5.0, 1.0)",
+        "EntityType": "IfcCartesianPoint"
+      }
+    },
+    {
+      "id": "n16",
+      "position": {
+        "x": 1000,
+        "y": 0
+      },
+      "caption": "16",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "EntityType": "IfcProductDefinitionShape"
+      }
+    },
+    {
+      "id": "n15",
+      "position": {
+        "x": 1100,
+        "y": 0
+      },
+      "caption": "15",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "RepresentationIdentifier": "Body",
+        "RepresentationType": "SweptSolid",
+        "EntityType": "IfcShapeRepresentation"
+      }
+    },
+    {
+      "id": "n14",
+      "position": {
+        "x": 1200,
+        "y": 0
+      },
+      "caption": "14",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "ContextIdentifier": "Body",
+        "ContextType": "Model",
+        "TargetView": "MODEL_VIEW",
+        "EntityType": "IfcGeometricRepresentationSubContext"
+      }
+    },
+    {
+      "id": "n13",
+      "position": {
+        "x": 1300,
+        "y": 0
+      },
+      "caption": "13",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "DirectionRatios": "(0.0, 1.0)",
+        "EntityType": "IfcDirection"
+      }
+    },
+    {
+      "id": "n12",
+      "position": {
+        "x": 1400,
+        "y": 0
+      },
+      "caption": "12",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "EntityType": "IfcAxis2Placement3D"
+      }
+    },
+    {
+      "id": "n11",
+      "position": {
+        "x": 1500,
+        "y": 0
+      },
+      "caption": "11",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "Coordinates": "(0.0, 0.0, 0.0)",
+        "EntityType": "IfcCartesianPoint"
+      }
+    },
+    {
+      "id": "n10",
+      "position": {
+        "x": 1600,
+        "y": 0
+      },
+      "caption": "10",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "ContextType": "Model",
+        "CoordinateSpaceDimension": 3,
+        "Precision": 0.0001,
+        "EntityType": "IfcGeometricRepresentationContext"
+      }
+    },
+    {
+      "id": "n9",
+      "position": {
+        "x": 1700,
+        "y": 0
+      },
+      "caption": "9",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "DirectionRatios": "(0.0, 0.0, 1.0)",
+        "EntityType": "IfcDirection"
+      }
+    },
+    {
+      "id": "n8",
+      "position": {
+        "x": 1800,
+        "y": 0
+      },
+      "caption": "8",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "Depth": 2.5,
+        "EntityType": "IfcExtrudedAreaSolid"
+      }
+    },
+    {
+      "id": "n7",
+      "position": {
+        "x": 1900,
+        "y": 0
+      },
+      "caption": "7",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "ProfileType": "AREA",
+        "ProfileName": "rectangleProfileDef",
+        "XDim": 4.0,
+        "YDim": 6.0,
+        "EntityType": "IfcRectangleProfileDef"
+      }
+    },
+    {
+      "id": "n6",
+      "position": {
+        "x": 2000,
+        "y": 0
+      },
+      "caption": "6",
+      "style": {
+        "border-color": "#68bc00",
+        "radius": 20
+      },
+      "properties": {
+        "GlobalId": "1U7z3bi0N_4L0UNA$m7S6j",
+        "EntityType": "IfcRelAggregates"
+      }
+    },
+    {
+      "id": "n5",
+      "position": {
+        "x": 2100,
+        "y": 0
+      },
+      "caption": "5",
+      "style": {
+        "border-color": "#0062b1",
+        "radius": 20
+      },
+      "properties": {
+        "GlobalId": "2KrDsiaI1FkRwWUa5EvoNK",
+        "Name": "GeomRep",
+        "EntityType": "IfcProject"
+      }
+    },
+    {
+      "id": "n4",
+      "position": {
+        "x": 2200,
+        "y": 0
+      },
+      "caption": "4",
+      "style": {
+        "border-color": "#0062b1",
+        "radius": 20
+      },
+      "properties": {
+        "GlobalId": "2gG1du9OH4eQ4omNt$zfn1",
+        "Name": "site",
+        "EntityType": "IfcSite"
+      }
+    },
+    {
+      "id": "n3",
+      "position": {
+        "x": 2300,
+        "y": 0
+      },
+      "caption": "3",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "EntityType": "IfcLocalPlacement"
+      }
+    },
+    {
+      "id": "n2",
+      "position": {
+        "x": 2400,
+        "y": 0
+      },
+      "caption": "2",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "EntityType": "IfcAxis2Placement3D"
+      }
+    },
+    {
+      "id": "n1",
+      "position": {
+        "x": 2500,
+        "y": 0
+      },
+      "caption": "1",
+      "style": {
+        "border-color": "#fcc400",
+        "radius": 20
+      },
+      "properties": {
+        "Coordinates": "(0.0, 0.0, 0.0)",
+        "EntityType": "IfcCartesianPoint"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "id": "n0",
+      "type": "Units",
+      "style": {},
+      "properties": {
+        "listItem": "0"
+      },
+      "fromId": "n80",
+      "toId": "n81"
+    },
+    {
+      "id": "n0",
+      "type": "Units",
+      "style": {},
+      "properties": {
+        "listItem": "1"
+      },
+      "fromId": "n80",
+      "toId": "n82"
+    },
+    {
+      "id": "n0",
+      "type": "Units",
+      "style": {},
+      "properties": {
+        "listItem": "2"
+      },
+      "fromId": "n80",
+      "toId": "n83"
+    },
+    {
+      "id": "n0",
+      "type": "Units",
+      "style": {},
+      "properties": {
+        "listItem": "3"
+      },
+      "fromId": "n80",
+      "toId": "n84"
+    },
+    {
+      "id": "n1",
+      "type": "RelatingStructure",
+      "style": {},
+      "fromId": "n21",
+      "toId": "n4"
+    },
+    {
+      "id": "n2",
+      "type": "RelatedElements",
+      "style": {},
+      "properties": {
+        "listItem": "0"
+      },
+      "fromId": "n21",
+      "toId": "n20"
+    },
+    {
+      "id": "n3",
+      "type": "ObjectPlacement",
+      "style": {},
+      "fromId": "n20",
+      "toId": "n19"
+    },
+    {
+      "id": "n4",
+      "type": "Representation",
+      "style": {},
+      "fromId": "n20",
+      "toId": "n16"
+    },
+    {
+      "id": "n5",
+      "type": "PlacementRelTo",
+      "style": {},
+      "fromId": "n19",
+      "toId": "n3"
+    },
+    {
+      "id": "n6",
+      "type": "RelativePlacement",
+      "style": {},
+      "fromId": "n19",
+      "toId": "n18"
+    },
+    {
+      "id": "n7",
+      "type": "Location",
+      "style": {},
+      "fromId": "n18",
+      "toId": "n17"
+    },
+    {
+      "id": "n8",
+      "type": "Representations",
+      "style": {},
+      "properties": {
+        "listItem": "0"
+      },
+      "fromId": "n16",
+      "toId": "n15"
+    },
+    {
+      "id": "n9",
+      "type": "ContextOfItems",
+      "style": {},
+      "fromId": "n15",
+      "toId": "n14"
+    },
+    {
+      "id": "n10",
+      "type": "Items",
+      "style": {},
+      "properties": {
+        "listItem": "0"
+      },
+      "fromId": "n15",
+      "toId": "n8"
+    },
+    {
+      "id": "n11",
+      "type": "ParentContext",
+      "style": {},
+      "fromId": "n14",
+      "toId": "n10"
+    },
+    {
+      "id": "n12",
+      "type": "Location",
+      "style": {},
+      "fromId": "n12",
+      "toId": "n11"
+    },
+    {
+      "id": "n13",
+      "type": "WorldCoordinateSystem",
+      "style": {},
+      "fromId": "n10",
+      "toId": "n12"
+    },
+    {
+      "id": "n14",
+      "type": "TrueNorth",
+      "style": {},
+      "fromId": "n10",
+      "toId": "n13"
+    },
+    {
+      "id": "n15",
+      "type": "SweptArea",
+      "style": {},
+      "fromId": "n8",
+      "toId": "n7"
+    },
+    {
+      "id": "n16",
+      "type": "ExtrudedDirection",
+      "style": {},
+      "fromId": "n8",
+      "toId": "n9"
+    },
+    {
+      "id": "n17",
+      "type": "RelatingObject",
+      "style": {},
+      "fromId": "n6",
+      "toId": "n5"
+    },
+    {
+      "id": "n18",
+      "type": "RelatedObjects",
+      "style": {},
+      "properties": {
+        "listItem": "0"
+      },
+      "fromId": "n6",
+      "toId": "n4"
+    },
+    {
+      "id": "n19",
+      "type": "UnitsInContext",
+      "style": {},
+      "fromId": "n5",
+      "toId": "n80"
+    },
+    {
+      "id": "n20",
+      "type": "RepresentationContexts",
+      "style": {},
+      "properties": {
+        "listItem": "0"
+      },
+      "fromId": "n5",
+      "toId": "n10"
+    },
+    {
+      "id": "n21",
+      "type": "ObjectPlacement",
+      "style": {},
+      "fromId": "n4",
+      "toId": "n3"
+    },
+    {
+      "id": "n22",
+      "type": "RelativePlacement",
+      "style": {},
+      "fromId": "n3",
+      "toId": "n2"
+    },
+    {
+      "id": "n23",
+      "type": "Location",
+      "style": {},
+      "fromId": "n2",
+      "toId": "n1"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ifcXML xsi:schemaLocation="http://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/XML/IFC4x1.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.buildingsmart-tech.org/ifc/IFC4x1/final">
+  <IfcProject GlobalId="2KrDsiaI1FkRwWUa5EvoNK" Name="Railway_spatial">
+    <IsDecomposedBy>
+      <IfcRelAggregates GlobalId="1U7z3bi0N_4L0UNA$m7S6j">
+        <RelatedObjects>
+          <IfcSite GlobalId="2gG1du9OH4eQ4omNt$zfn1" Name="site">
+            <ObjectPlacement id="i3" xsi:type="IfcLocalPlacement">
+              <RelativePlacement xsi:type="IfcAxis2Placement3D">
+                <Location xsi:type="IfcCartesianPoint" Coordinates="0 0 0" />
+              </RelativePlacement>
+            </ObjectPlacement>
+          </IfcSite>
+        </RelatedObjects>
+      </IfcRelAggregates>
+    </IsDecomposedBy>
+  </IfcProject>
+  <IfcCartesianPoint id="i7" Coordinates="2 5 1" />
+  <IfcAxis2Placement3D id="i8">
+    <Location xsi:nil="true" href="i7" />
+  </IfcAxis2Placement3D>
+  <IfcLocalPlacement id="i9">
+    <PlacementRelTo xsi:nil="true" href="i3" />
+    <RelativePlacement xsi:nil="true" href="i8" />
+  </IfcLocalPlacement>
+  <IfcCartesianPoint id="i10" Coordinates="10 5 1" />
+  <IfcAxis2Placement3D id="i11">
+    <Location xsi:nil="true" href="i10" />
+  </IfcAxis2Placement3D>
+  <IfcLocalPlacement id="i12">
+    <PlacementRelTo xsi:nil="true" href="i3" />
+    <RelativePlacement xsi:nil="true" href="i11" />
+  </IfcLocalPlacement>
+  <IfcCartesianPoint id="i13" Coordinates="15 3 6" />
+  <IfcAxis2Placement3D id="i14">
+    <Location xsi:nil="true" href="i13" />
+  </IfcAxis2Placement3D>
+  <IfcLocalPlacement>
+    <PlacementRelTo xsi:nil="true" href="i3" />
+    <RelativePlacement xsi:nil="true" href="i14" />
+  </IfcLocalPlacement>
+  <IfcCartesianPoint id="i16" Coordinates="5 8 3" />
+  <IfcAxis2Placement3D id="i17">
+    <Location xsi:nil="true" href="i16" />
+  </IfcAxis2Placement3D>
+  <IfcLocalPlacement>
+    <PlacementRelTo xsi:nil="true" href="i3" />
+    <RelativePlacement xsi:nil="true" href="i17" />
+  </IfcLocalPlacement>
+  <IfcCartesianPoint id="i19" Coordinates="0 0 0" />
+  <IfcAxis2Placement3D id="i20">
+    <Location xsi:nil="true" href="i19" />
+  </IfcAxis2Placement3D>
+  <IfcLocalPlacement>
+    <PlacementRelTo xsi:nil="true" href="i3" />
+    <RelativePlacement xsi:nil="true" href="i20" />
+  </IfcLocalPlacement>
+  <IfcSpatialZone GlobalId="12n$Io5tr8TOYxqxH15JKn" Name="Spatialzone1">
+    <ObjectPlacement xsi:nil="true" href="i9" />
+  </IfcSpatialZone>
+  <IfcSpatialZone GlobalId="12n$Io4pT8TOYxqxH15JKn" Name="Spatialzone2">
+    <ObjectPlacement xsi:nil="true" href="i12" />
+  </IfcSpatialZone>
+</ifcXML>

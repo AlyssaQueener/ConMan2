@@ -1,0 +1,157 @@
+{
+  "fileSchema": "IFC.JSON-4",
+  "originatingSystem": "IFC2JSON_python",
+  "timeStamp": "2020-09-14T10:08:21",
+  "data": [
+    {
+      "type": "IfcOwnerHistory",
+      "owningUser": {
+        "type": "IfcPersonAndOrganization",
+        "thePerson": {
+          "type": "IfcPerson",
+          "identification": "Sebastian Esser",
+          "familyName": "Sebastian Esser"
+        },
+        "theOrganization": {
+          "type": "IfcOrganization",
+          "name": "Technical University of Munich, Chair of Computational Modeling and Simulation"
+        }
+      },
+      "owningApplication": {
+        "type": "IfcApplication",
+        "applicationDeveloper": {
+          "type": "IfcOrganization",
+          "name": "Geometry Gym Pty Ltd"
+        },
+        "version": "0.1.0.0",
+        "applicationFullName": "ConsoleCreateSpatialStructure v1.0.0.0",
+        "applicationIdentifier": "ConsoleCreateSpatialStructure v1.0.0.0"
+      },
+      "changeAction": "ADDED",
+      "lastModifiedDate": 1599814909,
+      "creationDate": 1599814909,
+      "globalId": "d367f51a-3a93-4f25-86d7-c2e2eb06dd6b"
+    },
+    {
+      "type": "IfcSite",
+      "globalId": "24291367-cdfd-4dc0-826d-39f3b7877602",
+      "ownerHistory": {
+        "type": "IfcOwnerHistory",
+        "ref": "d367f51a-3a93-4f25-86d7-c2e2eb06dd6b"
+      },
+      "name": "sampleSite",
+      "objectPlacement": {
+        "type": "IfcLocalPlacement",
+        "relativePlacement": {
+          "type": "IfcAxis2Placement3D",
+          "location": {
+            "type": "IfcCartesianPoint"
+          },
+          "axis": {
+            "type": "IfcDirection",
+            "directionRatios": [
+              1.0
+            ]
+          },
+          "refDirection": {
+            "type": "IfcDirection",
+            "directionRatios": [
+              1.0
+            ]
+          }
+        }
+      },
+      "decomposes": [
+        {
+          "type": "IfcRelAggregates",
+          "globalId": "7da07914-44a3-457e-8ce1-adc820e8daa8",
+          "ownerHistory": {
+            "type": "IfcOwnerHistory",
+            "ref": "d367f51a-3a93-4f25-86d7-c2e2eb06dd6b"
+          },
+          "relatingObject": {
+            "type": "IfcProject",
+            "ref": "30e11913-6af9-4bf0-90c8-ebd1356672fe"
+          },
+          "relatedObjects": [
+            {
+              "type": "IfcSite",
+              "ref": "24291367-cdfd-4dc0-826d-39f3b7877602"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "IfcProject",
+      "globalId": "30e11913-6af9-4bf0-90c8-ebd1356672fe",
+      "ownerHistory": {
+        "type": "IfcOwnerHistory",
+        "ref": "d367f51a-3a93-4f25-86d7-c2e2eb06dd6b"
+      },
+      "name": "myProject",
+      "unitsInContext": {
+        "type": "IfcUnitAssignment",
+        "units": [
+          {
+            "type": "IfcSIUnit",
+            "unitType": "LENGTHUNIT",
+            "name": "METRE",
+            "dimensions": {
+              "LengthExponent": 1
+            }
+          },
+          {
+            "type": "IfcSIUnit",
+            "unitType": "AREAUNIT",
+            "name": "SQUARE_METRE",
+            "dimensions": {
+              "LengthExponent": 2
+            }
+          },
+          {
+            "type": "IfcSIUnit",
+            "unitType": "VOLUMEUNIT",
+            "name": "CUBIC_METRE",
+            "dimensions": {
+              "LengthExponent": 3
+            }
+          },
+          {
+            "type": "IfcSIUnit",
+            "unitType": "PLANEANGLEUNIT",
+            "name": "RADIAN"
+          },
+          {
+            "type": "IfcSIUnit",
+            "unitType": "TIMEUNIT",
+            "name": "SECOND",
+            "dimensions": {
+              "TimeExponent": 1
+            }
+          }
+        ]
+      },
+      "isDecomposedBy": [
+        {
+          "type": "IfcRelAggregates",
+          "globalId": "7da07914-44a3-457e-8ce1-adc820e8daa8",
+          "ownerHistory": {
+            "type": "IfcOwnerHistory",
+            "ref": "d367f51a-3a93-4f25-86d7-c2e2eb06dd6b"
+          },
+          "relatingObject": {
+            "type": "IfcProject",
+            "ref": "30e11913-6af9-4bf0-90c8-ebd1356672fe"
+          },
+          "relatedObjects": [
+            {
+              "type": "IfcSite",
+              "ref": "24291367-cdfd-4dc0-826d-39f3b7877602"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

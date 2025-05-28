@@ -1,0 +1,62 @@
+ISO-10303-21;
+HEADER;
+FILE_DESCRIPTION(('ViewDefinition [Ifc4NotAssigned]'),'2;1');
+FILE_NAME(
+/* name */ '.\\Unittest\\Update_GeomRepresentation_02.ifc',
+/* time_stamp */ '2021-01-19T08:54:09',
+/* author */ ('Sebastian Esser'),
+/* organization */ ('Unknown'),
+/* preprocessor_version */ 'GeometryGymIFC v0.1.6.0 by Geometry Gym Pty Ltd built 2020-12-16T04:57:54',
+/* originating_system */ 'CreateUnitTest v1.0.0.0',
+/* authorization */ 'None');
+
+FILE_SCHEMA (('IFC4'));
+ENDSEC;
+
+DATA;
+#1= IFCCARTESIANPOINT((0.0,0.0,0.0));
+#2= IFCAXIS2PLACEMENT3D(#1,$,$);
+#3= IFCLOCALPLACEMENT($,#2);
+#4= IFCSITE('2gG1du9OH4eQ4omNt$zfn1',$,'site',$,$,#3,$,$,$,$,$,$,$,$);
+#5= IFCPROJECT('2KrDsiaI1FkRwWUa5EvoNK',$,'GeomRepresentation_02',$,$,$,$,(#25),$);
+#6= IFCRELAGGREGATES('1U7z3bi0N_4L0UNA$m7S6j',$,$,$,#5,(#4));
+
+/* Geom Context */
+#25= IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,0.0001,#27,#28);
+#29= IFCGEOMETRICREPRESENTATIONSUBCONTEXT('Body','Model',*,*,*,*,#25,$,.MODEL_VIEW.,$);
+#27= IFCAXIS2PLACEMENT3D(#26,$,$);
+#26= IFCCARTESIANPOINT((0.0,0.0,0.0));
+#28= IFCDIRECTION((0.0,1.0));
+
+/* Semantic product definitions */
+#36= IFCBUILDINGELEMENTPROXY('3xowIo77r8TOYxqwlj5Rkg',$,'Cuboid1',$,$,#9,#31,$,$);
+#38= IFCBUILDINGELEMENTPROXY('3u8POxnzbDKvY53uVDQhpQ',$,'Cuboid2',$,$,#12,#35,$,$);
+#37= IFCRELCONTAINEDINSPATIALSTRUCTURE('002h8Y4pT8TK92qq5AlDKn',$,'Site','Site Container for Elements',(#36,#38),#4);
+
+/* Local Placement Cuboid 1 */
+#9= IFCLOCALPLACEMENT(#3,#8);
+#8= IFCAXIS2PLACEMENT3D(#7,$,$);
+#7= IFCCARTESIANPOINT((2.0,5.0,1.0));
+
+/* Local Placement Cuboid 2 */
+#12= IFCLOCALPLACEMENT(#3,#11);
+#11= IFCAXIS2PLACEMENT3D(#10,$,$);
+#10= IFCCARTESIANPOINT((10.0,5.0,1.0));
+
+/* Shape Cuboid 1 */
+#31= IFCPRODUCTDEFINITIONSHAPE($,$,(#30));
+#30= IFCSHAPEREPRESENTATION(#29,'Body','SweptSolid',(#23));
+#23= IFCEXTRUDEDAREASOLID(#22,$,#24,1.35);
+#22= IFCRECTANGLEPROFILEDEF(.AREA.,'rectangleProfileDef',$,4.0,6.0);
+#24= IFCDIRECTION((0.0,0.0,1.0));
+
+/* Shape Cuboid 2 */
+#35= IFCPRODUCTDEFINITIONSHAPE($,$,(#34));
+#34= IFCSHAPEREPRESENTATION(#29,'Body','SweptSolid',(#33));
+#33= IFCEXTRUDEDAREASOLID(#32,$,#36,3.0);
+#32= IFCRECTANGLEPROFILEDEF(.AREA.,'rectangleProfileDef',$,4.0,6.0);
+#36= IFCDIRECTION((0.0,0.0,1.0));
+ENDSEC;
+
+END-ISO-10303-21;
+

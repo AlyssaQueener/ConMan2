@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ifcXML xsi:schemaLocation="http://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/XML/IFC4x1.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.buildingsmart-tech.org/ifc/IFC4x1/final">
+  <IfcProject GlobalId="2KrDsiaI1FkRwWUa5EvoNK" Name="Placement_Local">
+    <IsDecomposedBy>
+      <IfcRelAggregates GlobalId="1U7z3bi0N_4L0UNA$m7S6j">
+        <RelatedObjects>
+          <IfcSite GlobalId="2gG1du9OH4eQ4omNt$zfn1" Name="site">
+            <ObjectPlacement id="i3" xsi:type="IfcLocalPlacement">
+              <RelativePlacement xsi:type="IfcAxis2Placement3D">
+                <Location xsi:type="IfcCartesianPoint" Coordinates="0 0 0" />
+              </RelativePlacement>
+            </ObjectPlacement>
+            <ContainsElements>
+              <IfcRelContainedInSpatialStructure GlobalId="12oh8Y4pT8TK92qxHAlDKn" Name="Site" Description="Site Container for Elements">
+                <RelatedElements>
+                  <IfcWall GlobalId="12ga8Y4pUgga92qwf15JKn" Name="Wall1">
+                    <ObjectPlacement xsi:type="IfcLocalPlacement">
+                      <PlacementRelTo xsi:nil="true" href="i3" />
+                      <RelativePlacement xsi:type="IfcAxis2Placement3D">
+                        <Location xsi:type="IfcCartesianPoint" Coordinates="2 3 0" />
+                      </RelativePlacement>
+                    </ObjectPlacement>
+                    <Representation xsi:type="IfcProductDefinitionShape">
+                      <Representations>
+                        <IfcShapeRepresentation RepresentationIdentifier="Body" RepresentationType="SweptSolid">
+                          <ContextOfItems xsi:nil="true" href="i29" />
+                          <Items>
+                            <IfcExtrudedAreaSolid Depth="1.35">
+                              <SweptArea xsi:type="IfcRectangleProfileDef" ProfileType="area" ProfileName="rectangleProfileDef" XDim="4" YDim="6" />
+                              <ExtrudedDirection xsi:type="IfcDirection" DirectionRatios="0 0 1" />
+                            </IfcExtrudedAreaSolid>
+                          </Items>
+                        </IfcShapeRepresentation>
+                      </Representations>
+                    </Representation>
+                  </IfcWall>
+                </RelatedElements>
+              </IfcRelContainedInSpatialStructure>
+            </ContainsElements>
+          </IfcSite>
+        </RelatedObjects>
+      </IfcRelAggregates>
+    </IsDecomposedBy>
+    <RepresentationContexts>
+      <IfcGeometricRepresentationContext ContextType="Model" CoordinateSpaceDimension="3" Precision="0.0001">
+        <WorldCoordinateSystem xsi:type="IfcAxis2Placement3D">
+          <Location xsi:type="IfcCartesianPoint" Coordinates="0 0 0" />
+        </WorldCoordinateSystem>
+        <TrueNorth xsi:type="IfcDirection" DirectionRatios="0 1" />
+        <HasSubContexts>
+          <IfcGeometricRepresentationSubContext id="i29" ContextIdentifier="Body" ContextType="Model" TargetView="model_view" />
+        </HasSubContexts>
+      </IfcGeometricRepresentationContext>
+    </RepresentationContexts>
+  </IfcProject>
+  <IfcCartesianPoint id="i7" Coordinates="2 5 1" />
+  <IfcAxis2Placement3D id="i8">
+    <Location xsi:nil="true" href="i7" />
+  </IfcAxis2Placement3D>
+  <IfcLocalPlacement>
+    <PlacementRelTo xsi:nil="true" href="i3" />
+    <RelativePlacement xsi:nil="true" href="i8" />
+  </IfcLocalPlacement>
+  <IfcCartesianPoint id="i10" Coordinates="10 5 1" />
+  <IfcAxis2Placement3D id="i11">
+    <Location xsi:nil="true" href="i10" />
+  </IfcAxis2Placement3D>
+  <IfcLocalPlacement>
+    <PlacementRelTo xsi:nil="true" href="i3" />
+    <RelativePlacement xsi:nil="true" href="i11" />
+  </IfcLocalPlacement>
+  <IfcCartesianPoint id="i13" Coordinates="15 3 6" />
+  <IfcAxis2Placement3D id="i14">
+    <Location xsi:nil="true" href="i13" />
+  </IfcAxis2Placement3D>
+  <IfcLocalPlacement>
+    <PlacementRelTo xsi:nil="true" href="i3" />
+    <RelativePlacement xsi:nil="true" href="i14" />
+  </IfcLocalPlacement>
+  <IfcCartesianPoint id="i16" Coordinates="5 8 3" />
+  <IfcAxis2Placement3D id="i17">
+    <Location xsi:nil="true" href="i16" />
+  </IfcAxis2Placement3D>
+  <IfcLocalPlacement>
+    <PlacementRelTo xsi:nil="true" href="i3" />
+    <RelativePlacement xsi:nil="true" href="i17" />
+  </IfcLocalPlacement>
+  <IfcCartesianPoint id="i19" Coordinates="0 0 0" />
+  <IfcAxis2Placement3D id="i20">
+    <Location xsi:nil="true" href="i19" />
+  </IfcAxis2Placement3D>
+  <IfcLocalPlacement>
+    <PlacementRelTo xsi:nil="true" href="i3" />
+    <RelativePlacement xsi:nil="true" href="i20" />
+  </IfcLocalPlacement>
+</ifcXML>
