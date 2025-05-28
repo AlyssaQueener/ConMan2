@@ -50,7 +50,3 @@ A graph representation of an IFC model can be parsed back into an SPF-based repr
 | --------------- |:-------------:| ------- |
 |[IfcOpenShell](http://ifcopenshell.org/)| | |
 |[Neo4j Driver](https://pypi.org/project/neo4j/)| | |
-
-test
-
-
