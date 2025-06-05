@@ -12,7 +12,7 @@ class RelProperties(StructuredRel):
     Relationship class for defining properties of relationships between nodes.
     '''
     rel_type = StringProperty(required=True)
-    listItem = IntegerProperty()
+    list_index = IntegerProperty()
 
 
 class Node(SemiStructuredNode):
