@@ -50,6 +50,9 @@ class IfcGraphInterface:
             # If no IFC entities in list, save list as a string. An example is a n IfcCaresianPointList3D. This works because (nested) lists can be interpreted using ast package when parsing it back to IFC.     
             else:
                 setattr(node, key, str(val))
+        # Assign "$" to non-assigned attributes, as neo4j does not store these attributes at all otherwise.
+        elif val is None:
+            setattr(node, key, "$")
         # If attribute value is a primitive, store it directly.
         else:
             setattr(node, key, val)
@@ -127,7 +130,7 @@ class IfcGraphInterface:
         """
         model = ifcopenshell.open(ifc_path)
 
-        # First iteration over all STEP entities: Create nodes and add p21_id and timestamp for unambiguous entity to node mapping
+        # First iteration over all STEP entities: Create nodes and add p21_id and timestamp for unambiguous entity to node mapping.
         for entity in model:
             if entity.is_a("IfcObjectDefinition") or entity.is_a("IfcPropertyDefinition"):
                 PrimaryNode(GlobalId=entity.GlobalId,
@@ -150,15 +153,6 @@ class IfcGraphInterface:
         # Second iteration over all STEP entities: Go through all attributes and either append them to the node or create relationships with other nodes.
         for entity in model:
             info = entity.get_info()
-
-            # Get full entity attribute schema
-            entity_attributes = ifcopenshell.util.schema.get_declaration(entity).all_attributes()
-            # Iterate over all possible ifc attributes of the entity.
-            for attribute in entity_attributes:
-                # Check if the attribute is in the list (we dont want to change these) or in info (we will set those later, as they are populated).
-                if attribute.name() not in ("GlobalId", "EntityType", "type", "p21_id", "id", "inline_id", "timestamp") and attribute.name() not in info:
-                    # Set the value as placeholder so every possible attribute fo ran IFC entity exists in the node or its relations.
-                    setattr(node, attribute.name(), "$")
 
             node = GenericNode.nodes.get(p21_id=f"#{entity.id()}", timestamp=timestamp)
 
