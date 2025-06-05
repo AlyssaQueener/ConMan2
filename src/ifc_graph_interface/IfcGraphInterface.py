@@ -1,6 +1,5 @@
 import ifcopenshell
 import ifcopenshell.api.project
-import ifcopenshell.util.schema
 
 import ast
 
@@ -52,8 +51,8 @@ class IfcGraphInterface:
                 setattr(node, key, str(val))
         # Assign "$" to non-assigned attributes, as neo4j does not store these attributes at all otherwise.
         # By extension: setting a node attribute (e.g. node.Name = None) it will remove it from the node completely.
-        # elif val is None:
-        #     setattr(node, key, "None")
+        elif val is None:
+            setattr(node, key, "$")
         # If attribute value is a primitive, store it directly.
         else:
             setattr(node, key, val)
@@ -67,12 +66,13 @@ class IfcGraphInterface:
         @param key: The key of the node attribute.
         @param val: The attribute value. This can either be a primitive type, a string, or a stringified list of primitives.
         """
+        # print(f"Processing {ifc_entity, key, val}")
+        if val == "$":
+            pass
         # Check if it is any primitive but a string. If so, leave it.
-        if not isinstance(val, str):
+        elif not isinstance(val, str):
             # Store the processed attribute in the IFC entity.
             setattr(ifc_entity, key, val)
-        # elif val == "None":
-        #     pass
         # Check if it is a list of primitives that was parsed as a string. If so, leave it.
         # While neo4j allows lists, it does not allow for nested lists, so every list is stored as a string for consistency.
         elif not val.startswith("(") or not val.endswith(")"):
@@ -196,6 +196,8 @@ class IfcGraphInterface:
             # Iterate over all node attributes. These are only primitive attributes and can therefore be appended to the new IFC entity independently of what other entities already exist in the model.
             for key, val in node.__properties__.items():
                 # Check if the ifc entity has an attribute with the name of the node attribute. Make sure e.g. node id or p21_id is ignored.
+                if key == "TrueNorth":
+                    continue
                 if hasattr(ifc_entity, key):
                     # Call function that handles primitives or stringified (nested) list of primitives.
                     self.process_node_attribute(ifc_entity, key, val)
