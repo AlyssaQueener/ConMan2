@@ -51,6 +51,7 @@ class IfcGraphInterface:
             else:
                 setattr(node, key, str(val))
         # Assign "$" to non-assigned attributes, as neo4j does not store these attributes at all otherwise.
+        # By extension: setting a node attribute (e.g. node.Name = None) it will remove it from the node completely.
         elif val is None:
             setattr(node, key, "$")
         # If attribute value is a primitive, store it directly.
