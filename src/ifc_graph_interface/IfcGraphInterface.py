@@ -12,7 +12,7 @@ class IfcGraphInterface:
     ### Helper Functions ###
     ########################
 
-    def process_ifc_attribute(self, node, key, val, timestamp):
+    def process_ifc_attribute(self, node, key, val, timestamp, list_index=0):
         """
         Process an IFC entity's attribute to either be handled as a connection to another node or a node attribute.
 
@@ -30,7 +30,7 @@ class IfcGraphInterface:
                 ref = InlineNode(EntityType=val.is_a(),
                                 timestamp=timestamp).save()
                 # Create a connection from the node to the newly created inline node.
-                node.relation.connect(ref, {"rel_type": key})
+                node.relation.connect(ref, {"rel_type": key, "list_index": list_index})
                 # Recursively handle the inline node's wrappedValue (holds the data like "(5,6,2)" for "IfcArcIndex(5,6,1)"). Safety in case of nested inline attributes.
                 self.process_ifc_attribute(ref, "wrappedValue", val.wrappedValue, timestamp)
                 # Save new inline node.
@@ -39,21 +39,21 @@ class IfcGraphInterface:
                 # ID is not 0, so the attribute entity already exists in neo4j.
                 ref = GenericNode.nodes.get(p21_id=f"#{val.id()}", timestamp=timestamp)
                 # Create a realtion from node to related node
-                node.relation.connect(ref, {"rel_type": key})
+                node.relation.connect(ref, {"rel_type": key, "list_index": list_index})
         # Check if attribute value is a list. This list can comprise primitives, entities, or lists of either.
         elif isinstance(val, (tuple, list)):
             # Check if any list item is itself an IFC entity.
             if any(isinstance(x, ifcopenshell.entity_instance) for x in val):
                 # Recursively call function to handle list elements correctly.
-                for x in val:
-                    self.process_ifc_attribute(node, key, x, timestamp)
+                for i, x in enumerate(val):
+                    self.process_ifc_attribute(node, key, x, timestamp, list_index=i)
             # If no IFC entities in list, save list as a string. An example is a n IfcCaresianPointList3D. This works because (nested) lists can be interpreted using ast package when parsing it back to IFC.     
             else:
                 setattr(node, key, str(val))
         # Assign "$" to non-assigned attributes, as neo4j does not store these attributes at all otherwise.
         # By extension: setting a node attribute (e.g. node.Name = None) it will remove it from the node completely.
-        elif val is None:
-            setattr(node, key, "$")
+        # elif val is None:
+        #     setattr(node, key, "None")
         # If attribute value is a primitive, store it directly.
         else:
             setattr(node, key, val)
@@ -69,16 +69,20 @@ class IfcGraphInterface:
         """
         # Check if it is any primitive but a string. If so, leave it.
         if not isinstance(val, str):
-            pass
+            # Store the processed attribute in the IFC entity.
+            setattr(ifc_entity, key, val)
+        # elif val == "None":
+        #     pass
         # Check if it is a list of primitives that was parsed as a string. If so, leave it.
         # While neo4j allows lists, it does not allow for nested lists, so every list is stored as a string for consistency.
         elif not val.startswith("(") or not val.endswith(")"):
-            pass
+            # Store the processed attribute in the IFC entity.
+            setattr(ifc_entity, key, val)
         # If it is a stringified list of primitives, evaluate it back into a Python list.
         else:
-            val = ast.literal_eval(val)
-        # Store the processed attribute in the IFC entity.
-        setattr(ifc_entity, key, val)
+            val = tuple(ast.literal_eval(val))
+            # Store the processed attribute in the IFC entity.
+            setattr(ifc_entity, key, val)
 
     def process_node_relation(self, model, ifc_entity, rel_type, related_nodes, id_mapping):
         """
@@ -93,28 +97,31 @@ class IfcGraphInterface:
         # Create list for entities to then set as the attribute value.
         ents = []
         # Iterate over all nodes that are grouped under the rel_attribute in the dict. This means that initially, all these nodes were part of the same IFC attribute.
-        for node in related_nodes:
+        for node, list_index in related_nodes:
             # Check if Inline node, if so, create new entity.
             if isinstance(node, InlineNode):
                 ent = model.create_entity(node.EntityType)
                 # WrappedValue is the actual input data of inline entities like "(6,5,1)" in "IfcArcIndex(6,5,1)". Process this like any other non-entity attribute.
                 self.process_node_attribute(ent, "wrappedValue", node.wrappedValue)
-                ents.append(ent)
+                ents.append((ent, list_index))
             # If entity is a real STEP entity, get the existing IFC entity and append that to the list.
             else:
                 ent = model.by_id(id_mapping[node.element_id])
-                ents.append(ent)
+                ents.append((ent, list_index))
 
         # Every attribute value is a list, for some attributes this datatype is correct. Others need single values.
         if len(ents) <= 1:
             # Required try block because if a list has only 1 entry, it might have to be passed as a list with one entry, or it may have to be passed as a single entry.
             try:
-                setattr(ifc_entity, rel_type, ents)
+                setattr(ifc_entity, rel_type, ents[0][0])
             except:
-                setattr(ifc_entity, rel_type, ents[0])
+                setattr(ifc_entity, rel_type, [ents[0][0]])
         # If multiple entities in the list, set the list as attribute value.
         else:
-            setattr(ifc_entity, rel_type, ents)
+            # Sort the entity list by the list index before setting as attribute. This rebuilds the same order.
+            ents_sorted = sorted(ents, key=lambda x: x[1])
+            ents_final = [ent[0] for ent in ents_sorted]
+            setattr(ifc_entity, rel_type, ents_final)
 
 
 
@@ -204,14 +211,15 @@ class IfcGraphInterface:
             for related_node in node.relation.all():
                 # Rel type will be used as the attribute key.
                 rel_type = node.relation.relationship(related_node).rel_type
+                list_index = node.relation.relationship(related_node).list_index
                 # Check if IFC entity has an attribute with the name of the rel_type
                 if hasattr(ifc_entity, rel_type):
                     # Rel type already exists in dict? Append node to its value that is a list.
                     if rel_type in relations_dict:
-                        relations_dict[rel_type].append(related_node)
+                        relations_dict[rel_type].append([related_node, list_index])
                     # Rel type appears for the first time? Create new entry for that attribtue in the dict.
                     else:
-                        relations_dict[rel_type] = [related_node]
+                        relations_dict[rel_type] = [[related_node, list_index]]
 
             # Iterate over the dictionary and process the lists of related nodes
             for rel_type, related_nodes in relations_dict.items():
