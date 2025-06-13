@@ -18,11 +18,11 @@ class RelProperties(StructuredRel):
 class Node(SemiStructuredNode):
     EntityType = StringProperty(required=True)
     relation = RelationshipTo('Node', 'rel', model=RelProperties)
+    timestamp = StringProperty(required=True)
 
 
 class GenericNode(Node):
     p21_id = StringProperty(required=True)
-    timestamp = StringProperty(required=True)
 
 
 class PrimaryNode(GenericNode):
