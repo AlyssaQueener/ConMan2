@@ -2,6 +2,7 @@ from neomodel import (
     StructuredRel,
     StringProperty,
     RelationshipTo,
+    Relationship,
     IntegerProperty
 )
 from neomodel.contrib import SemiStructuredNode
@@ -18,6 +19,7 @@ class RelProperties(StructuredRel):
 class Node(SemiStructuredNode):
     EntityType = StringProperty(required=True)
     relation = RelationshipTo('Node', 'rel', model=RelProperties)
+    equivalent_to = Relationship('Node', 'equivalent_to')
     timestamp = StringProperty(required=True)
 
 
