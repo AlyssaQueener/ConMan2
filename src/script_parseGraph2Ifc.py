@@ -17,5 +17,5 @@ counter = 0
 for path in paths:
     # timestamp = f"ts{datetime.now().strftime("%Y%m%d%H%M%S")}"
     print(f"Processing '{path}' with Timestamp '{counter}'")
-    neo4j_ifc_interface.graph_2_ifc(path, timestamp=counter)
+    neo4j_ifc_interface.graph_2_ifc(path, timestamp=str(counter))
     counter += 1
