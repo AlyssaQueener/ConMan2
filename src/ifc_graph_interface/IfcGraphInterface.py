@@ -29,7 +29,7 @@ class IfcGraphInterface:
                 ref = InlineNode(EntityType=val.is_a(),
                                 timestamp=timestamp).save()
                 # Create a connection from the node to the newly created inline node.
-                node.relation.connect(ref, {"rel_type": key, "list_index": list_index})
+                node.relation_to.connect(ref, {"rel_type": key, "list_index": list_index})
                 # Recursively handle the inline node's wrappedValue (holds the data like "(5,6,2)" for "IfcArcIndex(5,6,1)"). Safety in case of nested inline attributes.
                 self.process_ifc_attribute(ref, "wrappedValue", val.wrappedValue, timestamp)
                 # Save new inline node.
@@ -38,7 +38,7 @@ class IfcGraphInterface:
                 # ID is not 0, so the attribute entity already exists in neo4j.
                 ref = GenericNode.nodes.get(p21_id=f"#{val.id()}", timestamp=timestamp)
                 # Create a realtion from node to related node
-                node.relation.connect(ref, {"rel_type": key, "list_index": list_index})
+                node.relation_to.connect(ref, {"rel_type": key, "list_index": list_index})
         # Check if attribute value is a list. This list can comprise primitives, entities, or lists of either.
         elif isinstance(val, (tuple, list)):
             # Check if any list item is itself an IFC entity.
@@ -210,10 +210,10 @@ class IfcGraphInterface:
             relations_dict = {}
 
             # Iterate over all related nodes.
-            for related_node in node.relation.all():
+            for related_node in node.relation_to.all():
                 # Rel type will be used as the attribute key.
-                rel_type = node.relation.relationship(related_node).rel_type
-                list_index = node.relation.relationship(related_node).list_index
+                rel_type = node.relation_to.relationship(related_node).rel_type
+                list_index = node.relation_to.relationship(related_node).list_index
                 # Check if IFC entity has an attribute with the name of the rel_type
                 if hasattr(ifc_entity, rel_type):
                     # Rel type already exists in dict? Append node to its value that is a list.
