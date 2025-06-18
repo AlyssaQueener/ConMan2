@@ -1,6 +1,7 @@
 from neo4j_core.neo4j_model import Node, GenericNode, PrimaryNode, ConnectionNode, SecondaryNode, InlineNode, RelProperties
 
 from neomodel import Traversal #???
+import json
 
 # Query for all nodes without equivalence
 # match (n:Node) where not (n)-[:equivalent_to]-(:Node) return n
@@ -80,3 +81,6 @@ class GraphDiff:
 
 
         #self.get_pushout_pattern(timestamp_init, timestamp_updt)
+
+        with open("./graph_diff/unique_paths_test.json", "w") as f:
+            json.dump(self.node_matching_table, f)
