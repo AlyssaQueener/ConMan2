@@ -49,13 +49,17 @@ class GraphDiff:
                     rel_init.rel_type == rel_updt.rel_type
                     and rel_init.list_index == rel_updt.list_index
                     and child_init.EntityType == child_updt.EntityType
-                    and child_updt in child_init.equivalent_to.all()
+                    and child_init.equivalent_to is None
+                    and child_updt.equivalent_to is None
                 ):
                     equiv_node_init.equivalent_to.connect(equiv_node_updt)
 
-    def get_pushout_pattern(self, timestamp_init, timestamp_updt):
-        pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
-        pushout_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all()
+    # def get_pushout_pattern(self, timestamp_init, timestamp_updt):
+    #     pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
+    #     pushout_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all()
+
+    #     for node in pushout_nodes_init:
+    #         setattr(node, "pushout", "TRUE")
 
 
 
@@ -76,11 +80,8 @@ class GraphDiff:
             primary_node_init.equivalent_to.connect(primary_node_updt)
             self.create_equivalence_relations_primary(primary_node_init, primary_node_updt)
 
-        for connection_node_init in ConnectionNode.nodes.filter(timestamp=timestamp_init):
-            connection_node_updt = ConnectionNode.nodes.get(GlobalId=connection_node_init.GlobalId, timestamp=timestamp_updt)
+        # for connection_node_init in ConnectionNode.nodes.filter(timestamp=timestamp_init):
+        #     connection_node_updt = ConnectionNode.nodes.get(GlobalId=connection_node_init.GlobalId, timestamp=timestamp_updt)
 
 
-        #self.get_pushout_pattern(timestamp_init, timestamp_updt)
-
-        with open("./graph_diff/unique_paths_test.json", "w") as f:
-            json.dump(self.node_matching_table, f)
+        # self.get_pushout_pattern(timestamp_init, timestamp_updt)
