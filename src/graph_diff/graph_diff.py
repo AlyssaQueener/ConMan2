@@ -1,4 +1,5 @@
 from neo4j_core.neo4j_model import Node, GenericNode, PrimaryNode, ConnectionNode, SecondaryNode, InlineNode, RelProperties
+import script_parseIfc2Graph
 
 from neomodel import Traversal #???
 import json
@@ -55,12 +56,12 @@ class GraphDiff:
     #             ):
     #                 equiv_node_init.equivalent_to.connect(equiv_node_updt)
 
-    # def get_pushout_pattern(self, timestamp_init, timestamp_updt):
-    #     pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
-    #     pushout_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all()
+    def create_pushout_pattern(self, timestamp_init, timestamp_updt):
+        pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
+        pushout_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all()
 
-    #     for node in pushout_nodes_init:
-    #         setattr(node, "pushout", "TRUE")
+        for node in pushout_nodes_init:
+            setattr(node, "pushout", "TRUE")
 
 
 
@@ -85,6 +86,4 @@ class GraphDiff:
         #     connection_node_updt = ConnectionNode.nodes.get(GlobalId=connection_node_init.GlobalId, timestamp=timestamp_updt)
 
 
-        # self.get_pushout_pattern(timestamp_init, timestamp_updt)
-
-        print(self.node_matching_table[3])
+        self.create_pushout_pattern(timestamp_init, timestamp_updt)
