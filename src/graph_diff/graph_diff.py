@@ -33,26 +33,27 @@ class GraphDiff:
                     rel_init.rel_type == rel_updt.rel_type
                     and rel_init.list_index == rel_updt.list_index
                     and child_init.EntityType == child_updt.EntityType
-                    and child_updt not in child_init.equivalent_to.all()
+                    and not child_init.equivalent_to.all()
+                    and not child_updt.equivalent_to.all()
                 ):
                     child_init.equivalent_to.connect(child_updt)
                     self.node_matching_table.append([new_path_init.copy(), new_path_updt.copy()])
                     self.create_equivalence_relations_primary(child_init, child_updt, new_path_init, new_path_updt)
 
 
-    def create_equivalence_relations_connection(self, equiv_node_init, equiv_node_updt):
-        for child_init in equiv_node_init.relation_to.all():
-            for child_updt in equiv_node_updt.relation_to.all():
-                rel_init = equiv_node_init.relation_to.relationship(child_init)
-                rel_updt = equiv_node_updt.relation_to.relationship(child_updt)
-                if (
-                    rel_init.rel_type == rel_updt.rel_type
-                    and rel_init.list_index == rel_updt.list_index
-                    and child_init.EntityType == child_updt.EntityType
-                    and child_init.equivalent_to is None
-                    and child_updt.equivalent_to is None
-                ):
-                    equiv_node_init.equivalent_to.connect(equiv_node_updt)
+    # def create_equivalence_relations_connection(self, equiv_node_init, equiv_node_updt):
+    #     for child_init in equiv_node_init.relation_to.all():
+    #         for child_updt in equiv_node_updt.relation_to.all():
+    #             rel_init = equiv_node_init.relation_to.relationship(child_init)
+    #             rel_updt = equiv_node_updt.relation_to.relationship(child_updt)
+    #             if (
+    #                 rel_init.rel_type == rel_updt.rel_type
+    #                 and rel_init.list_index == rel_updt.list_index
+    #                 and child_init.EntityType == child_updt.EntityType
+    #                 and child_init.equivalent_to is None
+    #                 and child_updt.equivalent_to is None
+    #             ):
+    #                 equiv_node_init.equivalent_to.connect(equiv_node_updt)
 
     # def get_pushout_pattern(self, timestamp_init, timestamp_updt):
     #     pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
