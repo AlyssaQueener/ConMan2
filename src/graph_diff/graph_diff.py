@@ -23,11 +23,11 @@ class GraphDiff:
 
         for child_init in equiv_node_init.relation_to.all():
             rel_init = equiv_node_init.relation_to.relationship(child_init)
-            new_path_init = unique_path_init + [{"rel_type": rel_init.rel_type, "list_index": rel_init.list_index, "EntityType": child_init.EntityType}]
+            new_path_init = unique_path_init + [{"node": child_init, "rel_type": rel_init.rel_type, "list_index": rel_init.list_index, "EntityType": child_init.EntityType}]
             
             for child_updt in equiv_node_updt.relation_to.all():
                 rel_updt = equiv_node_updt.relation_to.relationship(child_updt)
-                new_path_updt = unique_path_updt + [{"rel_type": rel_updt.rel_type, "list_index": rel_updt.list_index, "EntityType": child_updt.EntityType}]
+                new_path_updt = unique_path_updt + [{"node": child_updt, "rel_type": rel_updt.rel_type, "list_index": rel_updt.list_index, "EntityType": child_updt.EntityType}]
                 
                 if (
                     rel_init.rel_type == rel_updt.rel_type
@@ -86,3 +86,5 @@ class GraphDiff:
 
 
         # self.get_pushout_pattern(timestamp_init, timestamp_updt)
+
+        print(self.node_matching_table[3])
