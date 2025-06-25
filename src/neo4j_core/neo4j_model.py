@@ -15,6 +15,7 @@ class RelProperties(StructuredRel):
     '''
     rel_type = StringProperty(required=True)
     list_index = IntegerProperty()
+    pushout_id = IntegerProperty()
 
 
 class Node(SemiStructuredNode):
