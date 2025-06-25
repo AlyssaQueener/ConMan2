@@ -1,5 +1,4 @@
 from neo4j_core.neo4j_model import Node, GenericNode, PrimaryNode, ConnectionNode, SecondaryNode, InlineNode, RelProperties
-import script_parseIfc2Graph
 
 from neomodel import Traversal #???
 import json
@@ -62,6 +61,7 @@ class GraphDiff:
 
         for node in pushout_nodes_init:
             setattr(node, "pushout", "TRUE")
+            node.save()
 
 
 
