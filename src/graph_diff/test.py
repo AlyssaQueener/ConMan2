@@ -75,17 +75,20 @@ window_updt_same = SecondaryNode(
 ).save()
 
 
-proj_init.relation.connect(wall_init_same, {"rel_type": "wall", "list_index": 0}).save()
-proj_init.relation.connect(wall_init_diff, {"rel_type": "wall", "list_index": 1}).save()
+proj_init.relation_to.connect(wall_init_same, {"rel_type": "wall", "list_index": 0}).save()
+proj_init.relation_to.connect(wall_init_diff, {"rel_type": "wall", "list_index": 1}).save()
 
-proj_updt.relation.connect(wall_updt_same, {"rel_type": "wall", "list_index": 0}).save()
-proj_updt.relation.connect(wall_updt_diff, {"rel_type": "wall", "list_index": 1}).save()
+proj_updt.relation_to.connect(wall_updt_same, {"rel_type": "wall", "list_index": 0}).save()
+proj_updt.relation_to.connect(wall_updt_diff, {"rel_type": "wall", "list_index": 1}).save()
 
-wall_init_same.relation.connect(window_init_same, {"rel_type": "wall", "list_index": 0})
-wall_updt_same.relation.connect(window_updt_same, {"rel_type": "wall", "list_index": 0})
+wall_init_same.relation_to.connect(window_init_same, {"rel_type": "wall", "list_index": 0})
+wall_updt_same.relation_to.connect(window_updt_same, {"rel_type": "wall", "list_index": 0})
 
-wall_init_same.relation.connect(window_init_only, {"rel_type": "wall", "list_index": 1}).save()
+wall_init_same.relation_to.connect(window_init_only, {"rel_type": "wall", "list_index": 1}).save()
 
 graph_diff = GraphDiff()
 
 graph_diff.run_diff("1", "2")
+
+# This prints an actual relation object
+print(proj_init.relation_to.relationship(wall_init_same))
