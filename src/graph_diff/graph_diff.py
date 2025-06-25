@@ -55,7 +55,7 @@ class GraphDiff:
     #             ):
     #                 equiv_node_init.equivalent_to.connect(equiv_node_updt)
 
-    def create_pushout_pattern(self, node, timestamp, pushout_id, visited=None):
+    def create_pushout_and_gluing_pattern(self, node, timestamp, pushout_id, visited=None):
         if node.element_id in visited:
             return
         visited.add(node.element_id)
@@ -64,8 +64,30 @@ class GraphDiff:
             node.pushout_id = pushout_id
             node.save()
             for adjacent in node.relation_to.all() + node.relation_from.all():
+                relation_to = node.relation_to.relationship(adjacent)
+                relation_from = node.relation_from.relationship(adjacent)
+                # If receiving end is also not equiv, assign pushout id to relation
                 if not adjacent.equivalent_to.all() and adjacent.timestamp == timestamp:
-                    self.create_pushout_pattern(adjacent, timestamp, pushout_id, visited)
+                    if relation_to:
+                        if relation_to.pushout_id is None:
+                            relation_to.pushout_id = pushout_id
+                            relation_to.save()
+                    if relation_from:
+                        if relation_from.pushout_id is None:
+                            relation_from.pushout_id = pushout_id
+                            relation_from.save()
+                    self.create_pushout_and_gluing_pattern(adjacent, timestamp, pushout_id, visited)
+                # If receiving end is equiv, assign gluing id = pushout id
+                elif adjacent.equivalent_to.all() is not None and adjacent.timestamp == timestamp:
+                    if relation_to:
+                        if relation_to.gluing_id is None:
+                            relation_to.gluing_id = pushout_id
+                            relation_to.save()
+                    if relation_from:
+                        if relation_from.gluing_id is None:
+                            relation_from.gluing_id = pushout_id
+                            relation_from.save()
+                    
                     
 
 
@@ -96,9 +118,16 @@ class GraphDiff:
         id_counter_init = 0
         id_counter_updt = 0
 
-        visited = set()
+        visited_init = set()
+        visited_updt = set()
 
         for node_init in pushout_nodes_init:
-            if node_init.pushout_id is None and node_init.element_id not in visited:
-                self.create_pushout_pattern(node_init, timestamp_init, id_counter_init, visited)
+            if node_init.pushout_id is None and node_init.element_id not in visited_init:
+                self.create_pushout_and_gluing_pattern(node_init, timestamp_init, id_counter_init, visited_init)
                 id_counter_init += 1
+
+
+        for node_updt in pushout_nodes_updt:
+            if node_updt.pushout_id is None and node_updt.element_id not in visited_updt:
+                self.create_pushout_and_gluing_pattern(node_updt, timestamp_updt, id_counter_updt, visited_updt)
+                id_counter_updt += 1
