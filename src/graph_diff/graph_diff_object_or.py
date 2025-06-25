@@ -23,11 +23,11 @@ class GraphDiff:
 
         for child_init in equiv_node_init.relation_to.all():
             rel_init = equiv_node_init.relation_to.relationship(child_init)
-            new_path_init = unique_path_init + [{"node": child_init, "rel_type": rel_init.rel_type, "list_index": rel_init.list_index, "EntityType": child_init.EntityType}]
+            new_path_init = unique_path_init + [rel_init, child_init]
             
             for child_updt in equiv_node_updt.relation_to.all():
                 rel_updt = equiv_node_updt.relation_to.relationship(child_updt)
-                new_path_updt = unique_path_updt + [{"node": child_updt, "rel_type": rel_updt.rel_type, "list_index": rel_updt.list_index, "EntityType": child_updt.EntityType}]
+                new_path_updt = unique_path_updt + [rel_updt, child_updt]
                 
                 if (
                     rel_init.rel_type == rel_updt.rel_type
@@ -56,9 +56,19 @@ class GraphDiff:
     #                 equiv_node_init.equivalent_to.connect(equiv_node_updt)
 
     def create_pushout_pattern(self, node, timestamp, pushout_id, visited=None):
-        if node.element_id in visited:
+
+        # Idea:
+        """
+        Iterate over all nodes without an equiv relation.
+        For every node, traverse in all directions and store every connected node that does not have an equiv relation.
+        If a connected node has an equiv relation, stop traversal in that direction.
+        For every subgraph assign the nodes a pushout id to identify which pushout subgraph they belong to
+        """
+        if visited is None:
+            visited = []
+        if node in visited:
             return
-        visited.add(node.element_id)
+        visited.append(node)
 
         if node.pushout_id is None:
             node.pushout_id = pushout_id
@@ -67,6 +77,7 @@ class GraphDiff:
                 if not adjacent.equivalent_to.all() and adjacent.timestamp == timestamp:
                     self.create_pushout_pattern(adjacent, timestamp, pushout_id, visited)
                     
+
 
 
     ######################
@@ -96,9 +107,7 @@ class GraphDiff:
         id_counter_init = 0
         id_counter_updt = 0
 
-        visited = set()
-
         for node_init in pushout_nodes_init:
-            if node_init.pushout_id is None and node_init.element_id not in visited:
-                self.create_pushout_pattern(node_init, timestamp_init, id_counter_init, visited)
+            if node_init.pushout_id is None:
+                self.create_pushout_pattern(node_init, timestamp_init, id_counter_init)
                 id_counter_init += 1

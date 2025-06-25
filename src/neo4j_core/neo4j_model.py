@@ -19,9 +19,13 @@ class RelProperties(StructuredRel):
 
 class Node(SemiStructuredNode):
     EntityType = StringProperty(required=True)
+
     relation_to = RelationshipTo('Node', 'rel', model=RelProperties)
     relation_from = RelationshipFrom('Node', 'rel', model=RelProperties)
     equivalent_to = Relationship('Node', 'equivalent_to')
+
+    pushout_id = IntegerProperty()
+
     timestamp = StringProperty(required=True)
 
 
