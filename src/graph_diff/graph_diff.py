@@ -8,7 +8,6 @@ import json
 
 class GraphDiff:
 
-    node_matching_table = []
     unique_paths = {}
 
     ########################
@@ -40,7 +39,6 @@ class GraphDiff:
                     and not child_updt.equivalent_to.all()
                 ):
                     child_init.equivalent_to.connect(child_updt)
-                    self.node_matching_table.append([new_path_init.copy(), new_path_updt.copy()])
                     self.unique_paths[child_init.element_id] = json.dumps(new_path_init.copy())
                     self.unique_paths[child_updt.element_id] = json.dumps(new_path_updt.copy())
                     self.create_equivalence_relations_primary(child_init, child_updt, new_path_init, new_path_updt)
