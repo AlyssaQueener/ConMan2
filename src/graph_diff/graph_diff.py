@@ -46,19 +46,24 @@ class GraphDiff:
                     self.create_equivalence_relations_primary(child_init, child_updt, new_path_init, new_path_updt)
 
 
-    # def create_equivalence_relations_connection(self, equiv_node_init, equiv_node_updt):
-    #     for child_init in equiv_node_init.relation_to.all():
-    #         for child_updt in equiv_node_updt.relation_to.all():
-    #             rel_init = equiv_node_init.relation_to.relationship(child_init)
-    #             rel_updt = equiv_node_updt.relation_to.relationship(child_updt)
-    #             if (
-    #                 rel_init.rel_type == rel_updt.rel_type
-    #                 and rel_init.list_index == rel_updt.list_index
-    #                 and child_init.EntityType == child_updt.EntityType
-    #                 and child_init.equivalent_to is None
-    #                 and child_updt.equivalent_to is None
-    #             ):
-    #                 equiv_node_init.equivalent_to.connect(equiv_node_updt)
+    def create_equivalence_relations_connection(self, connection_node_init, connection_node_updt):
+
+        common_children_count = 0
+
+        for child_init in connection_node_init.relation_to.all():
+            for child_updt in connection_node_updt.relation_to.all():
+                if child_init.equivalent_to.relationship(child_updt) is not None:
+                    common_children_count += 1
+
+        unique_children_count_init = len(connection_node_init.relation_to.all()) - common_children_count
+        unique_children_count_updt = len(connection_node_updt.relation_to.all()) - common_children_count
+
+        iou = common_children_count / (unique_children_count_init + common_children_count + unique_children_count_updt)
+        if iou == 1.0:
+            connection_node_init.equivalent_to.connect(connection_node_updt)
+            self.unique_paths[connection_node_init.element_id] = {"connection_node": connection_node_init.GlobalId}
+            self.unique_paths[connection_node_updt.element_id] = {"connection_node": connection_node_updt.GlobalId}
+
 
     def create_pushout_and_gluing_pattern(self, node, timestamp, pushout_id, visited=None):
         if node.element_id in visited:
@@ -92,7 +97,7 @@ class GraphDiff:
                     if relation_from:
                         if relation_from.gluing_id is None:
                             relation_from.gluing_id = pushout_id
-                            relation_to.context_node = self.unique_paths[adjacent.element_id]
+                            relation_from.context_node = self.unique_paths[adjacent.element_id]
                             relation_from.save()
                     
                     
@@ -115,12 +120,16 @@ class GraphDiff:
             primary_node_init.equivalent_to.connect(primary_node_updt)
             self.create_equivalence_relations_primary(primary_node_init, primary_node_updt)
 
-        # for connection_node_init in ConnectionNode.nodes.filter(timestamp=timestamp_init):
-        #     connection_node_updt = ConnectionNode.nodes.get(GlobalId=connection_node_init.GlobalId, timestamp=timestamp_updt)
+        for connection_node_init in ConnectionNode.nodes.filter(timestamp=timestamp_init):
+            for connection_node_updt in ConnectionNode.nodes.filter(timestamp=timestamp_updt):
+                self.create_equivalence_relations_connection(connection_node_init, connection_node_updt)
 
-
+        # Ab hier in PATCH
         pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
         pushout_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all()
+
+        pushout_edges_init = None # filter alles relationships die zwishcen zwei knoten aus pushout init bestehen
+        # und für updt
 
         id_counter_init = 0
         id_counter_updt = 0
