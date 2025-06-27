@@ -46,6 +46,14 @@ class GraphDiff:
 
     def create_equivalence_relations_connection(self, connection_node_init, connection_node_updt):
 
+        if hasattr(connection_node_init, 'GlobalId'):
+            if hasattr(connection_node_updt, 'GlobalId'):
+                if connection_node_init.GlobalId == connection_node_updt.GlobalId:
+                    connection_node_init.equivalent_to.connect(connection_node_updt)
+                    self.unique_paths[connection_node_init.element_id] = {"connection_node": connection_node_init.GlobalId}
+                    self.unique_paths[connection_node_updt.element_id] = {"connection_node": connection_node_updt.GlobalId}
+                    return
+
         common_children_count = 0
 
         for child_init in connection_node_init.relation_to.all():
