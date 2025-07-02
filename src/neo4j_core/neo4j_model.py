@@ -17,7 +17,6 @@ class RelProperties(StructuredRel):
     list_index = IntegerProperty()
     pushout_id = IntegerProperty()
     gluing_id = IntegerProperty()
-    context_node = StringProperty()
 
 
 class Node(SemiStructuredNode):
