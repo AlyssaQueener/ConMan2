@@ -39,8 +39,8 @@ class GraphDiff:
                     and not child_updt.equivalent_to.all()
                 ):
                     child_init.equivalent_to.connect(child_updt)
-                    self.unique_paths[child_init.element_id] = json.dumps(new_path_init.copy())
-                    self.unique_paths[child_updt.element_id] = json.dumps(new_path_updt.copy())
+                    self.unique_paths[child_init.element_id] = new_path_init.copy()
+                    self.unique_paths[child_updt.element_id] = new_path_updt.copy()
                     self.create_equivalence_relations_primary(child_init, child_updt, new_path_init, new_path_updt)
 
 
