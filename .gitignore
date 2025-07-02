@@ -269,3 +269,4 @@ __pycache__/
 GraphDelta_*.json
 Patch_*.json
 PatchBundle_*.json
+Diff_*.json
