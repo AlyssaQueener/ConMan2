@@ -2,6 +2,8 @@ from neo4j_core.neo4j_model import Node, GenericNode, PrimaryNode, ConnectionNod
     
 class GraphPatch:
 
+    unique_paths = {}
+
     ########################
     ### Helper Functions ###
     ########################
@@ -17,13 +19,15 @@ class GraphPatch:
             for adjacent in node.relation_to.all() + node.relation_from.all():
                 relation_to = node.relation_to.relationship(adjacent)
                 relation_from = node.relation_from.relationship(adjacent)
+                # print(adjacent.equivalent_to.all())
+                # print(relation_to)
                 # If receiving end is also not equiv, assign pushout id to relation
                 if not adjacent.equivalent_to.all() and adjacent.timestamp == timestamp:
-                    if relation_to:
+                    if relation_to is not None:
                         if relation_to.pushout_id is None:
                             relation_to.pushout_id = pushout_id
                             relation_to.save()
-                    if relation_from:
+                    if relation_from is not None:
                         if relation_from.pushout_id is None:
                             relation_from.pushout_id = pushout_id
                             relation_from.save()
@@ -45,7 +49,10 @@ class GraphPatch:
     ### Main Functions ###
     ######################
 
-    def create_patch(self, timestamp_init:str, timestamp_updt:str):
+    def create_patch(self, timestamp_init:str, timestamp_updt:str, unique_paths):
+
+        self.unique_paths = unique_paths
+
         pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
         pushout_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all()
 
@@ -68,3 +75,5 @@ class GraphPatch:
             if node_updt.pushout_id is None and node_updt.element_id not in visited_updt:
                 self.create_pushout_and_gluing_pattern(node_updt, timestamp_updt, id_counter_updt, visited_updt)
                 id_counter_updt += 1
+
+        
