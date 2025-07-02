@@ -1,5 +1,5 @@
 from neo4j_core.neo4j_connection import Neo4jConnection
-from graph_patch.graph_patch import GraphPatch
+from graph_patch.GraphPatch import GraphPatch
 
 timestamp_init = "0"
 timestamp_updt = "1"

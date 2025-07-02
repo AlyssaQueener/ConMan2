@@ -1,5 +1,5 @@
 from neo4j_core.neo4j_connection import Neo4jConnection
-from graph_diff.graph_diff import GraphDiff
+from graph_diff.GraphDiff import GraphDiff
 
 timestamp_init = "0"
 timestamp_updt = "1"

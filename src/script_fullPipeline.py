@@ -1,7 +1,7 @@
 from neo4j_core.neo4j_connection import Neo4jConnection
 from ifc_graph_interface.IfcGraphInterface import IfcGraphInterface
-from graph_diff.graph_diff import GraphDiff
-from graph_patch.graph_patch import GraphPatch
+from graph_diff.GraphDiff import GraphDiff
+from graph_patch.GraphPatch import GraphPatch
 
 # paths = [
 #     "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v1-purified.ifc",
