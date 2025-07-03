@@ -4,8 +4,8 @@ from data_handler.DataHandler import DataHandler
     
 class GraphPatch:
 
-    unique_paths_to_node_ids_mapping = {}
-    node_ids_to_unique_paths_mapping = {}
+    unique_paths_to_node_ids_mapping = {"init": {}, "updt": {}}
+    node_ids_to_unique_paths_mapping = {"init": {}, "updt": {}}
 
     topological_patch_pattern = {
         "init": {},
@@ -18,9 +18,9 @@ class GraphPatch:
     ### Helper Functions ###
     ########################
 
-    def create_unique_path_mappings(self, node, unique_path=None):
+    def create_unique_path_mappings(self, node, timestamp, unique_path=None):
 
-        if node.element_id not in self.node_ids_to_unique_paths_mapping:
+        if node.element_id not in self.node_ids_to_unique_paths_mapping[timestamp]:
 
             if unique_path == None:
                 if type(node) == PrimaryNode:
@@ -28,13 +28,13 @@ class GraphPatch:
                 if type(node) == ConnectionNode:
                     unique_path = [{"connection_node": node.GlobalId}]
 
-            self.node_ids_to_unique_paths_mapping[node.element_id] = DataHandler.path_to_hash(unique_path)
-            self.unique_paths_to_node_ids_mapping[DataHandler.path_to_hash(unique_path)] = node.element_id
+            self.node_ids_to_unique_paths_mapping[timestamp][node.element_id] = DataHandler.path_to_hash(unique_path)
+            self.unique_paths_to_node_ids_mapping[timestamp][DataHandler.path_to_hash(unique_path)] = node.element_id
 
             for child in node.relation_to.all():
                 rel = node.relation_to.relationship(child)
                 new_path = unique_path + [{"rel_type": rel.rel_type, "list_index": rel.list_index, "EntityType": child.EntityType}]
-                self.create_unique_path_mappings(child, new_path)
+                self.create_unique_path_mappings(child, timestamp, new_path)
 
 
 
@@ -71,19 +71,19 @@ class GraphPatch:
                     if relation_to:
                         if relation_to.gluing_id is None:
                             relation_to.gluing_id = pushout_id
-                            self.topological_patch_pattern[timestamp][pushout_id]["gluing_relations"][relation_to.element_id] = {"pushout": node.element_id, "context": self.unique_paths[adjacent.element_id], "properties": relation_to.__properties__, "direction": "pushout_to_context"}
+                            self.topological_patch_pattern[timestamp][pushout_id]["gluing_relations"][relation_to.element_id] = {"pushout": node.element_id, "context": self.node_ids_to_unique_paths_mapping[timestamp][adjacent.element_id], "properties": relation_to.__properties__, "direction": "pushout_to_context"}
                             relation_to.save()
                     if relation_from:
                         if relation_from.gluing_id is None:
                             relation_from.gluing_id = pushout_id
-                            self.topological_patch_pattern[timestamp][pushout_id]["gluing_relations"][relation_from.element_id] = {"context": self.unique_paths[adjacent.element_id], "pushout": adjacent.element_id, "properties": relation_from.__properties__, "direction": "context_to_context"}
+                            self.topological_patch_pattern[timestamp][pushout_id]["gluing_relations"][relation_from.element_id] = {"context": self.node_ids_to_unique_paths_mapping[timestamp][adjacent.element_id], "pushout": adjacent.element_id, "properties": relation_from.__properties__, "direction": "context_to_context"}
                             relation_from.save()
 
 
-    def create_semantic_patch_pattern(self, equivalent_nodes_init):
+    def create_semantic_patch_pattern(self, equivalent_nodes_init, timestamp_init):
         for node_init in equivalent_nodes_init:
             node_updt = node_init.equivalent_to.all()[0]
-            unique_path = self.unique_paths[node_init.element_id]
+            unique_path = self.node_ids_to_unique_paths_mapping[timestamp_init][node_init.element_id]
             for property_key, property_value in node_init.__properties__.items():
                 if property_key not in ["timestamp", "element_id_property"]:
                     if property_value != node_updt.__properties__.get(property_key):
@@ -105,15 +105,27 @@ class GraphPatch:
     ### Main Functions ###
     ######################
 
-    def create_patch(self, timestamp_init:str, timestamp_updt:str, unique_paths):
+    def create_patch(self, timestamp_init:str, timestamp_updt:str):
 
-        self.unique_paths = unique_paths
+        prim_and_con_init = list(PrimaryNode.nodes.filter(timestamp=timestamp_init)) + list(ConnectionNode.nodes.filter(timestamp=timestamp_init))
+        prim_and_con_updt = list(PrimaryNode.nodes.filter(timestamp=timestamp_updt)) + list(ConnectionNode.nodes.filter(timestamp=timestamp_updt))
+
+        for node in prim_and_con_init:
+            self.create_unique_path_mappings(node, timestamp_init)
+        for node in prim_and_con_updt:
+            self.create_unique_path_mappings(node, timestamp_updt)
+
+        with open(f"Patch_unique_paths_to_node_ids_mapping.json", "w") as f:
+            json.dump(self.unique_paths_to_node_ids_mapping, f, indent=4)
+        with open(f"Patch_node_ids_to_unique_paths_mapping.json", "w") as f:
+            json.dump(self.node_ids_to_unique_paths_mapping, f, indent=4)
 
         pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
         pushout_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all()
         equivalent_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=True).all()
+
         
-        self.create_semantic_patch_pattern(equivalent_nodes_init)
+        self.create_semantic_patch_pattern(equivalent_nodes_init, timestamp_init)
 
 
         pushout_id_counter_init = 0

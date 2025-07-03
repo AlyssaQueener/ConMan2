@@ -39,12 +39,11 @@ creation_neo4j_ifc_interface.ifc_2_graph(path_updt, timestamp=timestamp_updt)
 print(f"Running diff.")
 creation_graph_diff = GraphDiff()
 creation_graph_diff.run_diff(timestamp_init, timestamp_updt)
-print(creation_graph_diff.unique_paths)
 
 # Create Patch
 print(f"Creating patch.")
 creation_graph_patch = GraphPatch()
-creation_graph_patch.create_patch(timestamp_init, timestamp_updt, unique_paths=creation_graph_diff.unique_paths)
+creation_graph_patch.create_patch(timestamp_init, timestamp_updt)
 
 
 
