@@ -1,9 +1,11 @@
 from neo4j_core.neo4j_model import Node, GenericNode, PrimaryNode, ConnectionNode, SecondaryNode, InlineNode, RelProperties
 import json
+from data_handler.DataHandler import DataHandler
     
 class GraphPatch:
 
-    unique_paths = {}
+    unique_paths_to_node_ids_mapping = {}
+    node_ids_to_unique_paths_mapping = {}
 
     topological_patch_pattern = {
         "init": {},
@@ -15,6 +17,26 @@ class GraphPatch:
     ########################
     ### Helper Functions ###
     ########################
+
+    def create_unique_path_mappings(self, node, unique_path=None):
+
+        if node.element_id not in self.node_ids_to_unique_paths_mapping:
+
+            if unique_path == None:
+                if type(node) == PrimaryNode:
+                    unique_path = [{"primary_node": node.GlobalId}]
+                if type(node) == ConnectionNode:
+                    unique_path = [{"connection_node": node.GlobalId}]
+
+            self.node_ids_to_unique_paths_mapping[node.element_id] = DataHandler.path_to_hash(unique_path)
+            self.unique_paths_to_node_ids_mapping[DataHandler.path_to_hash(unique_path)] = node.element_id
+
+            for child in node.relation_to.all():
+                rel = node.relation_to.relationship(child)
+                new_path = unique_path + [{"rel_type": rel.rel_type, "list_index": rel.list_index, "EntityType": child.EntityType}]
+                self.create_unique_path_mappings(child, new_path)
+
+
 
     def create_topological_patch_pattern(self, node, timestamp, pushout_id, visited=None):
         if node.element_id in visited:
@@ -71,6 +93,14 @@ class GraphPatch:
                         self.semantic_patch_pattern[unique_path][property_key]["init"] = property_value
                         self.semantic_patch_pattern[unique_path][property_key]["updt"] = node_updt.__properties__.get(property_key)
 
+
+    def load_patch_from_file(self, path_topo, path_sema):
+        with open(path_sema, "r") as f:
+            self.semantic_patch_pattern = json.load(f)
+        with open(path_topo, "r") as f:
+            self.topological_patch_pattern = json.load(f)
+
+
     ######################
     ### Main Functions ###
     ######################
@@ -103,8 +133,12 @@ class GraphPatch:
                 self.create_topological_patch_pattern(node_updt, timestamp_updt, pushout_id_counter_updt, visited_updt)
                 pushout_id_counter_updt += 1
 
-        with open("Patch_Topo.json", "w") as f:
+        with open(f"Patch_Topo_{timestamp_init}_{timestamp_updt}.json", "w") as f:
             json.dump(self.topological_patch_pattern, f, indent=4)
 
-        with open("Patch_Sema.json", "w") as f:
+        with open(f"Patch_Sema_{timestamp_init}_{timestamp_updt}.json", "w") as f:
             json.dump(self.semantic_patch_pattern, f, indent=4)
+
+
+    # def apply_patch(self, timestamp_init, timestamp_updt):
+    #     for 

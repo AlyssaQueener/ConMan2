@@ -12,25 +12,62 @@ from graph_patch.GraphPatch import GraphPatch
 path_init = "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v1-purified.ifc"
 path_updt = "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v2-purified.ifc"
 
-db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
-db.cypher_query("MATCH (n) DETACH DELETE n")
-
 timestamp_init = "init"
 timestamp_updt = "updt"
 
+
+
+##################
+# Patch Creation #
+##################
+
+print('''##################
+# Patch Creation #
+##################''')
+
+db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
+db.cypher_query("MATCH (n) DETACH DELETE n")
+
 # Parse IFC to Graph
-neo4j_ifc_interface = IfcGraphInterface()
+creation_neo4j_ifc_interface = IfcGraphInterface()
 print(f"Parsing {path_init} with timestamp {timestamp_init}.")
-neo4j_ifc_interface.ifc_2_graph(path_init, timestamp=timestamp_init)
+creation_neo4j_ifc_interface.ifc_2_graph(path_init, timestamp=timestamp_init)
 print(f"Parsing {path_updt} with timestamp {timestamp_updt}.")
-neo4j_ifc_interface.ifc_2_graph(path_updt, timestamp=timestamp_updt)
+creation_neo4j_ifc_interface.ifc_2_graph(path_updt, timestamp=timestamp_updt)
 
 # Run Diff
 print(f"Running diff.")
-graph_diff = GraphDiff()
-graph_diff.run_diff(timestamp_init, timestamp_updt)
+creation_graph_diff = GraphDiff()
+creation_graph_diff.run_diff(timestamp_init, timestamp_updt)
+print(creation_graph_diff.unique_paths)
 
 # Create Patch
 print(f"Creating patch.")
-graph_patch = GraphPatch()
-graph_patch.create_patch(timestamp_init, timestamp_updt, unique_paths=graph_diff.unique_paths)
+creation_graph_patch = GraphPatch()
+creation_graph_patch.create_patch(timestamp_init, timestamp_updt, unique_paths=creation_graph_diff.unique_paths)
+
+
+
+# #####################
+# # Patch Application #
+# #####################
+
+# print('''#####################
+# # Patch Application #
+# #####################''')
+
+# db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
+# db.cypher_query("MATCH (n) DETACH DELETE n")
+
+# # Parse IFC to Graph
+# application_neo4j_ifc_interface = IfcGraphInterface()
+# print(f"Parsing {path_init} with timestamp {timestamp_init}.")
+# application_neo4j_ifc_interface.ifc_2_graph(path_init, timestamp=timestamp_init)
+
+# # Load Patch from File
+# application_graph_patch = GraphPatch()
+# application_graph_patch.load_patch_from_file(path_sema="./Patch_Sema.json", path_topo="./Patch_Topo.json")
+
+# #Apply Patch
+# print(f"Applying Patch")
+# application_graph_patch.apply_patch(timestamp_init, timestamp_updt)
