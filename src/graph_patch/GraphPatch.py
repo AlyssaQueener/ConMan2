@@ -104,7 +104,7 @@ class GraphPatch:
                 pushout_id_counter_updt += 1
 
         with open("Patch_Topo.json", "w") as f:
-            json.dump(self.topological_patch_pattern, f)
+            json.dump(self.topological_patch_pattern, f, indent=4)
 
         with open("Patch_Sema.json", "w") as f:
-            json.dump(self.semantic_patch_pattern, f)
+            json.dump(self.semantic_patch_pattern, f, indent=4)
