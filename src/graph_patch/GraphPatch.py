@@ -49,13 +49,27 @@ class GraphPatch:
                     if relation_to:
                         if relation_to.gluing_id is None:
                             relation_to.gluing_id = pushout_id
-                            self.topological_patch_pattern[timestamp][pushout_id]["gluing_relations"][relation_to.element_id] = {"source": node.element_id, "target": self.unique_paths[adjacent.element_id], "properties": relation_to.__properties__}
+                            self.topological_patch_pattern[timestamp][pushout_id]["gluing_relations"][relation_to.element_id] = {"pushout": node.element_id, "context": self.unique_paths[adjacent.element_id], "properties": relation_to.__properties__, "direction": "pushout_to_context"}
                             relation_to.save()
                     if relation_from:
                         if relation_from.gluing_id is None:
                             relation_from.gluing_id = pushout_id
-                            self.topological_patch_pattern[timestamp][pushout_id]["gluing_relations"][relation_from.element_id] = {"source": self.unique_paths[adjacent.element_id], "target": adjacent.element_id, "properties": relation_from.__properties__}
+                            self.topological_patch_pattern[timestamp][pushout_id]["gluing_relations"][relation_from.element_id] = {"context": self.unique_paths[adjacent.element_id], "pushout": adjacent.element_id, "properties": relation_from.__properties__, "direction": "context_to_context"}
                             relation_from.save()
+
+
+    def create_semantic_patch_pattern(self, equivalent_nodes_init):
+        for node_init in equivalent_nodes_init:
+            node_updt = node_init.equivalent_to.all()[0]
+            unique_path = self.unique_paths[node_init.element_id]
+            for property_key, property_value in node_init.__properties__.items():
+                if property_key not in ["timestamp", "element_id_property"]:
+                    if property_value != node_updt.__properties__.get(property_key):
+                        if unique_path not in self.semantic_patch_pattern:
+                            self.semantic_patch_pattern[unique_path] = {}
+                        self.semantic_patch_pattern[unique_path][property_key] = {}
+                        self.semantic_patch_pattern[unique_path][property_key]["init"] = property_value
+                        self.semantic_patch_pattern[unique_path][property_key]["updt"] = node_updt.__properties__.get(property_key)
 
     ######################
     ### Main Functions ###
@@ -68,19 +82,9 @@ class GraphPatch:
         pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
         pushout_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all()
         equivalent_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=True).all()
-        # equivalent_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=True).all()
+        
+        self.create_semantic_patch_pattern(equivalent_nodes_init)
 
-        for node_init in equivalent_nodes_init:
-            node_updt = node_init.equivalent_to.all()[0]
-            unique_path = json.dumps(self.unique_paths[node_init.element_id])
-            for property_key, property_value in node_init.__properties__.items():
-                if property_key not in ["timestamp", "element_id_property"]:
-                    if property_value != node_updt.__properties__.get(property_key):
-                        if unique_path not in self.semantic_patch_pattern:
-                            self.semantic_patch_pattern[unique_path] = {}
-                        self.semantic_patch_pattern[unique_path][property_key] = {}
-                        self.semantic_patch_pattern[unique_path][property_key]["init"] = property_value
-                        self.semantic_patch_pattern[unique_path][property_key]["updt"] = node_updt.__properties__.get(property_key)
 
         pushout_id_counter_init = 0
         pushout_id_counter_updt = 0
