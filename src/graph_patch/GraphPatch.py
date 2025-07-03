@@ -48,7 +48,7 @@ class GraphPatch:
 
         if node.pushout_id is None:
             node.pushout_id = pushout_id
-            self.topological_patch_pattern[timestamp][pushout_id]["pushout_nodes"][node.element_id] = node.__properties__
+            self.topological_patch_pattern[timestamp][pushout_id]["pushout_nodes"][node.element_id] = {"properties": {**dict(node.__properties__)}, "node_type": type(node).__name__}
             node.save()
             for adjacent in node.relation_to.all() + node.relation_from.all():
                 relation_to = node.relation_to.relationship(adjacent)
