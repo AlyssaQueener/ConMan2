@@ -115,11 +115,6 @@ class GraphPatch:
         for node in prim_and_con_updt:
             self.create_unique_path_mappings(node, timestamp_updt)
 
-        with open(f"Patch_unique_paths_to_node_ids_mapping.json", "w") as f:
-            json.dump(self.unique_paths_to_node_ids_mapping, f, indent=4)
-        with open(f"Patch_node_ids_to_unique_paths_mapping.json", "w") as f:
-            json.dump(self.node_ids_to_unique_paths_mapping, f, indent=4)
-
         pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
         pushout_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all()
         equivalent_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=True).all()
