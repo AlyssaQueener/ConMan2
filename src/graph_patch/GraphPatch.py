@@ -4,7 +4,7 @@ from data_handler.DataHandler import DataHandler
     
 class GraphPatch:
 
-    unique_paths_to_node_ids_mapping = {"init": {}, "updt": {}}
+    unique_paths_to_node_mapping = {"init": {}, "updt": {}}
     node_ids_to_unique_paths_mapping = {"init": {}, "updt": {}}
 
     topological_patch_pattern = {
@@ -29,7 +29,7 @@ class GraphPatch:
                     unique_path = [{"connection_node": node.GlobalId}]
 
             self.node_ids_to_unique_paths_mapping[timestamp][node.element_id] = DataHandler.path_to_hash(unique_path)
-            self.unique_paths_to_node_ids_mapping[timestamp][DataHandler.path_to_hash(unique_path)] = node.element_id
+            self.unique_paths_to_node_mapping[timestamp][DataHandler.path_to_hash(unique_path)] = node
 
             for child in node.relation_to.all():
                 rel = node.relation_to.relationship(child)
@@ -76,7 +76,7 @@ class GraphPatch:
                     if relation_from:
                         if relation_from.gluing_id is None:
                             relation_from.gluing_id = pushout_id
-                            self.topological_patch_pattern[timestamp][pushout_id]["gluing_relations"][relation_from.element_id] = {"context": self.node_ids_to_unique_paths_mapping[timestamp][adjacent.element_id], "pushout": adjacent.element_id, "properties": relation_from.__properties__, "direction": "context_to_context"}
+                            self.topological_patch_pattern[timestamp][pushout_id]["gluing_relations"][relation_from.element_id] = {"context": self.node_ids_to_unique_paths_mapping[timestamp][node.element_id], "pushout": adjacent.element_id, "properties": relation_from.__properties__, "direction": "context_to_pushout"}
                             relation_from.save()
 
 
@@ -92,6 +92,35 @@ class GraphPatch:
                         self.semantic_patch_pattern[unique_path][property_key] = {}
                         self.semantic_patch_pattern[unique_path][property_key]["init"] = property_value
                         self.semantic_patch_pattern[unique_path][property_key]["updt"] = node_updt.__properties__.get(property_key)
+
+
+    # def delete_topological_patch_pattern(self, node):
+    #     for adjacent in node.relation_to.all() + node.relation_from.all():
+    #         relation_to = node.relation_to.relationship(adjacent)
+    #         relation_from = node.relation_from.relationship(adjacent)
+    #         if not adjacent.equivalent_to.all():
+    #             if relation_to is not None:
+    #                 node.relation_to.disconnect(adjacent)
+    #                 self.delete_topological_patch_pattern(adjacent)
+    #             if relation_from is not None:
+    #                 node.relation_from.disconnect(adjacent)
+    #                 self.delete_topological_patch_pattern(adjacent)
+    #         elif adjacent.equivalent_to.all() is not None:
+    #             if relation_to is not None:
+    #                 node.relation_to.disconnect(adjacent)
+    #             if relation_from is not None:
+    #                 node.relation_from.disconnect(adjacent)
+    #     node.delete()
+
+
+    def delete_pushout_node(self, node, pushout_pattern):
+        for gluing_relation in pushout_pattern["gluing_relations"]:
+            if self.node_ids_to_unique_paths_mapping[node.element_id] == gluing_relation["context"]:
+                return
+            
+
+    def delete_pushout_pattern(self, pushout_pattern: dict):
+        
 
 
     def load_patch_from_file(self, path_topo, path_sema):
@@ -147,5 +176,65 @@ class GraphPatch:
             json.dump(self.semantic_patch_pattern, f, indent=4)
 
 
-    # def apply_patch(self, timestamp_init, timestamp_updt):
-    #     for 
+    def apply_patch(self, timestamp_init: str, timestamp_updt:str):
+
+        prim_and_con_init = list(PrimaryNode.nodes.filter(timestamp=timestamp_init)) + list(ConnectionNode.nodes.filter(timestamp=timestamp_init))
+        prim_and_con_updt = list(PrimaryNode.nodes.filter(timestamp=timestamp_updt)) + list(ConnectionNode.nodes.filter(timestamp=timestamp_updt))
+
+        for node in prim_and_con_init:
+            self.create_unique_path_mappings(node, timestamp_init)
+        for node in prim_and_con_updt:
+            self.create_unique_path_mappings(node, timestamp_updt)
+
+        for unique_path in self.semantic_patch_pattern.keys():
+            node = self.unique_paths_to_node_mapping[timestamp_init][unique_path]
+
+            setattr(node, "timestamp", timestamp_updt)
+
+            for attr in self.semantic_patch_pattern[unique_path].keys():
+                setattr(node, attr, self.semantic_patch_pattern[unique_path][attr][timestamp_updt])
+                node.save()
+
+        """
+        First, delete all nodes without ingoing relations. They do not have a gluing pattern or a unqiue path.
+        No pushout ids or gluing ids because no persistance between patch and diff neede, either new nodes or deleted.
+        In topo patch init:
+            iterate over pushout clusters:
+                find all nodes without an euivalence
+                find all relations between them and between them and the context
+                find pushout cluster with a gluing pattern (others already removed in before step)
+                find context nodes by unique path in gluing pattern -> context
+            Gluing pattern = Connected (in and out) realtions from guing pattern identifiable by rel type listindex and other end entity type
+
+        idea:
+            store topo patch like this:
+                store context ndoes by unique ids
+                from one of the context nodes, traverse the graph of non-equivalent nodes and store there paths from the context node
+                stop traversal, if another context node is reached
+
+        """
+
+        # pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
+
+        # print(len(pushout_nodes_init))
+
+        # for node in pushout_nodes_init:
+        #     if node is not None:
+        #         self.delete_topological_patch_pattern(node)
+
+        for node in Node.nodes.all():
+            if node.element_id not in self.unique_paths_to_node_mapping:
+                for adjacent in node.relation_to.all():
+                    node.relation_to.disconnect(adjacent)
+                for adjacent in node.relation_from.all():
+                    node.relation_from.disconnect(adjacent)
+                node.delete()
+
+
+        for pushout_id in self.topological_patch_pattern[timestamp_init].keys():
+            pushout_pattern = self.topological_patch_pattern[timestamp_init][pushout_id]
+            # gluing_relations = set()
+            # for gluing_relation in pushout_pattern["gluing_relations"].keys():
+            #     gluing_relations.add(self.unique_paths_to_node_mapping[gluing_relation["context"]])
+            # for gluing_relation in gluing_relations:
+            self.delete_pushout_pattern(pushout_pattern)
