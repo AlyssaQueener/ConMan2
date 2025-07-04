@@ -47,26 +47,26 @@ creation_graph_patch.create_patch(timestamp_init, timestamp_updt)
 
 
 
-# #####################
-# # Patch Application #
-# #####################
+#####################
+# Patch Application #
+#####################
 
-# print('''#####################
-# # Patch Application #
-# #####################''')
+print('''#####################
+# Patch Application #
+#####################''')
 
-# db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
-# db.cypher_query("MATCH (n) DETACH DELETE n")
+db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
+db.cypher_query("MATCH (n) DETACH DELETE n")
 
-# # Parse IFC to Graph
-# application_neo4j_ifc_interface = IfcGraphInterface()
-# print(f"Parsing {path_init} with timestamp {timestamp_init}.")
-# application_neo4j_ifc_interface.ifc_2_graph(path_init, timestamp=timestamp_init)
+# Parse IFC to Graph
+application_neo4j_ifc_interface = IfcGraphInterface()
+print(f"Parsing {path_init} with timestamp {timestamp_init}.")
+application_neo4j_ifc_interface.ifc_2_graph(path_init, timestamp=timestamp_init)
 
-# # Load Patch from File
-# application_graph_patch = GraphPatch()
-# application_graph_patch.load_patch_from_file(path_sema="./Patch_Sema.json", path_topo="./Patch_Topo.json")
+# Load Patch from File
+application_graph_patch = GraphPatch()
+application_graph_patch.load_patch_from_file(path_sema="./Patch_Sema_init_updt.json", path_topo="./Patch_Topo_init_updt.json")
 
-# #Apply Patch
-# print(f"Applying Patch")
-# application_graph_patch.apply_patch(timestamp_init, timestamp_updt)
+#Apply Patch
+print(f"Applying Patch")
+application_graph_patch.apply_patch(timestamp_init, timestamp_updt)
