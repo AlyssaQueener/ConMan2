@@ -14,6 +14,8 @@ class GraphPatch:
 
     semantic_patch_pattern = {}
 
+    nodes_to_delete = []
+
     ########################
     ### Helper Functions ###
     ########################
@@ -76,7 +78,7 @@ class GraphPatch:
                     if relation_from:
                         if relation_from.gluing_id is None:
                             relation_from.gluing_id = pushout_id
-                            self.topological_patch_pattern[timestamp][pushout_id]["gluing_relations"][relation_from.element_id] = {"context": self.node_ids_to_unique_paths_mapping[timestamp][node.element_id], "pushout": adjacent.element_id, "properties": relation_from.__properties__, "direction": "context_to_pushout"}
+                            self.topological_patch_pattern[timestamp][pushout_id]["gluing_relations"][relation_from.element_id] = {"context": self.node_ids_to_unique_paths_mapping[timestamp][adjacent.element_id], "pushout": node.element_id, "properties": relation_from.__properties__, "direction": "context_to_pushout"}
                             relation_from.save()
 
 
@@ -119,8 +121,20 @@ class GraphPatch:
                 return
             
 
-    def delete_pushout_pattern(self, pushout_pattern: dict):
-        
+    def find_nodes_to_delete(self, node, context_nodes):
+        # Traverses nodes until a context node is hit. no checking with the patch relations.
+        if node in self.nodes_to_delete:
+            return
+        for adjacent in node.relation_to.all():
+            if adjacent in context_nodes:
+                return
+            else:
+                self.nodes_to_delete.append(node)
+        for adjacent in node.relation_from.all():
+            if adjacent in context_nodes:
+                return
+            else:
+                self.nodes_to_delete.append(node)
 
 
     def load_patch_from_file(self, path_topo, path_sema):
@@ -222,19 +236,68 @@ class GraphPatch:
         #     if node is not None:
         #         self.delete_topological_patch_pattern(node)
 
-        for node in Node.nodes.all():
-            if node.element_id not in self.unique_paths_to_node_mapping:
-                for adjacent in node.relation_to.all():
-                    node.relation_to.disconnect(adjacent)
-                for adjacent in node.relation_from.all():
-                    node.relation_from.disconnect(adjacent)
-                node.delete()
-
+        # # Delete all nodes without unique paths as they are not reachable in any way and so always have to be patched out
+        # for node in Node.nodes.all():
+        #     if node.element_id not in self.node_ids_to_unique_paths_mapping[timestamp_init]:
+        #         for adjacent in node.relation_to.all():
+        #             node.relation_to.disconnect(adjacent)
+        #         for adjacent in node.relation_from.all():
+        #             node.relation_from.disconnect(adjacent)
+        #         node.delete()
 
         for pushout_id in self.topological_patch_pattern[timestamp_init].keys():
             pushout_pattern = self.topological_patch_pattern[timestamp_init][pushout_id]
+            context_nodes = []
+            gluing_nodes = []
+            for gluing_relation_id, gluing_relation in pushout_pattern["gluing_relations"].items():
+                context_node = self.unique_paths_to_node_mapping[timestamp_init][gluing_relation["context"]]
+                if context_node not in context_nodes:
+                    context_nodes.append(context_node)
+                gluing_node_entry = pushout_pattern["pushout_nodes"][gluing_relation["pushout"]]
+                gluing_relation_rel_type = gluing_relation["properties"]["rel_type"]
+                gluing_relation_list_index = gluing_relation["properties"]["list_index"]
+                if gluing_relation["direction"] == "pushout_to_context":
+                    pushout_contestants = context_node.relation_from.all()
+                    for pushout_contestant in pushout_contestants:
+                        rel_type = context_node.relation_from.relationship(pushout_contestant).rel_type
+                        list_index = context_node.relation_from.relationship(pushout_contestant).list_index
+                        if (
+                            gluing_relation_rel_type == rel_type
+                            and gluing_relation_list_index == list_index
+                            and gluing_node_entry["properties"]["EntityType"] == pushout_contestant.EntityType
+                            and pushout_contestant not in gluing_nodes
+                        ):
+                            gluing_nodes.append(pushout_contestant)
+                elif gluing_relation["direction"] == "context_to_pushout":
+                    pushout_contestants = context_node.relation_to.all()
+                    for pushout_contestant in pushout_contestants:
+                        rel_type = context_node.relation_to.relationship(pushout_contestant).rel_type
+                        list_index = context_node.relation_to.relationship(pushout_contestant).list_index
+                        if (
+                            gluing_relation_rel_type == rel_type
+                            and gluing_relation_list_index == list_index
+                            and gluing_node_entry["properties"]["EntityType"] == pushout_contestant.EntityType
+                            and pushout_contestant not in gluing_nodes
+                        ):
+                            gluing_nodes.append(pushout_contestant)
+                            self.nodes_to_delete.append(pushout_contestant)
+
+            for gluing_node in gluing_nodes:
+                self.find_nodes_to_delete(gluing_node, context_nodes)
+
+            for node in self.nodes_to_delete:
+                try:
+                    for adjacent in node.relation_to.all():
+                        node.relation_to.disconnect(adjacent)
+                    for adjacent in node.relation_from.all():
+                        node.relation_from.disconnect(adjacent)
+                    node.delete()
+                except:
+                    pass
+
+
             # gluing_relations = set()
             # for gluing_relation in pushout_pattern["gluing_relations"].keys():
             #     gluing_relations.add(self.unique_paths_to_node_mapping[gluing_relation["context"]])
             # for gluing_relation in gluing_relations:
-            self.delete_pushout_pattern(pushout_pattern)
+            # self.delete_pushout_pattern(pushout_pattern)
