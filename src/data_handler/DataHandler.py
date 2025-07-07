@@ -5,7 +5,15 @@ import hashlib
 
 class DataHandler:
 
+    @staticmethod
     def path_to_hash(path):
-        path_string = json.dumps(path)
-        path_hash = hashlib.sha1(path_string.encode('utf-8')).hexdigest()
-        return path_hash
+        # Just return the string representation directly
+        parts = []
+        for item in path:
+            if isinstance(item, dict):
+                dict_str = ','.join(f"{k}={v}" for k, v in sorted(item.items()))
+                parts.append(f"[{dict_str}]")
+            else:
+                parts.append(str(item))
+        
+        return '|'.join(parts)
