@@ -4,17 +4,14 @@ from data_handler.DataHandler import DataHandler
     
 class GraphPatch:
 
-    unique_paths_to_node_mapping = {"init": {}, "updt": {}}
-    node_ids_to_unique_paths_mapping = {"init": {}, "updt": {}}
+    def __init__(self):
+        # INSTANCE variables (unique per object)
+        self.unique_paths_to_node_mapping = {"init": {}, "updt": {}}
+        self.node_ids_to_unique_paths_mapping = {"init": {}, "updt": {}}
+        self.topological_patch_pattern = {"init": {}, "updt": {}}
+        self.semantic_patch_pattern = {}
+        self.nodes_to_delete = []
 
-    topological_patch_pattern = {
-        "init": {},
-        "updt": {}
-    }
-
-    semantic_patch_pattern = {}
-
-    nodes_to_delete = []
 
     ########################
     ### Helper Functions ###
@@ -30,13 +27,28 @@ class GraphPatch:
                 if type(node) == ConnectionNode:
                     unique_path = [{"connection_node": node.GlobalId}]
 
-            self.node_ids_to_unique_paths_mapping[timestamp][node.element_id] = DataHandler.path_to_hash(unique_path)
-            self.unique_paths_to_node_mapping[timestamp][DataHandler.path_to_hash(unique_path)] = node
+            self.node_ids_to_unique_paths_mapping[timestamp][node.element_id] = DataHandler.path_to_string(unique_path)
+            self.unique_paths_to_node_mapping[timestamp][DataHandler.path_to_string(unique_path)] = node
 
             for child in node.relation_to.all():
                 rel = node.relation_to.relationship(child)
                 new_path = unique_path + [{"rel_type": rel.rel_type, "list_index": rel.list_index, "EntityType": child.EntityType}]
                 self.create_unique_path_mappings(child, timestamp, new_path)
+
+
+    def find_node_from_unique_path(self, unique_path: str, timestamp):
+        path = DataHandler.string_to_path(unique_path)
+        if "primary_node" in path[0]:
+            start_node = PrimaryNode.nodes.get(timestamp=timestamp, GlobalId=path[0]["primary_node"])
+        elif "connection_node" in path[0]:
+            start_node = ConnectionNode.nodes.get(timestamp=timestamp, GlobalId=path[0]["connection_node"])
+        latest_node = start_node
+        for i in range(1, len(path)-1):
+            for contestant in latest_node.relation_to.match(rel_type=path[i]["rel_type"], list_index=path[i]["list_index"]):
+                if contestant.EntityType == path[i]["EntityType"]:
+                    latest_node = contestant
+            i += 1
+        return latest_node
 
 
 
@@ -174,21 +186,8 @@ class GraphPatch:
     def apply_patch(self, timestamp_init: str, timestamp_updt:str):
 
         prim_and_con_init = list(PrimaryNode.nodes.filter(timestamp=timestamp_init)) + list(ConnectionNode.nodes.filter(timestamp=timestamp_init))
-        prim_and_con_updt = list(PrimaryNode.nodes.filter(timestamp=timestamp_updt)) + list(ConnectionNode.nodes.filter(timestamp=timestamp_updt))
-
         for node in prim_and_con_init:
             self.create_unique_path_mappings(node, timestamp_init)
-        for node in prim_and_con_updt:
-            self.create_unique_path_mappings(node, timestamp_updt)
-
-        for unique_path in self.semantic_patch_pattern.keys():
-            node = self.unique_paths_to_node_mapping[timestamp_init][unique_path]
-
-            setattr(node, "timestamp", timestamp_updt)
-
-            for attr in self.semantic_patch_pattern[unique_path].keys():
-                setattr(node, attr, self.semantic_patch_pattern[unique_path][attr][timestamp_updt])
-                node.save()
 
         # Deletion of init part
 
@@ -206,7 +205,8 @@ class GraphPatch:
             context_nodes = []
             gluing_nodes = []
             for gluing_relation_id, gluing_relation in pushout_pattern["gluing_relations"].items():
-                context_node = self.unique_paths_to_node_mapping[timestamp_init][gluing_relation["context"]]
+                # context_node = self.unique_paths_to_node_mapping[timestamp_init][gluing_relation["context"]]
+                context_node = self.find_node_from_unique_path(unique_path=gluing_relation["context"], timestamp=timestamp_init)
                 if context_node not in context_nodes:
                     context_nodes.append(context_node)
                 gluing_node_entry = pushout_pattern["pushout_nodes"][gluing_relation["pushout"]]
@@ -254,12 +254,42 @@ class GraphPatch:
         # Insertion of updt part
 
         for pushout_id in self.topological_patch_pattern[timestamp_updt].keys():
+            pushout_node_id_to_added_node_mapping = {}
+            added_node_id_to_pushout_id_mapping = {}
             pushout_pattern = self.topological_patch_pattern[timestamp_updt][pushout_id]
-            if pushout_pattern["gluing_relations"] == {}:
-                pushout_to_added_id_mapping = {}
-                added_to_pushout_id_mapping = {}
-                for node_id, node in pushout_pattern["pushout_nodes"].items():
-                    node_class = globals()[node["node_type"]]
-                    node_obj = node_class(**node["properties"])
-                    delattr(node_obj, "element_id_property")
-                    node_obj.save()
+            for node_id, node in pushout_pattern["pushout_nodes"].items():
+                node_class = globals()[node["node_type"]]
+                node_obj = node_class(**node["properties"])
+                delattr(node_obj, "element_id_property")
+                node_obj.save()
+                pushout_node_id_to_added_node_mapping[node["properties"]["element_id_property"]] = node_obj
+                added_node_id_to_pushout_id_mapping[node_obj.element_id] = pushout_node_id_to_added_node_mapping[node["properties"]["element_id_property"]]
+
+            if pushout_pattern["pushout_relations"]:
+                for rel_id, relation in pushout_pattern["pushout_relations"].items():
+                    del relation["properties"]["element_id_property"]
+                    source_node = pushout_node_id_to_added_node_mapping[relation["source"]]
+                    target_node = pushout_node_id_to_added_node_mapping[relation["target"]]
+                    source_node.relation_to.connect(target_node, relation["properties"])
+            
+            if pushout_pattern["gluing_relations"]:
+                for rel_id, relation in pushout_pattern["gluing_relations"].items():
+                    del relation["properties"]["element_id_property"]
+                    # context_node = self.unique_paths_to_node_mapping[timestamp_init][relation["context"]]
+                    context_node = self.find_node_from_unique_path(unique_path=relation["context"], timestamp=timestamp_init)
+                    gluing_node = pushout_node_id_to_added_node_mapping[relation["pushout"]]
+                    if relation["direction"] == "pushout_to_context":
+                        gluing_node.relation_to.connect(context_node, relation["properties"])
+                    elif relation["direction"] == "context_to_pushout":
+                        context_node.relation_to.connect(gluing_node, relation["properties"])
+
+
+        # Semantic patch
+        for unique_path in self.semantic_patch_pattern.keys():
+            node = self.find_node_from_unique_path(unique_path=unique_path, timestamp=timestamp_init)
+
+            # setattr(node, "timestamp", timestamp_updt)
+
+            for attr in self.semantic_patch_pattern[unique_path].keys():
+                setattr(node, attr, self.semantic_patch_pattern[unique_path][attr][timestamp_updt])
+                node.save()
