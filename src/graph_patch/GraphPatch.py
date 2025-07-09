@@ -236,14 +236,14 @@ class GraphPatch:
         #     if node is not None:
         #         self.delete_topological_patch_pattern(node)
 
-        # # Delete all nodes without unique paths as they are not reachable in any way and so always have to be patched out
-        # for node in Node.nodes.all():
-        #     if node.element_id not in self.node_ids_to_unique_paths_mapping[timestamp_init]:
-        #         for adjacent in node.relation_to.all():
-        #             node.relation_to.disconnect(adjacent)
-        #         for adjacent in node.relation_from.all():
-        #             node.relation_from.disconnect(adjacent)
-        #         node.delete()
+        # Delete all nodes without unique paths as they are not reachable in any way and so always have to be patched out
+        for node in Node.nodes.all():
+            if node.element_id not in self.node_ids_to_unique_paths_mapping[timestamp_init]:
+                for adjacent in node.relation_to.all():
+                    node.relation_to.disconnect(adjacent)
+                for adjacent in node.relation_from.all():
+                    node.relation_from.disconnect(adjacent)
+                node.delete()
 
         for pushout_id in self.topological_patch_pattern[timestamp_init].keys():
             pushout_pattern = self.topological_patch_pattern[timestamp_init][pushout_id]

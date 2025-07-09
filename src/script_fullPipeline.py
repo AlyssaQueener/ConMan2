@@ -68,5 +68,5 @@ application_graph_patch = GraphPatch()
 application_graph_patch.load_patch_from_file(path_sema="./Patch_Sema_init_updt.json", path_topo="./Patch_Topo_init_updt.json")
 
 #Apply Patch
-print(f"Applying Patch")
+print(f"Applying Patch.")
 application_graph_patch.apply_patch(timestamp_init, timestamp_updt)
