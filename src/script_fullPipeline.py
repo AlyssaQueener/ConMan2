@@ -10,7 +10,7 @@ from graph_patch.GraphPatch import GraphPatch
 # ]
 
 path_init = "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v1-purified.ifc"
-path_updt = "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v2-purified.ifc"
+path_updt = "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v3-purified.ifc"
 
 timestamp_init = "init"
 timestamp_updt = "updt"

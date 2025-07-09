@@ -190,6 +190,8 @@ class GraphPatch:
                 setattr(node, attr, self.semantic_patch_pattern[unique_path][attr][timestamp_updt])
                 node.save()
 
+        # Deletion of init part
+
         # Delete all nodes without unique paths as they are not reachable in any way and so always have to be patched out
         for node in Node.nodes.all():
             if node.element_id not in self.node_ids_to_unique_paths_mapping[timestamp_init]:
@@ -248,3 +250,16 @@ class GraphPatch:
                     node.delete()
                 except:
                     pass
+
+        # Insertion of updt part
+
+        for pushout_id in self.topological_patch_pattern[timestamp_updt].keys():
+            pushout_pattern = self.topological_patch_pattern[timestamp_updt][pushout_id]
+            if pushout_pattern["gluing_relations"] == {}:
+                pushout_to_added_id_mapping = {}
+                added_to_pushout_id_mapping = {}
+                for node_id, node in pushout_pattern["pushout_nodes"].items():
+                    node_class = globals()[node["node_type"]]
+                    node_obj = node_class(**node["properties"])
+                    delattr(node_obj, "element_id_property")
+                    node_obj.save()
