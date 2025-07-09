@@ -96,25 +96,6 @@ class GraphPatch:
                         self.semantic_patch_pattern[unique_path][property_key]["updt"] = node_updt.__properties__.get(property_key)
 
 
-    # def delete_topological_patch_pattern(self, node):
-    #     for adjacent in node.relation_to.all() + node.relation_from.all():
-    #         relation_to = node.relation_to.relationship(adjacent)
-    #         relation_from = node.relation_from.relationship(adjacent)
-    #         if not adjacent.equivalent_to.all():
-    #             if relation_to is not None:
-    #                 node.relation_to.disconnect(adjacent)
-    #                 self.delete_topological_patch_pattern(adjacent)
-    #             if relation_from is not None:
-    #                 node.relation_from.disconnect(adjacent)
-    #                 self.delete_topological_patch_pattern(adjacent)
-    #         elif adjacent.equivalent_to.all() is not None:
-    #             if relation_to is not None:
-    #                 node.relation_to.disconnect(adjacent)
-    #             if relation_from is not None:
-    #                 node.relation_from.disconnect(adjacent)
-    #     node.delete()
-
-
     def delete_pushout_node(self, node, pushout_pattern):
         for gluing_relation in pushout_pattern["gluing_relations"]:
             if self.node_ids_to_unique_paths_mapping[node.element_id] == gluing_relation["context"]:
@@ -209,33 +190,6 @@ class GraphPatch:
                 setattr(node, attr, self.semantic_patch_pattern[unique_path][attr][timestamp_updt])
                 node.save()
 
-        """
-        First, delete all nodes without ingoing relations. They do not have a gluing pattern or a unqiue path.
-        No pushout ids or gluing ids because no persistance between patch and diff neede, either new nodes or deleted.
-        In topo patch init:
-            iterate over pushout clusters:
-                find all nodes without an euivalence
-                find all relations between them and between them and the context
-                find pushout cluster with a gluing pattern (others already removed in before step)
-                find context nodes by unique path in gluing pattern -> context
-            Gluing pattern = Connected (in and out) realtions from guing pattern identifiable by rel type listindex and other end entity type
-
-        idea:
-            store topo patch like this:
-                store context ndoes by unique ids
-                from one of the context nodes, traverse the graph of non-equivalent nodes and store there paths from the context node
-                stop traversal, if another context node is reached
-
-        """
-
-        # pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
-
-        # print(len(pushout_nodes_init))
-
-        # for node in pushout_nodes_init:
-        #     if node is not None:
-        #         self.delete_topological_patch_pattern(node)
-
         # Delete all nodes without unique paths as they are not reachable in any way and so always have to be patched out
         for node in Node.nodes.all():
             if node.element_id not in self.node_ids_to_unique_paths_mapping[timestamp_init]:
@@ -294,10 +248,3 @@ class GraphPatch:
                     node.delete()
                 except:
                     pass
-
-
-            # gluing_relations = set()
-            # for gluing_relation in pushout_pattern["gluing_relations"].keys():
-            #     gluing_relations.add(self.unique_paths_to_node_mapping[gluing_relation["context"]])
-            # for gluing_relation in gluing_relations:
-            # self.delete_pushout_pattern(pushout_pattern)
