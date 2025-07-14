@@ -71,4 +71,4 @@ application_graph_patch.load_patch_from_file(path_sema="./Patch_Sema_init_updt.j
 print(f"Applying Patch.")
 application_graph_patch.apply_patch(timestamp_init, timestamp_updt)
 
-# application_neo4j_ifc_interface.graph_2_ifc("./wat_denn.ifc", timestamp="init")
+application_neo4j_ifc_interface.graph_2_ifc("./wat_denn.ifc", timestamp="init")
