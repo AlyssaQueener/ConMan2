@@ -11,6 +11,36 @@ class IfcGraphInterface:
     ### Helper Functions ###
     ########################
 
+    # def create_ifc_entities_from_nodes(self, model, current_nodes:list, parsed_nodes:list, id_mapping:dict):
+    #     """
+    #     Iteratively create ifcopenshell entities from leaf nodes to root nodes
+    #     """
+    #     next_nodes = []
+    #     if len(current_nodes) == 0:
+    #         return
+    #     for node in current_nodes:
+    #         if node in parsed_nodes:
+    #             continue
+    #         parsed_nodes.append(node)
+    #         for parent in node.relation_from.all():
+    #             if parent not in next_nodes:
+    #                 next_nodes.append(parent)
+    #         ifc_entity = model.create_entity(node.EntityType)
+    #         # Add node id and id of new IFC entity to mapping for later use
+    #         id_mapping[node.element_id] = ifc_entity.id()
+
+    #         # Iterate over all node attributes. These are only primitive attributes and can therefore be appended to the new IFC entity independently of what other entities already exist in the model.
+    #         for key, val in node.__properties__.items():
+    #             # Check if the ifc entity has an attribute with the name of the node attribute. Make sure e.g. node id or p21_id is ignored.
+    #             if key == "TrueNorth":
+    #                 continue
+    #             if hasattr(ifc_entity, key):
+    #                 # Call function that handles primitives or stringified (nested) list of primitives.
+    #                 self.process_node_attribute(ifc_entity, key, val)
+
+    #     self.create_ifc_entities_from_nodes(model, next_nodes, parsed_nodes, id_mapping)
+
+
     def process_ifc_attribute(self, node, key, val, timestamp, list_index=0):
         """
         Process an IFC entity's attribute to either be handled as a connection to another node or a node attribute.
@@ -181,10 +211,17 @@ class IfcGraphInterface:
         @param ifc_path: Target path of the generated IFC file.
         @param timestamp: ID to keep track of what nodes in the graph belong to the same origin IFC file.
         """
-        model = ifcopenshell.api.project.create_file()
+        model = ifcopenshell.api.project.create_file("IFC4")
 
         # Dictionary to map newly created IFC entities to their source node ids.
         id_mapping = {}
+
+        #List to keep track of processed nodes
+        parsed_nodes = []
+        #List of the nodes that are processed in this iteration
+        current_nodes = GenericNode.nodes.has(relation_to=False)
+
+        # self.create_ifc_entities_from_nodes(model, current_nodes, parsed_nodes, id_mapping)
 
         # Per method call, only one IFC file is created from the nodes. Therefore, filter all nodes with the timestamp of that IFC file.
         # First iteraton: Create IFC entities (STEP entities with p21 id) from all nodes that are not Inline Nodes
