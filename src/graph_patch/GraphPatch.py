@@ -43,7 +43,7 @@ class GraphPatch:
         elif "connection_node" in path[0]:
             start_node = ConnectionNode.nodes.get(timestamp=timestamp, GlobalId=path[0]["connection_node"])
         latest_node = start_node
-        for i in range(1, len(path)-1):
+        for i in range(1, len(path)):
             for contestant in latest_node.relation_to.match(rel_type=path[i]["rel_type"], list_index=path[i]["list_index"]):
                 if contestant.EntityType == path[i]["EntityType"]:
                     latest_node = contestant
@@ -276,7 +276,10 @@ class GraphPatch:
                 for rel_id, relation in pushout_pattern["gluing_relations"].items():
                     del relation["properties"]["element_id_property"]
                     # context_node = self.unique_paths_to_node_mapping[timestamp_init][relation["context"]]
-                    context_node = self.find_node_from_unique_path(unique_path=relation["context"], timestamp=timestamp_init)
+                    try:
+                        context_node = self.find_node_from_unique_path(unique_path=relation["context"], timestamp=timestamp_init)
+                    except:
+                        context_node = self.find_node_from_unique_path(unique_path=relation["context"], timestamp=timestamp_updt)
                     gluing_node = pushout_node_id_to_added_node_mapping[relation["pushout"]]
                     if relation["direction"] == "pushout_to_context":
                         gluing_node.relation_to.connect(context_node, relation["properties"])
