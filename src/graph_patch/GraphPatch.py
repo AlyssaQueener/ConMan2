@@ -296,3 +296,8 @@ class GraphPatch:
             for attr in self.semantic_patch_pattern[unique_path].keys():
                 setattr(node, attr, self.semantic_patch_pattern[unique_path][attr][timestamp_updt])
                 node.save()
+
+        # Make all timestamps updt to have the whole model be that version
+        for node in Node.nodes.all():
+            setattr(node, "timestamp", timestamp_updt)
+            node.save()
