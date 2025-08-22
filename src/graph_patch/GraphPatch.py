@@ -4,11 +4,11 @@ from data_handler.DataHandler import DataHandler
     
 class GraphPatch:
 
-    def __init__(self):
+    def __init__(self, timestamp_init: str, timestamp_updt: str):
         # INSTANCE variables (unique per object)
-        self.unique_paths_to_node_mapping = {"init": {}, "updt": {}}
-        self.node_ids_to_unique_paths_mapping = {"init": {}, "updt": {}}
-        self.topological_patch_pattern = {"init": {}, "updt": {}}
+        self.unique_paths_to_node_mapping = {timestamp_init: {}, timestamp_updt: {}}
+        self.node_ids_to_unique_paths_mapping = {timestamp_init: {}, timestamp_updt: {}}
+        self.topological_patch_pattern = {timestamp_init: {}, timestamp_updt: {}}
         self.semantic_patch_pattern = {}
         self.nodes_to_delete = []
 
@@ -176,10 +176,10 @@ class GraphPatch:
                 self.create_topological_patch_pattern(node_updt, timestamp_updt, pushout_id_counter_updt, visited_updt)
                 pushout_id_counter_updt += 1
 
-        with open(f"Patch_Topo_{timestamp_init}_{timestamp_updt}.json", "w") as f:
+        with open(f"patch_data/Patch_Topo_{timestamp_init}_{timestamp_updt}.json", "w") as f:
             json.dump(self.topological_patch_pattern, f, indent=4)
 
-        with open(f"Patch_Sema_{timestamp_init}_{timestamp_updt}.json", "w") as f:
+        with open(f"patch_data/Patch_Sema_{timestamp_init}_{timestamp_updt}.json", "w") as f:
             json.dump(self.semantic_patch_pattern, f, indent=4)
 
 
