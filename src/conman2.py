@@ -1,6 +1,4 @@
 import argparse
-import glob
-import os
 
 from version_timeline.VersionTimeline import VersionTimeline
 
@@ -34,6 +32,15 @@ commit_parser.add_argument('-u', '--timestamp_updt', type=str, required=True, he
 remove_parser = subparsers.add_parser('remove', help='Removes all nodes and relationships with the given timestamp from the database.')
 remove_parser.add_argument('-t', '--timestamp', type=str, required=True, help='Timestamp of the graph model to remove.')
 
+# "fetch" command parser
+fetch_parser = subparsers.add_parser('fetch', help='Fetches updates from the remote repository.')
+
+# "pull" command parser
+pull_parser = subparsers.add_parser('pull', help='Fetches updates from the remote repository. And merges them into the local repository.')
+
+# "push" command parser
+push_parser = subparsers.add_parser('push', help='Pushes local commits to the remote repository.')
+
 args = parser.parse_args()
 
 if args.command == 'add':
@@ -58,5 +65,14 @@ elif args.command == 'remove':
     timestamp = args.timestamp
     print(f"Removing all nodes and relationships with timestamp: {timestamp}")
     remove(timestamp)
+elif args.command == 'fetch':
+    print("Fetching updates from remote repository.")
+    fetch()
+elif args.command == 'pull':
+    print("Pulling updates from remote repository.")
+    pull()
+elif args.command == 'push':
+    print("Pushing local commits to remote repository.")
+    push()
 else:
     print("No command specified.")
