@@ -25,6 +25,7 @@ class VersionTimeline:
             print(f"Timeline file not found at {self.timeline_path}. Initializing empty timeline.")
 
     def save(self):
+        os.makedirs(os.path.dirname(self.timeline_path), exist_ok=True)
         with open(self.timeline_path, "w") as f:
             json.dump(self.timeline, f, indent=4)  # Save to JSON with indentation
 
