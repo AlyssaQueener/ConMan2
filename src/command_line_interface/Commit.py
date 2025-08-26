@@ -3,6 +3,8 @@ from graph_patch.GraphPatch import GraphPatch
 from neo4j_core.neo4j_connection import Neo4jConnection
 from version_timeline.VersionTimeline import VersionTimeline
 
+version_timeline = VersionTimeline()
+
 def commit(timestamp_init: str, timestamp_updt: str):
 
     Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
