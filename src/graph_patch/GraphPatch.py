@@ -1,5 +1,6 @@
 from neo4j_core.neo4j_model import Node, GenericNode, PrimaryNode, ConnectionNode, SecondaryNode, InlineNode, RelProperties
 import json
+import os
 from data_handler.DataHandler import DataHandler
     
 class GraphPatch:
@@ -175,6 +176,9 @@ class GraphPatch:
             if node_updt.pushout_id is None and node_updt.element_id not in visited_updt:
                 self.create_topological_patch_pattern(node_updt, timestamp_updt, pushout_id_counter_updt, visited_updt)
                 pushout_id_counter_updt += 1
+
+        # Ensure patch_data directory exists
+        os.makedirs("patch_data", exist_ok=True)
 
         with open(f"patch_data/Patch_Topo_{timestamp_init}_{timestamp_updt}.json", "w") as f:
             json.dump(self.topological_patch_pattern, f, indent=4)
