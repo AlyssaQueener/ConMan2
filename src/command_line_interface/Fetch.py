@@ -1,2 +1,2 @@
 def fetch():
-    pass
+    print("Not yet implemented.")

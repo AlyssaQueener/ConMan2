@@ -1,2 +1,2 @@
 def pull():
-    pass
+    print("Not yet implemented.")

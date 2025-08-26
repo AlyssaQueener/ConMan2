@@ -1,2 +1,2 @@
 def push():
-    pass
+    print("Not yet implemented.")
