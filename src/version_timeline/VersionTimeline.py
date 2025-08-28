@@ -19,16 +19,25 @@ class VersionTimeline:
             json.dump(self.timeline, f, indent=4)
 
     def add_commit_to_timeline(self, timestamp: str):
-        project_id = PrimaryNode.nodes.get(timestamp=timestamp, EntityType="IfcProject").GlobalId
+        project_id = self.get_project_id_from_timestamp(timestamp)
         if project_id not in self.timeline:
             self.timeline[project_id] = []
-        self.timeline[project_id].append(timestamp)
+        if timestamp not in self.timeline[project_id]:
+            self.timeline[project_id].append(timestamp)
 
     def get_latest_commit_timestamp(self, timestamp: str):
-        project_id = PrimaryNode.nodes.get(timestamp=timestamp, EntityType="IfcProject").GlobalId
+        project_id = self.get_project_id_from_timestamp(timestamp)
         if project_id in self.timeline and self.timeline[project_id]:
             return self.timeline[project_id][-1]
         else:
+            return None
+        
+    def get_project_id_from_timestamp(self, timestamp: str):
+        try:
+            project = PrimaryNode.nodes.get(timestamp=timestamp, EntityType="IfcProject")
+            return project.GlobalId
+        except Exception as e:
+            print(f"Error retrieving project for timestamp {timestamp}: {e}")
             return None
 
     @staticmethod
