@@ -16,5 +16,6 @@ def commit(timestamp_init: str, timestamp_updt: str):
     graph_patch.create_patch(timestamp_init, timestamp_updt)
 
     version_timeline = VersionTimeline()
+    version_timeline.add_commit_to_timeline(timestamp_init)
     version_timeline.add_commit_to_timeline(timestamp_updt)
     version_timeline.save()
