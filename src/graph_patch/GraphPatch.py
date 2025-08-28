@@ -95,7 +95,7 @@ class GraphPatch:
                             relation_from.save()
 
 
-    def create_semantic_patch_pattern(self, equivalent_nodes_init, timestamp_init):
+    def create_semantic_patch_pattern(self, equivalent_nodes_init, timestamp_init, timestamp_updt):
         for node_init in equivalent_nodes_init:
             node_updt = node_init.equivalent_to.all()[0]
             unique_path = self.node_ids_to_unique_paths_mapping[timestamp_init][node_init.element_id]
@@ -105,8 +105,8 @@ class GraphPatch:
                         if unique_path not in self.semantic_patch_pattern:
                             self.semantic_patch_pattern[unique_path] = {}
                         self.semantic_patch_pattern[unique_path][property_key] = {}
-                        self.semantic_patch_pattern[unique_path][property_key]["init"] = property_value
-                        self.semantic_patch_pattern[unique_path][property_key]["updt"] = node_updt.__properties__.get(property_key)
+                        self.semantic_patch_pattern[unique_path][property_key][timestamp_init] = property_value
+                        self.semantic_patch_pattern[unique_path][property_key][timestamp_updt] = node_updt.__properties__.get(property_key)
 
 
     def delete_pushout_node(self, node, pushout_pattern):
@@ -157,7 +157,7 @@ class GraphPatch:
         equivalent_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=True).all()
 
         
-        self.create_semantic_patch_pattern(equivalent_nodes_init, timestamp_init)
+        self.create_semantic_patch_pattern(equivalent_nodes_init, timestamp_init, timestamp_updt)
 
 
         pushout_id_counter_init = 0
