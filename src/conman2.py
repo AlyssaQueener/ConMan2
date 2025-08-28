@@ -9,6 +9,7 @@ from command_line_interface.Fetch import fetch
 from command_line_interface.Pull import pull
 from command_line_interface.Push import push
 from command_line_interface.Remove import remove
+from command_line_interface.Checkout import checkout
 
 parser = argparse.ArgumentParser(description='ConMan')
 subparsers = parser.add_subparsers(dest='command', help='Available commands.')
@@ -27,6 +28,11 @@ get_parser.add_argument('-t', '--timestamp', type=str, required=True, help='Time
 commit_parser = subparsers.add_parser('commit', help='Creates diff and patch from two graphs.')
 commit_parser.add_argument('-i', '--timestamp_init', type=str, required=True, help='Timestamp of the initial graph model.')
 commit_parser.add_argument('-u', '--timestamp_updt', type=str, required=True, help='Timestamp of the updated graph model.')
+
+# "checkout" command parser
+checkout_parser = subparsers.add_parser('checkout', help='Checks out a specific version.')
+checkout_parser.add_argument('-i', '--timestamp_init', type=str, required=True, help='Timestamp of the initial graph model.')
+checkout_parser.add_argument('-u', '--timestamp_updt', type=str, required=True, help='Timestamp of the updated graph model.')
 
 # "remove" command parser
 remove_parser = subparsers.add_parser('remove', help='Removes all nodes and relationships with the given timestamp from the database.')
@@ -61,6 +67,11 @@ elif args.command == 'commit':
     ts_updt = args.timestamp_updt
     print(f"Running diff and creating patch between graph models with timestamps {ts_init} and {ts_updt}.")
     commit(ts_init, ts_updt)
+elif args.command == 'checkout':
+    ts_init = args.timestamp_init
+    ts_updt = args.timestamp_updt
+    print(f"Checking out versions from {ts_init} to {ts_updt}.")
+    checkout(ts_init, ts_updt)
 elif args.command == 'remove':
     timestamp = args.timestamp
     print(f"Removing all nodes and relationships with timestamp: {timestamp}")
