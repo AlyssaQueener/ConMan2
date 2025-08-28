@@ -1,5 +1,53 @@
 # Versioning Manager as BIM Level 3 CDE
 
+## Problem statement 
+
+BIM and Digital Twin workflows currently depend largely on loosely connected, monolithic files specific to certain disciplines. 
+These discipline models are manually coordinated and form the atomic unit disseminated within a project. 
+This collaborative strategy presents considerable difficulties in recognizing model changes and performing subsequent actions because incremental information is not readily accessible and must be manually determined by each project stakeholder. 
+We introduce a graph-based version management system where BIM data are represented as Labeled Property Graphs within a Neo4j database, allowing for the decoupling of synchronization from proprietary formats. 
+By identifying unchanged sections of the model based on the graph representation of each version, incremental changes between different model states can be derived. 
+Following this, topological changes and attribute alterations are determined and packed into accurate version increments. 
+These version increments are shared through a collaboration hub, which enhances the traditional functions of Common Data Environments. 
+Additional functionalities include support for branching and merging, enabling the integration of different model versions into coherent states. 
+In conclusion, this version control framework plays a crucial role in advancing the maturity of BIM Level 3 collaboration, ensuring the integrity of the project lifecycle from start to finish.
+
+This repository contains the prototypical implementation of the aforementioned version control system for BIM models, mainly based on the [IFC](https://technical.buildingsmart.org/standards/ifc/) standard.
+
+![Overall Architecture](readme_data/overallArch-2024-ENG.png)
+
+We have reported on this matter in several papers, including the following: 
+
+```bibtex
+@article{Esser2022,
+   author = {Sebastian Esser and Simon Vilgertshofer and André Borrmann},
+   doi = {10.1016/j.aei.2022.101664},
+   journal = {Advanced Engineering Informatics},
+   month = {8},
+   pages = {101664},
+   title = {Graph-based version control for asynchronous {BIM} collaboration},
+   volume = {53},
+   year = {2022},
+}
+```
+
+and
+
+```bibtex
+@article{Esser2023,
+   author = {Sebastian Esser and Simon Vilgertshofer and André Borrmann},
+   doi = {10.1016/j.autcon.2023.105063},
+   journal = {Automation in Construction},
+   month = {11},
+   pages = {105063},
+   title = {Version control for asynchronous {BIM} collaboration: Model merging through graph analysis and transformation},
+   volume = {155},
+   year = {2023},
+}
+```
+
+When utilizing this repository in your work, please cite the respective papers. 
+
 ## Installation and Setup
 
 ### Forking the Repo
