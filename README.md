@@ -89,8 +89,6 @@ A graph representation of an IFC model can be parsed back into an SPF-based repr
 ## Caveats Concerning Edge Case IFC Classes
 The IFC schema includes cases where the general translation of entities, relations, and attributes does not work. One of these cases is the attribute _TrueNorth_,  which the IFC class _IfcGeometricRepresentationSubContext_ derives from its parent class _IfcGeometricRepresentationContext_. It is therefore, ignored [here](https://gitlab.lrz.de/sebastian.esser/conman2/-/blob/7086b80518b6f310adba0fe5fa6154ca92cf30de/src/ifc_graph_interface/IfcGraphInterface.py#L199). If similar cases arise, add the respective key name to the check there.
 
-Should similar
-
 ## Python Packages and Dependencies
 | Package         | URL           | License |
 | --------------- |:-------------:| ------- |
