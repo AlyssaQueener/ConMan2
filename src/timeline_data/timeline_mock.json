@@ -1,0 +1,21 @@
+{
+    "project_id": "sdlfkjssdfdsf",
+    "branches": {
+        "main": {
+            "root": "root",
+            "timestamps": [
+                "1",
+                "2",
+                "3"
+            ]
+        },
+        "dev_a": {
+            "root": "main_2",
+            "timestamps": [
+                "2",
+                "3",
+                "4"
+            ]
+        }
+    }
+}
