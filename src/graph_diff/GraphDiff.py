@@ -80,7 +80,10 @@ class GraphDiff:
 
         # For PrimaryNodes, find partners using the globalid, then run the recursive function.
         for primary_node_init in PrimaryNode.nodes.filter(timestamp=timestamp_init):
-            primary_node_updt = PrimaryNode.nodes.get(GlobalId=primary_node_init.GlobalId, timestamp=timestamp_updt)
+            try:
+                primary_node_updt = PrimaryNode.nodes.get(GlobalId=primary_node_init.GlobalId, timestamp=timestamp_updt)
+            except:
+                continue
             primary_node_init.equivalent_to.connect(primary_node_updt)
             self.create_equivalence_relations_primary(primary_node_init, primary_node_updt)
         # For ConnectionNodes, find all in both models, then run the Intersection over Union function.
