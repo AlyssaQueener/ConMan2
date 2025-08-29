@@ -15,8 +15,6 @@ class RelProperties(StructuredRel):
     '''
     rel_type = StringProperty(required=True)
     list_index = IntegerProperty()
-    pushout_id = IntegerProperty()
-    gluing_id = IntegerProperty()
 
 
 class Node(SemiStructuredNode):
@@ -26,7 +24,6 @@ class Node(SemiStructuredNode):
     relation_from = RelationshipFrom('Node', 'rel', model=RelProperties)
     equivalent_to = Relationship('Node', 'equivalent_to')
 
-    pushout_id = IntegerProperty()
 
     timestamp = StringProperty(required=True)
 
