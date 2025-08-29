@@ -92,17 +92,6 @@ class GraphPatch:
             self.topological_patch_pattern = json.load(f)
 
 
-    def find_nodes_to_delete(self, node):
-        if node not in self.nodes_to_delete:
-            self.nodes_to_delete.append(node)
-        else:
-            return
-        for adjacent in node.relation_to.all() + node.relation_from.all():
-            if adjacent in self.context_nodes:
-                continue
-            else:
-                self.find_nodes_to_delete(adjacent)
-
 
     ######################
     ### Main Functions ###
@@ -144,36 +133,8 @@ class GraphPatch:
 
         for key, pushout_node_ref in self.topological_patch_pattern[timestamp_init].items():
             if pushout_node_ref["path"]:
-                pushout_node = self.unique_paths_to_node_mapping[timestamp_init][pushout_node_ref["path"]]
+                pushout_node = self.find_node_from_unique_path(pushout_node_ref["path"], timestamp_init)
                 self.nodes_to_delete.append(pushout_node)
-            # context_nodes_to = pushout_node["context_to"]
-            # context_nodes_from = pushout_node["context_from"]
-            # if context_nodes_to:
-            #     for key, context_node_ref in context_nodes_to.items():
-            #         context_node = self.find_node_from_unique_path(context_node_ref["path"], timestamp_init)
-            #         if context_node not in self.context_nodes:
-            #             self.context_nodes.append(context_node)
-            #         for adjacent in context_node.relation_from.all():
-            #             if adjacent.relation_to.relationship(context_node).rel_type == context_node_ref["properties"]["rel_type"] and adjacent.relation_to.relationship(context_node).list_index == context_node_ref["properties"]["list_index"]:
-            #                 if adjacent not in self.gluing_nodes_init:
-            #                     self.gluing_nodes_init.append(adjacent)
-            # if context_nodes_from:
-            #     for key, context_node_ref in context_nodes_from.items():
-            #         context_node = self.find_node_from_unique_path(context_node_ref["path"], timestamp_init)
-            #         if context_node not in self.context_nodes:
-            #             self.context_nodes.append(context_node)
-            #         for adjacent in context_node.relation_to.all():
-            #             if adjacent.relation_from.relationship(context_node).rel_type == context_node_ref["properties"]["rel_type"] and adjacent.relation_from.relationship(context_node).list_index == context_node_ref["properties"]["list_index"]:
-            #                 if adjacent not in self.gluing_nodes_init:
-            #                     self.gluing_nodes_init.append(adjacent)
-
-        # 288 original nodes
-        # for gluing_node in self.gluing_nodes_init:
-        #     self.find_nodes_to_delete(gluing_node)
-
-        # for node in Node.nodes.all():
-        #     if node.element_id not in self.node_ids_to_unique_paths_mapping:
-        #         self.nodes_to_delete.append(node)
 
         for node in self.nodes_to_delete:
             for adjacent in node.relation_to.all():
@@ -182,6 +143,40 @@ class GraphPatch:
                 node.relation_from.disconnect(adjacent)
             node.delete()
 
-        
-        for key, pushout_node in self.topological_patch_pattern[timestamp_updt].items():
-            pass
+        pushout_node_id_to_added_node_mapping = {}
+        added_node_id_to_pushout_id_mapping = {}
+        for key, pushout_node_ref in self.topological_patch_pattern[timestamp_updt].items():
+            node_class = globals()[pushout_node_ref["node_type"]]
+            node_obj = node_class(**pushout_node_ref["properties"])
+            delattr(node_obj, "element_id_property")
+            node_obj.save()
+            pushout_node_id_to_added_node_mapping[pushout_node_ref["properties"]["element_id_property"]] = node_obj
+            added_node_id_to_pushout_id_mapping[node_obj.element_id] = pushout_node_id_to_added_node_mapping[pushout_node_ref["properties"]["element_id_property"]]
+
+        for key_pushout, pushout_node_ref in self.topological_patch_pattern[timestamp_updt].items():
+            pushout_node = pushout_node_id_to_added_node_mapping[key_pushout]
+            if pushout_node_ref["relation_to"]:
+                for key_relation, relation in pushout_node_ref["relation_to"].items():
+                    related_node = pushout_node_id_to_added_node_mapping[key_relation]
+                    pushout_node.relation_to.connect(related_node, {"rel_type": relation["properties"]["rel_type"], "list_index": relation["properties"]["list_index"]})
+            if pushout_node_ref["context_to"]:
+                for key_context_to, context_to in pushout_node_ref["context_to"].items():
+                    context_node = self.find_node_from_unique_path(context_to["path"], timestamp_init)
+                    pushout_node.relation_to.connect(context_node, {"rel_type": context_to["properties"]["rel_type"], "list_index": context_to["properties"]["list_index"]})
+            if pushout_node_ref["context_from"]:
+                for key_context_from, context_from in pushout_node_ref["context_from"].items():
+                    context_node = self.find_node_from_unique_path(context_from["path"], timestamp_init)
+                    context_node.relation_to.connect(pushout_node, {"rel_type": context_from["properties"]["rel_type"], "list_index": context_from["properties"]["list_index"]})
+
+                    
+        # Semantic patch
+        for unique_path in self.semantic_patch_pattern.keys():
+            node = self.find_node_from_unique_path(unique_path=unique_path, timestamp=timestamp_init)
+            for attr in self.semantic_patch_pattern[unique_path].keys():
+                setattr(node, attr, self.semantic_patch_pattern[unique_path][attr][timestamp_updt])
+                node.save()
+
+        # Make all timestamps updt to have the whole model be that version
+        for node in Node.nodes.all():
+            setattr(node, "timestamp", timestamp_updt)
+            node.save()
