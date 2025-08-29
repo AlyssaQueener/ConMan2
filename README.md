@@ -76,6 +76,7 @@ Default credentials:
 
 - OPTIONAL: Download and install [Anaconda](https://www.anaconda.com/products/individual).
 
+- Set up a Python environment with Python 3.10.
 - Install the Python requirements using: `pip install -r requirements.txt`.
 
 ## Translating IFC Models from/to Graphs
