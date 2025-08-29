@@ -1,2 +1,2 @@
 def push():
-    print("Not yet implemented.")
+    raise NotImplementedError("Push command is not yet implemented.")

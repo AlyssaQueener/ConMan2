@@ -1,2 +1,2 @@
 def pull():
-    print("Not yet implemented.")
+    raise NotImplementedError("Pull command is not yet implemented.")

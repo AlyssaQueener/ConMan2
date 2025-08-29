@@ -1,2 +1,2 @@
 def fetch():
-    print("Not yet implemented.")
+    raise NotImplementedError("Fetch command is not yet implemented.")
