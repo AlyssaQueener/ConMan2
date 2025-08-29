@@ -10,6 +10,7 @@ from command_line_interface.Pull import pull
 from command_line_interface.Push import push
 from command_line_interface.Remove import remove
 from command_line_interface.Checkout import checkout
+from command_line_interface.Reset import reset
 
 parser = argparse.ArgumentParser(description='ConMan')
 subparsers = parser.add_subparsers(dest='command', help='Available commands.')
@@ -37,6 +38,9 @@ checkout_parser.add_argument('-u', '--timestamp_updt', type=str, required=True, 
 # "remove" command parser
 remove_parser = subparsers.add_parser('remove', help='Removes all nodes and relationships with the given timestamp from the database.')
 remove_parser.add_argument('-t', '--timestamp', type=str, required=True, help='Timestamp of the graph model to remove.')
+
+# "reset" command parser
+reset_parser = subparsers.add_parser('reset', help='Removes all nodes and relationships from the database.')
 
 # "fetch" command parser
 fetch_parser = subparsers.add_parser('fetch', help='Fetches updates from the remote repository.')
@@ -76,6 +80,9 @@ elif args.command == 'remove':
     timestamp = args.timestamp
     print(f"Removing all nodes and relationships with timestamp: {timestamp}")
     remove(timestamp)
+elif args.command == 'reset':
+    print("Removing all nodes and relationships from the database.")
+    reset()
 elif args.command == 'fetch':
     print("Fetching updates from remote repository.")
     fetch()
