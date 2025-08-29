@@ -24,9 +24,17 @@ def checkout(timestamp_init: str, timestamp_updt: str):
             for i in range(start_index, stop_index, step):
                 if i == stop_index:
                     break
-                ts_init = version_timeline.timeline[project_id][i]
-                ts_updt = version_timeline.timeline[project_id][i + step]
-                print(f"Applying patch from {ts_init} to {ts_updt}.")
-                graph_patch = GraphPatch(ts_init, ts_updt)
-                graph_patch.load_patch_from_file(path_sema=f"./patch_data/Patch_Sema_{ts_init}_{ts_updt}.json", path_topo=f"./patch_data/Patch_Topo_{ts_init}_{ts_updt}.json"                                       )
-                graph_patch.apply_patch(ts_init, ts_updt)
+                if start_index > stop_index:
+                    ts_init = version_timeline.timeline[project_id][i + step]
+                    ts_updt = version_timeline.timeline[project_id][i]
+                    graph_patch = GraphPatch(ts_updt, ts_init)
+                    print(f"Applying patch from {ts_updt} to {ts_init}.")
+                    graph_patch.load_patch_from_file(path_sema=f"./patch_data/Patch_Sema_{ts_init}_{ts_updt}.json", path_topo=f"./patch_data/Patch_Topo_{ts_init}_{ts_updt}.json"                                       )
+                    graph_patch.apply_patch(ts_updt, ts_init)
+                else:
+                    ts_init = version_timeline.timeline[project_id][i]
+                    ts_updt = version_timeline.timeline[project_id][i + step]
+                    graph_patch = GraphPatch(ts_init, ts_updt)
+                    print(f"Applying patch from {ts_init} to {ts_updt}.")
+                    graph_patch.load_patch_from_file(path_sema=f"./patch_data/Patch_Sema_{ts_init}_{ts_updt}.json", path_topo=f"./patch_data/Patch_Topo_{ts_init}_{ts_updt}.json"                                       )
+                    graph_patch.apply_patch(ts_init, ts_updt)
