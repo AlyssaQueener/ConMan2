@@ -228,3 +228,20 @@ class IfcGraphInterface:
                 self.process_node_relation(model, ifc_entity, rel_type, related_nodes, id_mapping)
         # Save the IFC model to file.
         model.write(ifc_path)
+
+    
+    def get_project_id_from_timestamp(self, timestamp: str):
+        try:
+            project = PrimaryNode.nodes.get(EntityType="IfcProject", timestamp=timestamp)
+            return project.GlobalId
+        except Exception as e:
+            print(f"Error retrieving project ID for timestamp {timestamp}: {e}")
+            return None
+        
+    def get_latest_from_project_id(self, project_id: str):
+        try:
+            project = PrimaryNode.nodes.get(GlobalId=project_id, EntityType="IfcProject")
+            return project.timestamp
+        except Exception as e:
+            print(f"Error retrieving latest timestamp for project ID {project_id}: {e}")
+            return None
