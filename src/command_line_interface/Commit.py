@@ -5,7 +5,7 @@ from version_timeline.VersionTimeline import VersionTimeline
 
 version_timeline = VersionTimeline()
 
-def commit(timestamp_init: str, timestamp_updt: str):
+def commit(branch: str, timestamp_init: str, timestamp_updt: str):
 
     Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
 
@@ -16,6 +16,12 @@ def commit(timestamp_init: str, timestamp_updt: str):
     graph_patch.create_patch(timestamp_init, timestamp_updt)
 
     version_timeline = VersionTimeline()
-    version_timeline.add_commit_to_timeline(timestamp_init)
-    version_timeline.add_commit_to_timeline(timestamp_updt)
-    version_timeline.save()
+    version_timeline.add_commit_to_timeline(branch, timestamp_init, timestamp_updt)
+
+    ## Remove init model.
+    query = f"""
+    MATCH (n)
+    WHERE n.timestamp = '{timestamp_init}'
+    DETACH DELETE n
+    """
+    Neo4jConnection().cypher_query(query)
