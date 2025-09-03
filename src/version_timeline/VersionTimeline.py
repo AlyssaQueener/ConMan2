@@ -1,11 +1,18 @@
 from datetime import datetime
 import os
 import json
-from neo4j_core.neo4j_model import PrimaryNode
+from ifc_graph_interface.IfcGraphInterface import IfcGraphInterface
+from graph_patch.GraphPatch import GraphPatch
 
 class VersionTimeline:
 
+    # File interation to store the timeline data.
+
     def __init__(self):
+        self.load()
+        self.save()
+
+    def load(self):
         os.makedirs("./timeline_data", exist_ok=True)
         if os.path.exists("./timeline_data/timeline.json"):
             with open("./timeline_data/timeline.json", "r") as f:
@@ -18,27 +25,56 @@ class VersionTimeline:
         with open("./timeline_data/timeline.json", "w") as f:
             json.dump(self.timeline, f, indent=4)
 
-    def add_commit_to_timeline(self, timestamp: str):
-        project_id = self.get_project_id_from_timestamp(timestamp)
-        if project_id not in self.timeline:
-            self.timeline[project_id] = []
-        if timestamp not in self.timeline[project_id]:
-            self.timeline[project_id].append(timestamp)
-
-    def get_latest_commit_timestamp(self, timestamp: str):
-        project_id = self.get_project_id_from_timestamp(timestamp)
-        if project_id in self.timeline and self.timeline[project_id]:
-            return self.timeline[project_id][-1]
+    def project_is_tracked(self, project_id: str) -> bool:
+        self.load()
+        if self.timeline.get(project_id) is None:
+            return False
         else:
-            return None
+            return True
         
-    def get_project_id_from_timestamp(self, timestamp: str):
-        try:
-            project = PrimaryNode.nodes.get(timestamp=timestamp, EntityType="IfcProject")
-            return project.GlobalId
-        except Exception as e:
-            print(f"Error retrieving project for timestamp {timestamp}: {e}")
-            return None
+    def format_commit(self, timestamp_init: str, message: str=""):
+        return {"message": message, "parents": [timestamp_init]}
+
+    def add_project(self, project_id: str, timestamp: str, message: str=""):
+        self.load()
+        if project_id not in self.timeline:
+            self.timeline[project_id] = {
+                "branches": {
+                    "main": timestamp
+                },
+                "commits": {
+                    timestamp: self.format_commit(None, message)
+                }
+            }
+            self.save()
+        else:
+            raise Exception(f"Project {project_id} already exists in timeline.")
+            
+
+    def add_commit_to_timeline(self, project_id: str, branch: str, timestamp_init: str, timestamp_updt: str, message: str=""):
+        self.load()
+        self.timeline[project_id]["branches"][branch] = timestamp_updt
+        self.timeline[project_id]["commits"][timestamp_updt] = self.format_commit(timestamp_init, message)
+        self.save()
+
+    def get_latest_commit_on_branch(self, project_id: str, branch: str):
+        self.load()
+        if self.timeline.get(project_id) is None or self.timeline[project_id]["branches"].get(branch) is None:
+            raise Exception(f"Project {project_id} or branch {branch} does not exist in timeline.")
+        else:
+            return self.timeline[project_id]["branches"][branch]
+        
+        
+    def branch(self, project_id: str, branch_name: str):
+        self.load()
+        root_timestamp = IfcGraphInterface.get_timestamp_from_project_id(project_id)
+        if branch_name in self.timeline[project_id]["branches"] or len(root_timestamp) != 1:
+            raise Exception(f"Branch {branch_name} already exists in project {project_id} or there isn't exactly 1 added version of the project in the DB.")
+        self.timeline[project_id]["branches"][branch_name] = root_timestamp[0]
+        self.save()
+
+    def checkout(self, project_id: str, branch_init: str, branch_updt: str, timestamp_updt: str):
+        pass
 
     @staticmethod
     def create_timestamp():
