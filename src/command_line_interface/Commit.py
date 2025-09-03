@@ -2,21 +2,44 @@ from graph_diff.GraphDiff import GraphDiff
 from graph_patch.GraphPatch import GraphPatch
 from neo4j_core.neo4j_connection import Neo4jConnection
 from version_timeline.VersionTimeline import VersionTimeline
+from ifc_graph_interface.IfcGraphInterface import IfcGraphInterface
 
-version_timeline = VersionTimeline()
+def commit(project_id: str, branch: str, message: str=""):
 
-def commit(branch: str, timestamp_init: str, timestamp_updt: str):
-
+    version_timeline = VersionTimeline()
     Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
 
+    added_timestamps = IfcGraphInterface.get_timestamp_from_project_id(project_id)
+    if len(added_timestamps) == 0:
+        raise Exception(f"No graph models found for project {project_id}. Please add a graph model first.")
+    elif len(added_timestamps) == 1:
+        if not version_timeline.project_is_tracked(project_id):
+            version_timeline.add_project(project_id=project_id, timestamp=added_timestamps[0], message=message)
+            print(f"Added project {project_id} to timeline.")
+        return
+    elif len(added_timestamps) > 2:
+        raise Exception(f"More than two graph models found for project {project_id}. Please ensure only two graph models exist for creating a commit.")
+    else:
+        if not version_timeline.project_is_tracked(project_id):
+            raise Exception(f"Project {project_id} is untracked and 2 versions are added. Please commit one version of project {project_id} first.")
+        latest_timestamp = version_timeline.get_latest_commit_on_branch(project_id, branch)
+        if latest_timestamp in added_timestamps:
+            added_timestamps.remove(latest_timestamp)
+        else:
+            raise Exception(f"2 model versions are added but the latest commit {latest_timestamp} is not added. No consecutive patch can be generated.")
+        timestamp_init = latest_timestamp
+        timestamp_updt = added_timestamps[0]
+
+    print(f"Running diff for project {project_id} on branch {branch} between timestamps {timestamp_init} and {timestamp_updt}.")
     graph_diff = GraphDiff()
     graph_diff.run_diff(timestamp_init, timestamp_updt)
 
+    print(f"Creating patch for project {project_id} on branch {branch} between timestamps {timestamp_init} and {timestamp_updt}.")
     graph_patch = GraphPatch(timestamp_init, timestamp_updt)
-    graph_patch.create_patch(timestamp_init, timestamp_updt)
+    graph_patch.create_patch(project_id, timestamp_init, timestamp_updt)
 
     version_timeline = VersionTimeline()
-    version_timeline.add_commit_to_timeline(branch, timestamp_init, timestamp_updt)
+    version_timeline.add_commit_to_timeline(project_id=project_id, branch=branch, timestamp_init=timestamp_init, timestamp_updt=timestamp_updt, message=message)
 
     ## Remove init model.
     query = f"""

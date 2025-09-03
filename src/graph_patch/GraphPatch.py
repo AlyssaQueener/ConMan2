@@ -127,7 +127,7 @@ class GraphPatch:
     ### Main Functions ###
     ######################
 
-    def create_patch(self, timestamp_init:str, timestamp_updt:str):
+    def create_patch(self, project_id: str, timestamp_init:str, timestamp_updt:str):
         """
         Use the two models that have been diffed and create a semanic and a topological patch.
         """
@@ -152,9 +152,9 @@ class GraphPatch:
 
         # Write out the patches.
         os.makedirs("patch_data", exist_ok=True)
-        with open(f"patch_data/Patch_Topo_{timestamp_init}_{timestamp_updt}.json", "w") as f:
+        with open(f"patch_data/Patch_Topo_{project_id}_{timestamp_init}_{timestamp_updt}.json", "w") as f:
             json.dump(self.topological_patch_pattern, f, indent=4)
-        with open(f"patch_data/Patch_Sema_{timestamp_init}_{timestamp_updt}.json", "w") as f:
+        with open(f"patch_data/Patch_Sema_{project_id}_{timestamp_init}_{timestamp_updt}.json", "w") as f:
             json.dump(self.semantic_patch_pattern, f, indent=4)
 
     
