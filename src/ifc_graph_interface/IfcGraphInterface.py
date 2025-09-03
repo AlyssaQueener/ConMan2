@@ -230,19 +230,29 @@ class IfcGraphInterface:
         model.write(ifc_path)
 
     @staticmethod
-    def get_project_id_from_timestamp(self, timestamp: str):
+    def get_project_id_from_timestamp(timestamp: str):
         try:
             project = PrimaryNode.nodes.get(EntityType="IfcProject", timestamp=timestamp)
             return project.GlobalId
         except Exception as e:
             print(f"Error retrieving project ID for timestamp {timestamp}: {e}")
             return None
+        
+    @staticmethod
+    def get_project_id_from_ifc_path(ifc_path: str):
+        try:
+            model = ifcopenshell.open(ifc_path)
+            project = model.by_type("IfcProject")[0]
+            return project.GlobalId
+        except Exception as e:
+            print(f"Error retrieving project ID from IFC file {ifc_path}: {e}")
+            return None
     
     @staticmethod
-    def get_timestamp_from_project_id(self, project_id: str):
+    def get_timestamp_from_project_id(project_id: str):
         try:
-            project = PrimaryNode.nodes.get(GlobalId=project_id, EntityType="IfcProject")
-            return project.timestamp
+            project = PrimaryNode.nodes.filter(GlobalId=project_id, EntityType="IfcProject").all()
+            return [p.timestamp for p in project]
         except Exception as e:
             print(f"Error retrieving latest timestamp for project ID {project_id}: {e}")
             return None
