@@ -3,6 +3,7 @@ import os
 import json
 from ifc_graph_interface.IfcGraphInterface import IfcGraphInterface
 from graph_patch.GraphPatch import GraphPatch
+from collections import deque, defaultdict
 
 class VersionTimeline:
 
@@ -33,7 +34,8 @@ class VersionTimeline:
             return True
         
     def format_commit(self, timestamp_init: str, message: str=""):
-        return {"message": message, "parents": [timestamp_init]}
+        parents = [] if timestamp_init is None else [timestamp_init]
+        return {"message": message, "parents": parents}
 
     def add_project(self, project_id: str, timestamp: str, message: str=""):
         self.load()
@@ -73,8 +75,87 @@ class VersionTimeline:
         self.timeline[project_id]["branches"][branch_name] = root_timestamp[0]
         self.save()
 
-    def checkout(self, project_id: str, branch_init: str, branch_updt: str, timestamp_updt: str):
-        pass
+    def checkout(self, project_id: str, branch_init:str, target_branch: str, target_timestamp: str) -> list[str]:
+        """
+        Return a list of timestamps [start, ..., target] to move from the single
+        model currently in DB to target_timestamp on target_branch.
+        Uses shortest path on the undirected commit graph (parents <-> children).
+        """
+        self.load()
+
+        # start timestamp = the one currently present in DB
+        current = IfcGraphInterface.get_timestamp_from_project_id(project_id)
+        if not current or len(current) != 1:
+            raise Exception("Exactly one model version must be present in the DB to plan checkout.")
+        start_ts = str(current[0])
+
+        proj = self.timeline.get(project_id)
+        if not proj:
+            raise Exception(f"Project {project_id} not found in timeline.")
+
+        commits = proj.get("commits", {})
+        branches = proj.get("branches", {})
+
+        if target_branch not in branches:
+            raise Exception(f"Branch {target_branch} not found.")
+        # trust the provided target_timestamp; optionally validate it is on the branch head path
+        if target_timestamp not in commits:
+            raise Exception(f"Target timestamp {target_timestamp} not found in commits.")
+
+        # build undirected adjacency from parents lists
+        adj = defaultdict(set)
+        for child, meta in commits.items():
+            for p in meta.get("parents", []):
+                adj[child].add(p)
+                adj[p].add(child)
+
+        # ensure nodes exist even if isolated
+        adj.setdefault(start_ts, set())
+        adj.setdefault(target_timestamp, set())
+
+        if start_ts == target_timestamp:
+            return [start_ts]
+
+        # BFS to find a shortest path (fewest edges)
+        prev = {start_ts: None}
+        q = deque([start_ts])
+        found = False
+        while q and not found:
+            n = q.popleft()
+            for nb in adj[n]:
+                if nb in prev:
+                    continue
+                prev[nb] = n
+                if nb == target_timestamp:
+                    found = True
+                    break
+                q.append(nb)
+
+        if not found:
+            raise Exception(f"No path from {start_ts} to {target_timestamp} in timeline.")
+
+        # reconstruct path start -> target
+        path = [target_timestamp]
+        while prev[path[-1]] is not None:
+            path.append(prev[path[-1]])
+        path.reverse()
+        print(f"Checkout path: {path}")
+        patches = []
+        for i in range(len(path)-1):
+            ts_init = path[i]
+            ts_updt = path[i+1]
+            patches.append((ts_init, ts_updt))
+        print(f"Checkout patches: {patches}")
+        for ts_init, ts_updt in patches:
+            print(f"Applying patch from {ts_init} to {ts_updt}.")
+            graph_patch = GraphPatch(ts_init, ts_updt)
+            if len(self.timeline[project_id]["commits"][ts_updt]["parents"]) != 0:
+                if self.timeline[project_id]["commits"][ts_updt]["parents"][0] == ts_init:
+                    graph_patch.load_patch_from_file(path_sema=f"./patch_data/Patch_Sema_{project_id}_{ts_init}_{ts_updt}.json", path_topo=f"./patch_data/Patch_Topo_{project_id}_{ts_init}_{ts_updt}.json")
+                elif self.timeline[project_id]["commits"][ts_init]["parents"][0] == ts_updt:
+                    graph_patch.load_patch_from_file(path_sema=f"./patch_data/Patch_Sema_{project_id}_{ts_updt}_{ts_init}.json", path_topo=f"./patch_data/Patch_Topo_{project_id}_{ts_updt}_{ts_init}.json")
+            graph_patch.apply_patch(ts_init, ts_updt)
+        return path
 
     @staticmethod
     def create_timestamp():
