@@ -1,0 +1,34 @@
+{
+    "projects": {
+        "<IfcPoject ID>": {
+            "branches": {
+                "main": {
+                    "root_branch": "main",
+                    "timestamps": [
+                        "1",
+                        "2",
+                        "3"
+                    ]
+                },
+                "dev_a": {
+                    "root_branch": "main",
+                    "timestamps": [
+                        "2",
+                        "3",
+                        "4"
+                    ]
+                },
+                "dev_b": {
+                    "root_branch": "dev_a",
+                    "timestamps": [
+                        "3",
+                        "4",
+                        "5"
+                    ]
+                }
+            }
+        },
+        "<IfcPoject ID_2>": {
+        }
+    }
+}
