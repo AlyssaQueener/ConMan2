@@ -90,7 +90,7 @@ graph_diff.run_diff(timestamp_init, timestamp_updt)
 # Create the Patch based on the Diff results.
 print("Creating the patch based on the diff results.")
 graph_patch = GraphPatch(timestamp_init, timestamp_updt)
-graph_patch.create_patch(timestamp_init, timestamp_updt)
+graph_patch.create_patch("1", timestamp_init, timestamp_updt)
 
 input("The patch has been created and saved to files (./patch_data/Patch_Topo_diss_init_diss_updt.json and ./patch_data/Patch_Sema_diss_init_diss_updt.json). You can look at the graph with the 'equivalent_to' edges added and the structure of the patch files now. Press Enter to continue...")
 
@@ -129,7 +129,7 @@ input("The initial graph has been recreated in the Neo4j database. You can look 
 # Load the Patch from file and apply it to the init graph.
 print("Loading and applying the patch to the initial graph.")
 graph_patch = GraphPatch(timestamp_init, timestamp_updt)
-graph_patch.load_patch_from_file(path_sema="./patch_data/Patch_Sema_diss_init_diss_updt.json", path_topo="./patch_data/Patch_Topo_diss_init_diss_updt.json")
+graph_patch.load_patch_from_file(path_sema="./patch_data/Patch_Sema_1_diss_init_diss_updt.json", path_topo="./patch_data/Patch_Topo_1_diss_init_diss_updt.json")
 graph_patch.apply_patch(timestamp_init, timestamp_updt)
 
 print("The patch has been applied. You can look at the updated graph structure now.")
