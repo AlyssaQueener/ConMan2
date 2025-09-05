@@ -6,7 +6,7 @@ python conman2.py add -p "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v2-puri
 python conman2.py commit -p "1ODmFv4Jv9ZO9fO_v2Tu_8" -b "main" &&
 python conman2.py checkout -p "1ODmFv4Jv9ZO9fO_v2Tu_8" -b "main" -t "1" &&
 python conman2.py branch -p "1ODmFv4Jv9ZO9fO_v2Tu_8" -n "test_branch" &&
-python conman2.py add -p "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v2-purified.ifc" -t "2" &&
+python conman2.py add -p "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v2-purified.ifc" -t "3" &&
 python conman2.py commit -p "1ODmFv4Jv9ZO9fO_v2Tu_8" -b "test_branch" &&
 python conman2.py checkout -p "1ODmFv4Jv9ZO9fO_v2Tu_8" -b "main" -t "2" &&
 python conman2.py get -p "./test_export.ifc" -t "2"

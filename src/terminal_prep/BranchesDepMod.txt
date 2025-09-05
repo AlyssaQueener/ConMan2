@@ -1,0 +1,12 @@
+python conman2.py reset &&
+rm ./timeline_data/timeline.json &&
+python conman2.py add -p "./00_sampleData/IFC_stepP21/DepMod2025/2025-DepMod2HVAC-Model-v1.ifc" -t "1" &&
+python conman2.py commit -p "0pSMCvZjz7CfEkjB_cFPoC" -b "main" &&
+python conman2.py add -p "./00_sampleData/IFC_stepP21/DepMod2025/2025-DepMod2HVAC-Model-v2.ifc" -t "2" &&
+python conman2.py commit -p "0pSMCvZjz7CfEkjB_cFPoC" -b "main" &&
+python conman2.py checkout -p "0pSMCvZjz7CfEkjB_cFPoC" -b "main" -t "1" &&
+python conman2.py branch -p "0pSMCvZjz7CfEkjB_cFPoC" -n "test_branch" &&
+python conman2.py add -p "./00_sampleData/IFC_stepP21/DepMod2025/2025-DepMod2HVAC-Model-v3.ifc" -t "3" &&
+python conman2.py commit -p "0pSMCvZjz7CfEkjB_cFPoC" -b "test_branch" &&
+python conman2.py checkout -p "0pSMCvZjz7CfEkjB_cFPoC" -b "main" -t "2" &&
+python conman2.py get -p "./test_export.ifc" -t "2"
