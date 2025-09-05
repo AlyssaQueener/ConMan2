@@ -1,16 +1,18 @@
-python conman2.py add -p "/home/julian/documents/conman2/src/00_sampleData/IFC_stepP21/SevenVersionsTest/v0.ifc" -t "0" &&
+python conman2.py reset &&
+rm ./timeline_data/timeline.json &&
+python conman2.py add -p "./00_sampleData/IFC_stepP21/SevenVersionsTest/v0.ifc" -t "0" &&
 python conman2.py commit -p 2UoLGbl5jCawzD_3HBZAPs -b main &&
-python conman2.py add -p "/home/julian/documents/conman2/src/00_sampleData/IFC_stepP21/SevenVersionsTest/v1.ifc" -t "1" &&
+python conman2.py add -p "./00_sampleData/IFC_stepP21/SevenVersionsTest/v1.ifc" -t "1" &&
 python conman2.py commit -p 2UoLGbl5jCawzD_3HBZAPs -b main &&
-python conman2.py add -p "/home/julian/documents/conman2/src/00_sampleData/IFC_stepP21/SevenVersionsTest/v2.ifc" -t "2" &&
+python conman2.py add -p "./00_sampleData/IFC_stepP21/SevenVersionsTest/v2.ifc" -t "2" &&
 python conman2.py commit -p 2UoLGbl5jCawzD_3HBZAPs -b main &&
-python conman2.py add -p "/home/julian/documents/conman2/src/00_sampleData/IFC_stepP21/SevenVersionsTest/v3.ifc" -t "3" &&
+python conman2.py add -p "./00_sampleData/IFC_stepP21/SevenVersionsTest/v3.ifc" -t "3" &&
 python conman2.py commit -p 2UoLGbl5jCawzD_3HBZAPs -b main &&
-python conman2.py add -p "/home/julian/documents/conman2/src/00_sampleData/IFC_stepP21/SevenVersionsTest/v4.ifc" -t "4" &&
+python conman2.py add -p "./00_sampleData/IFC_stepP21/SevenVersionsTest/v4.ifc" -t "4" &&
 python conman2.py commit -p 2UoLGbl5jCawzD_3HBZAPs -b main &&
-python conman2.py add -p "/home/julian/documents/conman2/src/00_sampleData/IFC_stepP21/SevenVersionsTest/v5.ifc" -t "5" &&
+python conman2.py add -p "./00_sampleData/IFC_stepP21/SevenVersionsTest/v5.ifc" -t "5" &&
 python conman2.py commit -p 2UoLGbl5jCawzD_3HBZAPs -b main &&
-python conman2.py add -p "/home/julian/documents/conman2/src/00_sampleData/IFC_stepP21/SevenVersionsTest/v6.ifc" -t "6" &&
+python conman2.py add -p "./00_sampleData/IFC_stepP21/SevenVersionsTest/v6.ifc" -t "6" &&
 python conman2.py commit -p 2UoLGbl5jCawzD_3HBZAPs -b main &&
-python conman2.py add -p "/home/julian/documents/conman2/src/00_sampleData/IFC_stepP21/SevenVersionsTest/v7.ifc" -t "7" &&
+python conman2.py add -p "./00_sampleData/IFC_stepP21/SevenVersionsTest/v7.ifc" -t "7" &&
 python conman2.py commit -p 2UoLGbl5jCawzD_3HBZAPs -b main
