@@ -6,7 +6,6 @@ from data_handler.DataHandler import DataHandler
 class GraphPatch:
 
     def __init__(self, timestamp_init: str, timestamp_updt: str):
-        self.unique_paths_to_node_mapping = {timestamp_init: {}, timestamp_updt: {}}
         self.node_ids_to_unique_paths_mapping = {timestamp_init: {}, timestamp_updt: {}}
         self.topological_patch_pattern = {timestamp_init: {}, timestamp_updt: {}}
         self.semantic_patch_pattern = {}
@@ -14,6 +13,8 @@ class GraphPatch:
         self.context_nodes = []
         self.gluing_nodes_init = []
         self.gluing_nodes_updt = []
+
+        self.init_side_node_ids_to_unique_paths_mapping = {timestamp_init: {}, timestamp_updt: {}} #includes pushout nodes in path, used to identify non-danlging pushout nodes to delete
 
     ########################
     ### Helper Functions ###
@@ -32,13 +33,27 @@ class GraphPatch:
                 unique_path = [{"connection_node": node.GlobalId}]
             # Create entries in the dicts for the node and its unique path.
             self.node_ids_to_unique_paths_mapping[timestamp][node.element_id] = DataHandler.path_to_string(unique_path)
-            self.unique_paths_to_node_mapping[timestamp][DataHandler.path_to_string(unique_path)] = node
+            # Create a unique path to a child element and then recursively run the function until a leaf node is reached.
+            for child in node.relation_to.all():
+                if child.equivalent_to.all():
+                    rel = node.relation_to.relationship(child)
+                    new_path = unique_path + [{"rel_type": rel.rel_type, "list_index": rel.list_index, "EntityType": child.EntityType}]
+                    self.create_unique_path_mappings(child, timestamp, new_path)
+
+    def create_init_side_unique_path_mappings(self, node, timestamp, unique_path=None):
+        if node.element_id not in self.init_side_node_ids_to_unique_paths_mapping[timestamp]:
+            # If the node is a PrimaryNode or a ConnectionNode, reset the path because this is the base for a unique path.
+            if type(node) == PrimaryNode:
+                unique_path = [{"primary_node": node.GlobalId}]
+            if type(node) == ConnectionNode:
+                unique_path = [{"connection_node": node.GlobalId}]
+            # Create entries in the dicts for the node and its unique path.
+            self.init_side_node_ids_to_unique_paths_mapping[timestamp][node.element_id] = DataHandler.path_to_string(unique_path)
             # Create a unique path to a child element and then recursively run the function until a leaf node is reached.
             for child in node.relation_to.all():
                 rel = node.relation_to.relationship(child)
                 new_path = unique_path + [{"rel_type": rel.rel_type, "list_index": rel.list_index, "EntityType": child.EntityType}]
-                self.create_unique_path_mappings(child, timestamp, new_path)
-
+                self.create_init_side_unique_path_mappings(child, timestamp, new_path)
 
     def find_node_from_unique_path(self, unique_path: str, timestamp):
         """
@@ -90,8 +105,8 @@ class GraphPatch:
             # relation_to are relationships to other pushout nodes. context_to and context_from are relationships to equivalent nodes that will be used to identify the pushout nodes.
             self.topological_patch_pattern[timestamp][pushout_node.element_id] = {"properties": {**dict(pushout_node.__properties__)}, "node_type": type(pushout_node).__name__, "path": "", "relation_to": {}, "context_to": {}, "context_from": {}}
             # If a pushout node is reachable (has a unique path), the unique path is stored.
-            if pushout_node.element_id in self.node_ids_to_unique_paths_mapping[timestamp]:
-                self.topological_patch_pattern[timestamp][pushout_node.element_id]["path"] = self.node_ids_to_unique_paths_mapping[timestamp][pushout_node.element_id]
+            if pushout_node.element_id in self.init_side_node_ids_to_unique_paths_mapping[timestamp]:
+                self.topological_patch_pattern[timestamp][pushout_node.element_id]["path"] = self.init_side_node_ids_to_unique_paths_mapping[timestamp][pushout_node.element_id]
             # Look at adjacent nodes from outgoing edges and store them with the pushout node. Mark down if it is another pushout node or a context node.
             for adjacent in pushout_node.relation_to.all():
                 if adjacent.timestamp != pushout_node.timestamp:
@@ -137,9 +152,15 @@ class GraphPatch:
 
         # Create unique paths starting from all Primary and all Connection nodes.
         for node in prim_and_con_init:
-            self.create_unique_path_mappings(node, timestamp_init)
+            # One mapping is just for the init (existing) side to find nodes to delete. These unique paths can traverse over init pushout nodes that are not present in the updt model.
+            self.create_init_side_unique_path_mappings(node, timestamp_init)
+            if node.equivalent_to.all():
+                # This mapping is the universal one for both models to identify context nodes.
+                self.create_unique_path_mappings(node, timestamp_init)
         for node in prim_and_con_updt:
-            self.create_unique_path_mappings(node, timestamp_updt)
+            self.create_init_side_unique_path_mappings(node, timestamp_updt)
+            if node.equivalent_to.all():
+                self.create_unique_path_mappings(node, timestamp_updt)
 
         # Collect all pushout nodes and equivalent nodes using the equivalent_to relations from the diff.
         pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
@@ -158,20 +179,19 @@ class GraphPatch:
             json.dump(self.semantic_patch_pattern, f, indent=4)
 
     
-    def apply_patch(self, timestamp_init:str, timestamp_updt:str):
-        """
-        Applies a previously created patch onto a model to update it to match the version of another timestamp.
-        """
+    def apply_patch(self, timestamp_init: str, timestamp_updt: str):
+
+        # Deletion of init
         # Get all Primary and Connection nodes and create unique paths for all reachable nodes. These are, again, the identifiers.
         prim_and_con_init = list(PrimaryNode.nodes.filter(timestamp=timestamp_init)) + list(ConnectionNode.nodes.filter(timestamp=timestamp_init))
         for node in prim_and_con_init:
-            self.create_unique_path_mappings(node, timestamp_init)
-
+            self.create_init_side_unique_path_mappings(node, timestamp_init)
         # Removal of init pushout pattern.
         # Mark any unreachable nodes for deletion. These nodes can not be updated and so must be fully replaced.
         for node in Node.nodes.all():
-            if node.element_id not in self.node_ids_to_unique_paths_mapping[timestamp_init]:
+            if node.element_id not in self.init_side_node_ids_to_unique_paths_mapping[timestamp_init]:
                 self.nodes_to_delete.append(node)
+
         # Iterate over the topological patches init side and mark any nodes with a unique path up for deletion.
         for key, pushout_node_ref in self.topological_patch_pattern[timestamp_init].items():
             if pushout_node_ref["path"]:
@@ -179,26 +199,25 @@ class GraphPatch:
                 self.nodes_to_delete.append(pushout_node)
         # Iterate over all nodes marked up for deletion (init pushout nodes). Detach them and remove them from the db.
         for node in self.nodes_to_delete:
-            for adjacent in node.relation_to.all():
-                node.relation_to.disconnect(adjacent)
-            for adjacent in node.relation_from.all():
-                node.relation_from.disconnect(adjacent)
+            node.relation_to.disconnect_all()
+            node.relation_from.disconnect_all()
             node.delete()
 
-        # Insertion of updt pushout pattern.
-        # Create mapping to track the correspondences between nodes in the patch file and the database by the node ids.
+        #Insertion of updt.
+        # First iteration to create the nodes as they are listed in the patch.
+        # Dicts to map patch_pattern node ids to actual DB nodes
+        pushout_node_refs_updt = self.topological_patch_pattern[timestamp_updt]
         pushout_node_id_to_added_node_mapping = {}
         added_node_id_to_pushout_id_mapping = {}
-        # Iterate over all updt pushout nodes and create nodes in the db for them. Remember the created nodes using the mappings.
-        for key, pushout_node_ref in self.topological_patch_pattern[timestamp_updt].items():
+        for key, pushout_node_ref in pushout_node_refs_updt.items():
             node_class = globals()[pushout_node_ref["node_type"]]
             node_obj = node_class(**pushout_node_ref["properties"])
             delattr(node_obj, "element_id_property")
             node_obj.save()
             pushout_node_id_to_added_node_mapping[pushout_node_ref["properties"]["element_id_property"]] = node_obj
             added_node_id_to_pushout_id_mapping[node_obj.element_id] = pushout_node_id_to_added_node_mapping[pushout_node_ref["properties"]["element_id_property"]]
-        # Iterate over all updt pushout nodes again and this time create relations according to the patch. Some of them are relations to other pushout nodes ("relation_to"), other are relations to context nodes.
-        for key_pushout, pushout_node_ref in self.topological_patch_pattern[timestamp_updt].items():
+        # Second iteration to connect the new updt nodes with one another and with the context
+        for key_pushout, pushout_node_ref in pushout_node_refs_updt.items():
             pushout_node = pushout_node_id_to_added_node_mapping[key_pushout]
             if pushout_node_ref["relation_to"]:
                 for key_relation, relation in pushout_node_ref["relation_to"].items():
