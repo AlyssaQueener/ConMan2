@@ -18,30 +18,29 @@ parser = argparse.ArgumentParser(description='ConMan')
 subparsers = parser.add_subparsers(dest='command', help='Available commands.')
 
 # "add" command parser
-add_parser = subparsers.add_parser('add', help='Adds a file to the database.')
+add_parser = subparsers.add_parser('add', help='Adds a file to the database. Function: IfcGraphInterface.ifc2graph()')
 add_parser.add_argument('-p', '--path', type=str, required=True, help='Path to the file to add.')
 add_parser.add_argument('-t', '--timestamp', type=str, required=False, help='OPTIONAL: Manually create a timestamp as a custom graph identifier.')
 
 # "get" command parser
-get_parser = subparsers.add_parser('get', help='Parses a file back from the database.')
+get_parser = subparsers.add_parser('get', help='Parses a file back from the database. Function: IfcGraphInterface.graph2ifc()')
 get_parser.add_argument('-p', '--path', type=str, required=True, help='Path the file is parsed to.')
 get_parser.add_argument('-t', '--timestamp', type=str, required=True, help='Timestamp of the graph model to get.')
 
 # "commit" command parser
-commit_parser = subparsers.add_parser('commit', help='Creates diff and patch from two graphs.')
+commit_parser = subparsers.add_parser('commit', help='Creates diff and patch from two graphs. Functions: GraphDiff.run_diff() and GraphPatch.create_patch()')
 commit_parser.add_argument('-b', '--branch', type=str, required=True, help='Branch name to commit to.')
 commit_parser.add_argument('-p', '--project_id', type=str, required=True, help='IfcProject GUID of the project to commit to.')
 commit_parser.add_argument('-m', '--message', type=str, required=False, help='OPTIONAL: Commit message.')
 
 # "checkout" command parser
-checkout_parser = subparsers.add_parser('checkout', help='Checks out a specific timestamp version of the model.')
+checkout_parser = subparsers.add_parser('checkout', help='Checks out a specific timestamp version of the model. Function: GraphPatch.apply_patch()')
 checkout_parser.add_argument('-p', '--project_id', type=str, required=True, help='Branch name to checkout from.')
-checkout_parser.add_argument('-bi', '--branch_init', type=str, required=True, help='Branch name to checkout from.')
-checkout_parser.add_argument('-bu', '--branch_updt', type=str, required=True, help='Branch name to checkout to.')
-checkout_parser.add_argument('-tu', '--timestamp_updt', type=str, required=True, help='Timestamp of the updated graph model.')
+checkout_parser.add_argument('-b', '--branch_updt', type=str, required=True, help='Branch name to checkout to.')
+checkout_parser.add_argument('-t', '--timestamp_updt', type=str, required=True, help='Timestamp of the updated graph model.')
 
 # "branch" command parser
-branch_parser = subparsers.add_parser('branch', help='Creates a new branch in the version timeline.')
+branch_parser = subparsers.add_parser('branch', help='Creates a new branch in the version timeline. Function: VersionTimeline.branch()')
 branch_parser.add_argument('-n', '--name', type=str, required=True, help='Name of the new branch.')
 branch_parser.add_argument('-p', '--project_id', type=str, required=True, help='IfcProject GUID of the project to create the branch in.')
 
@@ -88,10 +87,9 @@ elif args.command == 'commit':
     commit(project_id=project_id, branch=branch_name, message=message)
 elif args.command == 'checkout':
     project_id = args.project_id
-    b_init = args.branch_init
     b_updt = args.branch_updt
     ts_updt = args.timestamp_updt
-    checkout(project_id, b_init, b_updt, ts_updt)
+    checkout(project_id, b_updt, ts_updt)
 elif args.command == 'branch':
     name = args.name
     project_id = args.project_id
