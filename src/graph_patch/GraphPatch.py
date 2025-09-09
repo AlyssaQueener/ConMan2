@@ -10,9 +10,6 @@ class GraphPatch:
         self.topological_patch_pattern = {timestamp_init: {}, timestamp_updt: {}}
         self.semantic_patch_pattern = {}
         self.nodes_to_delete = []
-        self.context_nodes = []
-        self.gluing_nodes_init = []
-        self.gluing_nodes_updt = []
 
         self.init_side_node_ids_to_unique_paths_mapping = {timestamp_init: {}, timestamp_updt: {}} #includes pushout nodes in path, used to identify non-danlging pushout nodes to delete
 
@@ -84,16 +81,43 @@ class GraphPatch:
             # Find the corresponding equivalent node in the db.
             node_updt = node_init.equivalent_to.all()[0]
             unique_path = self.node_ids_to_unique_paths_mapping[timestamp_init][node_init.element_id]
+
             for property_key, property_value in node_init.__properties__.items():
                 # Exclude checking for the attributes timestamp and node id, as these are supposed to be different..
                 if property_key not in ["timestamp", "element_id_property"]:
                     # Compare the attribute values.
-                    if property_value != node_updt.__properties__.get(property_key):
+                    property_value_updt = node_updt.__properties__.get(property_key)
+                    if property_value != property_value_updt:
                         if unique_path not in self.semantic_patch_pattern:
                             self.semantic_patch_pattern[unique_path] = {}
-                        self.semantic_patch_pattern[unique_path][property_key] = {}
-                        self.semantic_patch_pattern[unique_path][property_key][timestamp_init] = property_value
-                        self.semantic_patch_pattern[unique_path][property_key][timestamp_updt] = node_updt.__properties__.get(property_key)
+                        if property_value is None:
+                            adjacent =  node_init.relation_to.match(rel_type=property_key)[0]
+                            if adjacent.equivalent_to.all():
+                                self.semantic_patch_pattern[unique_path][property_key] = {}
+                                self.semantic_patch_pattern[unique_path][property_key][timestamp_init] = {
+                                    "path": self.node_ids_to_unique_paths_mapping[timestamp_init][adjacent.element_id],
+                                    "rel_type": property_key,
+                                    "list_index": node_init.relation_to.relationship(adjacent).list_index
+                                }
+                                self.semantic_patch_pattern[unique_path][property_key][timestamp_updt] = property_value_updt
+                            else:
+                                continue
+                        elif property_value_updt is None:
+                            adjacent =  node_updt.relation_to.match(rel_type=property_key)[0]
+                            if adjacent.equivalent_to.all():
+                                self.semantic_patch_pattern[unique_path][property_key] = {}
+                                self.semantic_patch_pattern[unique_path][property_key][timestamp_updt] = {
+                                    "path": self.node_ids_to_unique_paths_mapping[timestamp_updt][adjacent.element_id],
+                                    "rel_type": property_key,
+                                    "list_index": node_updt.relation_to.relationship(adjacent).list_index
+                                }
+                                self.semantic_patch_pattern[unique_path][property_key][timestamp_init] = property_value
+                            else:
+                                continue
+                        else:
+                            self.semantic_patch_pattern[unique_path][property_key] = {}
+                            self.semantic_patch_pattern[unique_path][property_key][timestamp_init] = property_value
+                            self.semantic_patch_pattern[unique_path][property_key][timestamp_updt] = property_value_updt
 
 
     def create_topological_patch_pattern(self, pushout_nodes, timestamp):
@@ -197,8 +221,12 @@ class GraphPatch:
             if pushout_node_ref["path"]:
                 pushout_node = self.find_node_from_unique_path(pushout_node_ref["path"], timestamp_init)
                 self.nodes_to_delete.append(pushout_node)
+        
         # Iterate over all nodes marked up for deletion (init pushout nodes). Detach them and remove them from the db.
         for node in self.nodes_to_delete:
+            for adjacent in node.relation_from.all():
+                rel_type = adjacent.relation_to.relationship(node).rel_type
+                setattr(adjacent, rel_type, "$")
             node.relation_to.disconnect_all()
             node.relation_from.disconnect_all()
             node.delete()
@@ -223,21 +251,41 @@ class GraphPatch:
                 for key_relation, relation in pushout_node_ref["relation_to"].items():
                     related_node = pushout_node_id_to_added_node_mapping[key_relation]
                     pushout_node.relation_to.connect(related_node, {"rel_type": relation["properties"]["rel_type"], "list_index": relation["properties"]["list_index"]})
+                    if hasattr(pushout_node, relation["properties"]["rel_type"]):
+                        setattr(pushout_node, relation["properties"]["rel_type"], None)
+                        pushout_node.save()
             if pushout_node_ref["context_to"]:
                 for key_context_to, context_to in pushout_node_ref["context_to"].items():
                     context_node = self.find_node_from_unique_path(context_to["path"], timestamp_init)
                     pushout_node.relation_to.connect(context_node, {"rel_type": context_to["properties"]["rel_type"], "list_index": context_to["properties"]["list_index"]})
+                    if hasattr(pushout_node, context_to["properties"]["rel_type"]):
+                        setattr(pushout_node, context_to["properties"]["rel_type"], None)
+                        pushout_node.save()
             if pushout_node_ref["context_from"]:
                 for key_context_from, context_from in pushout_node_ref["context_from"].items():
                     context_node = self.find_node_from_unique_path(context_from["path"], timestamp_init)
                     context_node.relation_to.connect(pushout_node, {"rel_type": context_from["properties"]["rel_type"], "list_index": context_from["properties"]["list_index"]})
+                    if hasattr(context_node, context_from["properties"]["rel_type"]):
+                        setattr(context_node, context_from["properties"]["rel_type"], None)
+                        context_node.save()
 
                     
         # Update the existing nodes based on the semantic patch, i.e., the attribute updates.
         for unique_path in self.semantic_patch_pattern.keys():
             node = self.find_node_from_unique_path(unique_path=unique_path, timestamp=timestamp_init)
-            for attr in self.semantic_patch_pattern[unique_path].keys():
-                setattr(node, attr, self.semantic_patch_pattern[unique_path][attr][timestamp_updt])
+            for property_key in self.semantic_patch_pattern[unique_path].keys():
+                property_value_init = self.semantic_patch_pattern[unique_path][property_key][timestamp_init]
+                property_value_updt = self.semantic_patch_pattern[unique_path][property_key][timestamp_updt]
+                if "path" in property_value_updt.keys():
+                    adjacent = self.find_node_from_unique_path(property_value_updt["path"], timestamp_init)
+                    node.relation_to.connect(adjacent, {"rel_type": property_value_updt["rel_type"], "list_index": property_value_updt["list_index"]})
+                    setattr(node, property_key, None)
+                elif "path" in property_value_init.keys():
+                    adjacent = self.find_node_from_unique_path(property_value_init["path"], timestamp_init)
+                    node.relation_to.disconnect(adjacent)
+                    setattr(node, property_key, "$")
+                else:
+                    setattr(node, property_key, self.semantic_patch_pattern[unique_path][property_key][timestamp_updt])
                 node.save()
 
         # Make all timestamps updt to have the whole model be that version
