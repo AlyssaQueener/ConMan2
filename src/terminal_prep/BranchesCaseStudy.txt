@@ -1,5 +1,4 @@
-python conman2.py reset &&
-rm ./timeline_data/timeline.json &&
+python conman2.py nuke -y &&
 python conman2.py add -p "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v1-purified.ifc" -t "1" &&
 python conman2.py commit -p "1ODmFv4Jv9ZO9fO_v2Tu_8" -b "main" &&
 python conman2.py add -p "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v2-purified.ifc" -t "2" &&

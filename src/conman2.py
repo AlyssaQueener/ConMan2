@@ -11,6 +11,7 @@ from command_line_interface.Push import push
 from command_line_interface.Remove import remove
 from command_line_interface.Checkout import checkout
 from command_line_interface.Reset import reset
+from command_line_interface.Nuke import nuke
 from command_line_interface.Branch import branch
 from command_line_interface.Log import log_timeline
 
@@ -31,7 +32,7 @@ get_parser.add_argument('-t', '--timestamp', type=str, required=True, help='Time
 commit_parser = subparsers.add_parser('commit', help='Creates diff and patch from two graphs. Functions: GraphDiff.run_diff() and GraphPatch.create_patch()')
 commit_parser.add_argument('-b', '--branch', type=str, required=True, help='Branch name to commit to.')
 commit_parser.add_argument('-p', '--project_id', type=str, required=True, help='IfcProject GUID of the project to commit to.')
-commit_parser.add_argument('-m', '--message', type=str, required=False, help='OPTIONAL: Commit message.')
+commit_parser.add_argument('-m', '--message', type=str, required=False, default='', help='OPTIONAL: Commit message.')
 
 # "checkout" command parser
 checkout_parser = subparsers.add_parser('checkout', help='Checks out a specific timestamp version of the model. Function: GraphPatch.apply_patch()')
@@ -50,6 +51,10 @@ remove_parser.add_argument('-t', '--timestamp', type=str, required=True, help='T
 
 # "reset" command parser
 reset_parser = subparsers.add_parser('reset', help='Removes all nodes and relationships from the database.')
+
+# "nuke" command parser
+nuke_parser = subparsers.add_parser('nuke', help='Deletes all added data in the database, deletes the timeline, and deletes all patch files.')
+nuke_parser.add_argument('-y', '--yes', action="store_true", help='Automatically confirm the nuke operation without prompting.')
 
 # "fetch" command parser
 fetch_parser = subparsers.add_parser('fetch', help='Fetches updates from the remote repository.')
@@ -99,6 +104,9 @@ elif args.command == 'remove':
     remove(timestamp)
 elif args.command == 'reset':
     reset()
+elif args.command == 'nuke':
+    yes = args.yes
+    nuke(yes)
 elif args.command == 'fetch':
     fetch()
 elif args.command == 'pull':
