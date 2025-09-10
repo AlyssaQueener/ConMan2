@@ -150,35 +150,35 @@ class VersionTimeline:
             print(f"Applying patch from {ts_init} to {ts_updt}.")
             graph_patch = GraphPatch()
 
-            commits_meta = self.timeline[project_id]["commits"]
-            parents_init = commits_meta[ts_init]["parents"]
-            parents_updt = commits_meta[ts_updt]["parents"]
+            # commits_meta = self.timeline[project_id]["commits"]
+            # parents_init = commits_meta[ts_init]["parents"]
+            # parents_updt = commits_meta[ts_updt]["parents"]
 
-            parent_init = parents_init[0] if parents_init else None
-            parent_updt = parents_updt[0] if parents_updt else None
+            # parent_init = parents_init[0] if parents_init else None
+            # parent_updt = parents_updt[0] if parents_updt else None
 
-            # Determine orientation:
-            # If updt's parent is init -> forward (init -> updt) file = init_updt
-            # Else if init's parent is updt -> backward file = updt_init
-            # (Handles root case: parent_updt None, parent_init == ts_updt)
-            patch_loaded = False
-            if parent_updt == ts_init:
-                topo = f"./patch_data/Patch_Topo_{project_id}_{ts_init}_{ts_updt}.json"
-                sema = f"./patch_data/Patch_Sema_{project_id}_{ts_init}_{ts_updt}.json"
-                graph_patch.load_patch_from_file(path_sema=sema, path_topo=topo)
-                patch_loaded = True
-            elif parent_init == ts_updt:
-                topo = f"./patch_data/Patch_Topo_{project_id}_{ts_updt}_{ts_init}.json"
-                sema = f"./patch_data/Patch_Sema_{project_id}_{ts_updt}_{ts_init}.json"
-                graph_patch.load_patch_from_file(path_sema=sema, path_topo=topo)
-                patch_loaded = True
-            else:
-                raise RuntimeError(f"Cannot determine patch orientation for {ts_init}->{ts_updt} (parents: {parent_init}, {parent_updt}).")
+            # # Determine orientation:
+            # # If updt's parent is init -> forward (init -> updt) file = init_updt
+            # # Else if init's parent is updt -> backward file = updt_init
+            # # (Handles root case: parent_updt None, parent_init == ts_updt)
+            # patch_loaded = False
+            # if parent_updt == ts_init:
+            #     topo = f"./patch_data/Patch_Topo_{project_id}_{ts_init}_{ts_updt}.json"
+            #     sema = f"./patch_data/Patch_Sema_{project_id}_{ts_init}_{ts_updt}.json"
+            #     graph_patch.load_patch_from_file(path_sema=sema, path_topo=topo)
+            #     patch_loaded = True
+            # elif parent_init == ts_updt:
+            #     topo = f"./patch_data/Patch_Topo_{project_id}_{ts_updt}_{ts_init}.json"
+            #     sema = f"./patch_data/Patch_Sema_{project_id}_{ts_updt}_{ts_init}.json"
+            #     graph_patch.load_patch_from_file(path_sema=sema, path_topo=topo)
+            #     patch_loaded = True
+            # else:
+            #     raise RuntimeError(f"Cannot determine patch orientation for {ts_init}->{ts_updt} (parents: {parent_init}, {parent_updt}).")
 
-            if not patch_loaded:
-                raise RuntimeError(f"Patch not loaded for {ts_init}->{ts_updt}")
+            # if not patch_loaded:
+            #     raise RuntimeError(f"Patch not loaded for {ts_init}->{ts_updt}")
 
-            graph_patch.apply_patch(ts_init, ts_updt)
+            graph_patch.apply_patch(project_id, ts_init, ts_updt)
         return path
 
     @staticmethod

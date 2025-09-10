@@ -14,6 +14,7 @@ path_updt = "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v3-purified.ifc"
 # path_init = "./00_sampleData/IFC_stepP21/DepMod2025/2025-DepMod2HVAC-Model-v1.ifc"
 # path_updt = "./00_sampleData/IFC_stepP21/DepMod2025/2025-DepMod2HVAC-Model-v3.ifc"
 
+project_id = "1ODmFv4Jv9ZO9fO_v2Tu_8"
 timestamp_init = "init"
 timestamp_updt = "updt"
 
@@ -44,8 +45,8 @@ creation_graph_diff.run_diff(timestamp_init, timestamp_updt)
 
 # Create Patch
 print(f"Creating patch.")
-creation_graph_patch = GraphPatch(timestamp_init, timestamp_updt)
-creation_graph_patch.create_patch(timestamp_init, timestamp_updt)
+creation_graph_patch = GraphPatch()
+creation_graph_patch.create_patch(project_id, timestamp_init, timestamp_updt)
 
 
 
@@ -66,11 +67,10 @@ print(f"Parsing {path_init} with timestamp {timestamp_init}.")
 application_neo4j_ifc_interface.ifc_2_graph(path_init, timestamp=timestamp_init)
 
 # Load Patch from File
-application_graph_patch = GraphPatch(timestamp_init, timestamp_updt)
-application_graph_patch.load_patch_from_file(path_sema="./patch_data/Patch_Sema_init_updt.json", path_topo="./patch_data/Patch_Topo_init_updt.json")
+application_graph_patch = GraphPatch()
 
 #Apply Patch
 print(f"Applying Patch.")
-application_graph_patch.apply_patch(timestamp_init, timestamp_updt)
+application_graph_patch.apply_patch(project_id, timestamp_init, timestamp_updt)
 
 application_neo4j_ifc_interface.graph_2_ifc("./wat_denn.ifc", timestamp="updt")

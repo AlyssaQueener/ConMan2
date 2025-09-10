@@ -209,13 +209,22 @@ class GraphPatch:
             json.dump(self.semantic_patch_pattern, f, indent=4)
 
     
-    def apply_patch(self, timestamp_init: str, timestamp_updt: str):
+    def apply_patch(self, project_id: str, timestamp_init: str, timestamp_updt: str):
 
         self.node_ids_to_unique_paths_mapping = {timestamp_init: {}, timestamp_updt: {}}
         self.init_side_node_ids_to_unique_paths_mapping = {timestamp_init: {}, timestamp_updt: {}}
         self.topological_patch_pattern = {timestamp_init: {}, timestamp_updt: {}}
         self.semantic_patch_pattern = {}
         self.nodes_to_delete = []
+
+        try:
+            path_topo = f"./patch_data/Patch_Topo_{project_id}_{timestamp_init}_{timestamp_updt}.json"
+            path_sema = f"./patch_data/Patch_Sema_{project_id}_{timestamp_init}_{timestamp_updt}.json"
+            self.load_patch_from_file(path_topo, path_sema)
+        except:
+            path_topo = f"./patch_data/Patch_Topo_{project_id}_{timestamp_updt}_{timestamp_init}.json"
+            path_sema = f"./patch_data/Patch_Sema_{project_id}_{timestamp_updt}_{timestamp_init}.json"
+            self.load_patch_from_file(path_topo, path_sema)
 
         # Deletion of init
         # Get all Primary and Connection nodes and create unique paths for all reachable nodes. These are, again, the identifiers.
