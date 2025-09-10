@@ -13,5 +13,5 @@ def add(model_path: str, timestamp: str):
         if len(timestamps) > 1:
             raise Exception(f"Error: 2 or more timestamps for project ID {project_id} already exist in the database.")
         ifc_graph_interface = IfcGraphInterface()
-        print(f"Adding files from path {model_path} with timestamp {timestamp}.")
+        print(f"Adding files from path {model_path} with timestamp {timestamp}. Project: {project_id}")
         ifc_graph_interface.ifc_2_graph(model_path, timestamp)
