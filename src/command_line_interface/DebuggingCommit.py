@@ -12,6 +12,8 @@ def debugging_commit(project_id: str, timestamp_init: str, timestamp_updt: str):
     graph_diff = GraphDiff()
     graph_diff.run_diff(timestamp_init, timestamp_updt)
 
+    print(f"Diff created between models of project {project_id} with timestamps {timestamp_init} and {timestamp_updt}.")
+
     # print(f"Creating patch for project {project_id} on branch {branch} between timestamps {timestamp_init} and {timestamp_updt}.")
     # graph_patch = GraphPatch(timestamp_init, timestamp_updt)
     # graph_patch.create_patch(project_id, timestamp_init, timestamp_updt)

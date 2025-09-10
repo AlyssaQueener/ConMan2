@@ -31,3 +31,5 @@ def nuke(yes: bool=False):
     DETACH DELETE n
     """
     Neo4jConnection().cypher_query(query)
+
+    print(f"Database has been nuked. Neo4J is emptied, patch files and version timeline are removed.")

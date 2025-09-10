@@ -10,3 +10,5 @@ def reset():
     DETACH DELETE n
     """
     Neo4jConnection().cypher_query(query)
+
+    print(f"Database has been emptied.")
