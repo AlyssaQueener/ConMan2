@@ -14,4 +14,8 @@ python conman2.py commit -p 2UoLGbl5jCawzD_3HBZAPs -b main &&
 python conman2.py add -p "./00_sampleData/IFC_stepP21/8VersionsTest/v6.ifc" -t "6" &&
 python conman2.py commit -p 2UoLGbl5jCawzD_3HBZAPs -b main &&
 python conman2.py add -p "./00_sampleData/IFC_stepP21/8VersionsTest/v7.ifc" -t "7" &&
-python conman2.py commit -p 2UoLGbl5jCawzD_3HBZAPs -b main
+python conman2.py commit -p 2UoLGbl5jCawzD_3HBZAPs -b main &&
+python conman2.py reset &&
+python conman2.py add -p "./00_sampleData/IFC_stepP21/8VersionsTest/v0.ifc" -t "0" &&
+python conman2.py checkout -p 2UoLGbl5jCawzD_3HBZAPs -b main -t 7 &&
+python conman2.py get -p "./V8_Checkout_0_to_7.ifc" -t 7
