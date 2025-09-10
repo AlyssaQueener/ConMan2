@@ -1,0 +1,16 @@
+python conman2.py nuke -y &&
+python conman2.py debugging_add -p ./00_sampleData/IFC_stepP21/8VersionsTest/v0.ifc -t 0
+python conman2.py debugging_add -p ./00_sampleData/IFC_stepP21/8VersionsTest/v1.ifc -t 1
+python conman2.py debugging_commit -p 2UoLGbl5jCawzD_3HBZAPs -i 0 -u 1
+python conman2.py debugging_add -p ./00_sampleData/IFC_stepP21/8VersionsTest/v2.ifc -t 2
+python conman2.py debugging_commit -p 2UoLGbl5jCawzD_3HBZAPs -i 1 -u 2
+python conman2.py debugging_add -p ./00_sampleData/IFC_stepP21/8VersionsTest/v3.ifc -t 3
+python conman2.py debugging_commit -p 2UoLGbl5jCawzD_3HBZAPs -i 2 -u 3
+python conman2.py debugging_add -p ./00_sampleData/IFC_stepP21/8VersionsTest/v4.ifc -t 4
+python conman2.py debugging_commit -p 2UoLGbl5jCawzD_3HBZAPs -i 3 -u 4
+python conman2.py debugging_add -p ./00_sampleData/IFC_stepP21/8VersionsTest/v5.ifc -t 5
+python conman2.py debugging_commit -p 2UoLGbl5jCawzD_3HBZAPs -i 4 -u 5
+python conman2.py debugging_add -p ./00_sampleData/IFC_stepP21/8VersionsTest/v6.ifc -t 6
+python conman2.py debugging_commit -p 2UoLGbl5jCawzD_3HBZAPs -i 5 -u 6
+python conman2.py debugging_add -p ./00_sampleData/IFC_stepP21/8VersionsTest/v7.ifc -t 7
+python conman2.py debugging_commit -p 2UoLGbl5jCawzD_3HBZAPs -i 6 -u 7

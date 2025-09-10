@@ -14,6 +14,8 @@ from command_line_interface.Reset import reset
 from command_line_interface.Nuke import nuke
 from command_line_interface.Branch import branch
 from command_line_interface.Log import log_timeline
+from command_line_interface.DebuggingAdd import debugging_add
+from command_line_interface.DebuggingCommit import debugging_commit
 
 parser = argparse.ArgumentParser(description='ConMan')
 subparsers = parser.add_subparsers(dest='command', help='Available commands.')
@@ -21,7 +23,12 @@ subparsers = parser.add_subparsers(dest='command', help='Available commands.')
 # "add" command parser
 add_parser = subparsers.add_parser('add', help='Adds a file to the database. Function: IfcGraphInterface.ifc2graph()')
 add_parser.add_argument('-p', '--path', type=str, required=True, help='Path to the file to add.')
-add_parser.add_argument('-t', '--timestamp', type=str, required=False, help='OPTIONAL: Manually create a timestamp as a custom graph identifier.')
+add_parser.add_argument('-t', '--timestamp', type=str, required=False, default="", help='OPTIONAL: Manually create a timestamp as a custom graph identifier.')
+
+# "debugging add" command parser
+debugging_add_parser = subparsers.add_parser('debugging_add', help='\033[91mEXPERIMENTAL: Adds models to DB without checking for existing DB state for debugging purposes. Only use in combination with Debugging Commit for testing.\033[0m Function: IfcGraphInterface.ifc2graph()')
+debugging_add_parser.add_argument('-p', '--path', type=str, required=True, help='Path to the file to add.')
+debugging_add_parser.add_argument('-t', '--timestamp', type=str, required=False, default="", help='OPTIONAL: Manually create a timestamp as a custom graph identifier.')
 
 # "get" command parser
 get_parser = subparsers.add_parser('get', help='Parses a file back from the database. Function: IfcGraphInterface.graph2ifc()')
@@ -33,6 +40,12 @@ commit_parser = subparsers.add_parser('commit', help='Creates diff and patch fro
 commit_parser.add_argument('-b', '--branch', type=str, required=True, help='Branch name to commit to.')
 commit_parser.add_argument('-p', '--project_id', type=str, required=True, help='IfcProject GUID of the project to commit to.')
 commit_parser.add_argument('-m', '--message', type=str, required=False, default='', help='OPTIONAL: Commit message.')
+
+# "debugging commit" command parser
+debugging_commit_parser = subparsers.add_parser('debugging_commit', help='\033[91mEXPERIMENTAL: Creates a diff from 2 paths but does not create a patch or remove the init path. Only use for for viewing a chain of model versions in the DB, not for actual version tracking.\033[0m Function: GraphDiff.run_diff()')
+debugging_commit_parser.add_argument('-p', '--project_id', type=str, required=True, help='IfcProject GUID of the project to commit to.')
+debugging_commit_parser.add_argument('-i', '--timestamp_init', type=str, required=True, help='Init timestamp for diff creation.')
+debugging_commit_parser.add_argument('-u', '--timestamp_updt', type=str, required=True, help='Updt timestamp for diff creation.')
 
 # "checkout" command parser
 checkout_parser = subparsers.add_parser('checkout', help='Checks out a specific timestamp version of the model. Function: GraphPatch.apply_patch()')
@@ -73,11 +86,12 @@ args = parser.parse_args()
 
 if args.command == 'add':
     path = args.path
-    if args.timestamp is not None:
-        timestamp = args.timestamp
-    else:
-        timestamp = VersionTimeline.create_timestamp()
+    timestamp = args.timestamp
     add(path, timestamp)
+elif args.command == 'debugging_add':
+    path = args.path
+    timestamp = args.timestamp
+    debugging_add(path, timestamp)
 elif args.command == 'get':
     path = args.path
     timestamp = args.timestamp
@@ -87,9 +101,12 @@ elif args.command == 'commit':
     project_id = args.project_id
     branch_name = args.branch
     message = args.message
-    if message is None:
-        message = ""
     commit(project_id=project_id, branch=branch_name, message=message)
+elif args.command == 'debugging_commit':
+    project_id = args.project_id
+    ts_init = args.timestamp_init
+    ts_updt = args.timestamp_updt
+    debugging_commit(project_id=project_id, timestamp_init=ts_init, timestamp_updt=ts_updt)
 elif args.command == 'checkout':
     project_id = args.project_id
     b_updt = args.branch_updt
