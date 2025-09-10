@@ -5,13 +5,12 @@ from data_handler.DataHandler import DataHandler
 
 class GraphPatch:
 
-    def __init__(self, timestamp_init: str, timestamp_updt: str):
-        self.node_ids_to_unique_paths_mapping = {timestamp_init: {}, timestamp_updt: {}}
-        self.topological_patch_pattern = {timestamp_init: {}, timestamp_updt: {}}
-        self.semantic_patch_pattern = {}
-        self.nodes_to_delete = []
+    # node_ids_to_unique_paths_mapping = {}
+    # init_side_node_ids_to_unique_paths_mapping = {} #includes pushout nodes in path, used to identify non-danlging pushout nodes to delete
 
-        self.init_side_node_ids_to_unique_paths_mapping = {timestamp_init: {}, timestamp_updt: {}} #includes pushout nodes in path, used to identify non-danlging pushout nodes to delete
+    # topological_patch_pattern = {}
+    # semantic_patch_pattern = {}
+    # nodes_to_delete = []
 
     ########################
     ### Helper Functions ###
@@ -170,6 +169,13 @@ class GraphPatch:
         """
         Use the two models that have been diffed and create a semanic and a topological patch.
         """
+
+        self.node_ids_to_unique_paths_mapping = {timestamp_init: {}, timestamp_updt: {}}
+        self.init_side_node_ids_to_unique_paths_mapping = {timestamp_init: {}, timestamp_updt: {}}
+        self.topological_patch_pattern = {timestamp_init: {}, timestamp_updt: {}}
+        self.semantic_patch_pattern = {}
+        self.nodes_to_delete = []
+
         # Get all Primary and Connection Nodes.
         prim_and_con_init = list(PrimaryNode.nodes.filter(timestamp=timestamp_init)) + list(ConnectionNode.nodes.filter(timestamp=timestamp_init))
         prim_and_con_updt = list(PrimaryNode.nodes.filter(timestamp=timestamp_updt)) + list(ConnectionNode.nodes.filter(timestamp=timestamp_updt))
@@ -205,6 +211,12 @@ class GraphPatch:
     
     def apply_patch(self, timestamp_init: str, timestamp_updt: str):
 
+        self.node_ids_to_unique_paths_mapping = {timestamp_init: {}, timestamp_updt: {}}
+        self.init_side_node_ids_to_unique_paths_mapping = {timestamp_init: {}, timestamp_updt: {}}
+        self.topological_patch_pattern = {timestamp_init: {}, timestamp_updt: {}}
+        self.semantic_patch_pattern = {}
+        self.nodes_to_delete = []
+
         # Deletion of init
         # Get all Primary and Connection nodes and create unique paths for all reachable nodes. These are, again, the identifiers.
         prim_and_con_init = list(PrimaryNode.nodes.filter(timestamp=timestamp_init)) + list(ConnectionNode.nodes.filter(timestamp=timestamp_init))
@@ -214,13 +226,15 @@ class GraphPatch:
         # Mark any unreachable nodes for deletion. These nodes can not be updated and so must be fully replaced.
         for node in Node.nodes.all():
             if node.element_id not in self.init_side_node_ids_to_unique_paths_mapping[timestamp_init]:
-                self.nodes_to_delete.append(node)
+                if node not in self.nodes_to_delete:
+                    self.nodes_to_delete.append(node)
 
         # Iterate over the topological patches init side and mark any nodes with a unique path up for deletion.
         for key, pushout_node_ref in self.topological_patch_pattern[timestamp_init].items():
             if pushout_node_ref["path"]:
                 pushout_node = self.find_node_from_unique_path(pushout_node_ref["path"], timestamp_init)
-                self.nodes_to_delete.append(pushout_node)
+                if pushout_node not in self.nodes_to_delete:
+                    self.nodes_to_delete.append(pushout_node)
         
         # Iterate over all nodes marked up for deletion (init pushout nodes). Detach them and remove them from the db.
         for node in self.nodes_to_delete:
@@ -276,14 +290,16 @@ class GraphPatch:
             for property_key in self.semantic_patch_pattern[unique_path].keys():
                 property_value_init = self.semantic_patch_pattern[unique_path][property_key][timestamp_init]
                 property_value_updt = self.semantic_patch_pattern[unique_path][property_key][timestamp_updt]
-                if "path" in property_value_updt.keys():
-                    adjacent = self.find_node_from_unique_path(property_value_updt["path"], timestamp_init)
-                    node.relation_to.connect(adjacent, {"rel_type": property_value_updt["rel_type"], "list_index": property_value_updt["list_index"]})
-                    setattr(node, property_key, None)
-                elif "path" in property_value_init.keys():
-                    adjacent = self.find_node_from_unique_path(property_value_init["path"], timestamp_init)
-                    node.relation_to.disconnect(adjacent)
-                    setattr(node, property_key, "$")
+                if isinstance(property_value_updt, dict):
+                    if "path" in property_value_updt.keys():
+                        adjacent = self.find_node_from_unique_path(property_value_updt["path"], timestamp_init)
+                        node.relation_to.connect(adjacent, {"rel_type": property_value_updt["rel_type"], "list_index": property_value_updt["list_index"]})
+                        setattr(node, property_key, None)
+                elif isinstance(property_value_updt, dict):
+                    if "path" in property_value_init.keys():
+                        adjacent = self.find_node_from_unique_path(property_value_init["path"], timestamp_init)
+                        node.relation_to.disconnect(adjacent)
+                        setattr(node, property_key, "$")
                 else:
                     setattr(node, property_key, self.semantic_patch_pattern[unique_path][property_key][timestamp_updt])
                 node.save()

@@ -148,7 +148,7 @@ class VersionTimeline:
         print(f"Checkout patches: {patches}")
         for ts_init, ts_updt in patches:
             print(f"Applying patch from {ts_init} to {ts_updt}.")
-            graph_patch = GraphPatch(ts_init, ts_updt)
+            graph_patch = GraphPatch()
 
             commits_meta = self.timeline[project_id]["commits"]
             parents_init = commits_meta[ts_init]["parents"]

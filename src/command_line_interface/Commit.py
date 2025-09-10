@@ -37,7 +37,7 @@ def commit(project_id: str, branch: str, message: str=""):
     graph_diff.run_diff(timestamp_init, timestamp_updt)
 
     print(f"Creating patch for project {project_id} on branch {branch} between timestamps {timestamp_init} and {timestamp_updt}.")
-    graph_patch = GraphPatch(timestamp_init, timestamp_updt)
+    graph_patch = GraphPatch()
     graph_patch.create_patch(project_id, timestamp_init, timestamp_updt)
 
     version_timeline = VersionTimeline()
