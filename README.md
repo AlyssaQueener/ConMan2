@@ -1,5 +1,7 @@
 # ConMan2: Version Manager for BIM models
 
+SPDX-License-Identifier: MIT
+
 ## Problem statement 
 
 BIM and Digital Twin workflows currently depend largely on loosely connected, monolithic files specific to certain disciplines. 
@@ -107,5 +109,5 @@ The IFC schema includes cases where the general translation of entities, relatio
 ## Python Packages and Dependencies
 | Package         | Github URL           | License |
 | --------------- |:-------------:| ------- |
-|[IfcOpenShell](http://ifcopenshell.org/)| https://github.com/IfcOpenShell/IfcOpenShell |GPL-3.0 license & LGPL-3.0 license |
-|[Neomodel](https://neomodel.readthedocs.io/)|https://github.com/neo4j-contrib/neomodel | MIT|
+|[IfcOpenShell](http://ifcopenshell.org/)| https://github.com/IfcOpenShell/IfcOpenShell |LGPL-3.0 |
+|[Neomodel](https://neomodel.readthedocs.io/)| https://github.com/neo4j-contrib/neomodel | MIT |
