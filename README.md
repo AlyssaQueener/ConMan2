@@ -18,7 +18,7 @@ This repository contains the prototypical implementation of the aforementioned v
 
 ![Overall Architecture](readme_data/overallArch-2024-ENG.png)
 
-We have reported on this matter in several papers, including the following: 
+We have published several papers detailing this approach:
 
 ```bibtex
 @article{Esser2022,
@@ -60,7 +60,7 @@ Once forking is done, run `git clone` to download the repo on your machine.
 
 ### Installation and Preliminary Settings
 
-One the repository is cloned, navigate to `<...>/conman2/src/`. This is the base directory of the application.
+Once the repository is cloned, navigate to `<...>/conman2/src/`. This is the base directory of the application.
 
 The codebase acts as an intermediate server between an end-user and a running neo4j graph database. 
 Therefore, please download and install the following products on your machine before continuing: 
@@ -68,7 +68,7 @@ Therefore, please download and install the following products on your machine be
  - Download and install the latest version of [neo4j Desktop](https://neo4j.com/download-v2/).
    You can test its successful installation by creating and starting a new database instance. 
 
-   The DB browser of running neo4j instances is accessible port 7474 (http). 
+ - The DB browser of running neo4j instances is accessible port 7474 (http). 
 
 Default credentials: 
 | var   | value      |
@@ -76,7 +76,7 @@ Default credentials:
 | user  | `neo4j`    |
 | pw    | `password` |
 
-- OPTIONAL: Download and install [Anaconda](https://www.anaconda.com/products/individual).
+- OPTIONAL: Download and install [Anaconda](https://www.anaconda.com/products/individual) or create a virtual environment.
 
 - Install the Python requirements using: `pip install -r requirements.txt`.
 
@@ -109,5 +109,5 @@ The IFC schema includes cases where the general translation of entities, relatio
 ## Python Packages and Dependencies
 | Package         | Github URL           | License |
 | --------------- |:-------------:| ------- |
-|[IfcOpenShell](http://ifcopenshell.org/)| https://github.com/IfcOpenShell/IfcOpenShell |LGPL-3.0 |
-|[Neomodel](https://neomodel.readthedocs.io/)| https://github.com/neo4j-contrib/neomodel | MIT |
+|[IfcOpenShell](http://ifcopenshell.org/)| https://github.com/IfcOpenShell/IfcOpenShell |LGPL-3.0, see `third_party_licenses/lgpl-3.0.txt` for further details |
+|[Neomodel](https://neomodel.readthedocs.io/)| https://github.com/neo4j-contrib/neomodel | MIT,  see `third_party_licenses/neomodel-mit.txt` for further details |
