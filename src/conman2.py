@@ -17,7 +17,7 @@ from command_line_interface.Log import log_timeline
 from command_line_interface.DebuggingAdd import debugging_add
 from command_line_interface.DebuggingCommit import debugging_commit
 
-parser = argparse.ArgumentParser(description='ConMan')
+parser = argparse.ArgumentParser(description='ConMan2 CLI - Version Manager for BIM models. ')
 subparsers = parser.add_subparsers(dest='command', help='Available commands.')
 
 # "add" command parser
