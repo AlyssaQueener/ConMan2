@@ -196,7 +196,7 @@ class IfcGraphInterface:
             # Iterate over all node attributes. These are only primitive attributes and can therefore be appended to the new IFC entity independently of what other entities already exist in the model.
             for key, val in node.__properties__.items():
                 # Check if the ifc entity has an attribute with the name of the node attribute. Make sure e.g. node id or p21_id is ignored.
-                if key in ["TrueNorth"]:
+                if key in ["TrueNorth"]: #Add other edge cases to list.
                     continue
                 if hasattr(ifc_entity, key):
                     # Call function that handles primitives or stringified (nested) list of primitives.
