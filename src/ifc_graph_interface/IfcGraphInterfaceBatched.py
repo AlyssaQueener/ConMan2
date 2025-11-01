@@ -170,7 +170,7 @@ class IfcGraphInterfaceBatched:
         UNWIND $batch AS r
         MATCH (a:GenericNode {p21_id: r.source_p21_id, timestamp: r.timestamp})
         MATCH (b:GenericNode {p21_id: r.target_p21_id, timestamp: r.timestamp})
-        CREATE (a)-[:RELATION_TO {rel_type: r.rel_type, list_index: r.list_index}]->(b)   
+        CREATE (a)-[:rel {rel_type: r.rel_type, list_index: r.list_index}]->(b)   
         """
         self.batch_cypher_query(query_relationships, relationships, batch_size)
 
@@ -181,7 +181,7 @@ class IfcGraphInterfaceBatched:
         MATCH (a:GenericNode {p21_id: r.relation.source_p21_id, timestamp: r.props.timestamp})
         CREATE (b:InlineNode:Node)
         SET b = r.props
-        CREATE (a)-[:RELATION_TO {rel_type: r.relation.rel_type, list_index: r.relation.list_index}]->(b)
+        CREATE (a)-[:rel {rel_type: r.relation.rel_type, list_index: r.relation.list_index}]->(b)
         """
         self.batch_cypher_query(query_inline_patterns, inline_patterns, batch_size)
 

@@ -18,7 +18,7 @@ class GraphDiffBatched:
             "MATCH (a:PrimaryNode {timestamp: $ts_init})
             WHERE a.GlobalId IS NOT NULL RETURN a, a.GlobalId AS globalid",
             "MATCH (b:PrimaryNode {timestamp: $ts_updt, GlobalId: globalid})
-            MERGE (a)-[:EQUIVALENT_TO]-(b)",
+            MERGE (a)-[:equivalent_to]-(b)",
             {batchSize: $batch_size, parallel: false, params: {ts_init: $ts_init, ts_updt: $ts_updt, batch_size: $batch_size}}
         )
         """
@@ -32,11 +32,11 @@ class GraphDiffBatched:
         while True:
             query_secondary_equivalence = """
             CALL () {
-                MATCH (parent_a {timestamp: $ts_init})-[:EQUIVALENT_TO]-(parent_b {timestamp: $ts_updt})
-                MATCH (parent_a)-[relation_a:RELATION_TO]->(child_a)
+                MATCH (parent_a {timestamp: $ts_init})-[:equivalent_to]-(parent_b {timestamp: $ts_updt})
+                MATCH (parent_a)-[relation_a:rel]->(child_a)
                 WHERE child_a._visited IS NULL
                 
-                OPTIONAL MATCH (parent_b)-[relation_b:RELATION_TO {rel_type: relation_a.rel_type, list_index: relation_a.list_index}]->(child_b {EntityType: child_a.EntityType})
+                OPTIONAL MATCH (parent_b)-[relation_b:rel {rel_type: relation_a.rel_type, list_index: relation_a.list_index}]->(child_b {EntityType: child_a.EntityType})
                 WHERE child_b IS NULL OR child_b._visited IS NULL
                 
                 // Limit the number of rows to be processed in this transaction batch
@@ -48,7 +48,7 @@ class GraphDiffBatched:
                 
                 // If a partner child_b was found, create the link and mark it as visited.
                 FOREACH (_ IN CASE WHEN child_b IS NOT NULL THEN [1] ELSE [] END |
-                    MERGE (child_a)-[:EQUIVALENT_TO]-(child_b)
+                    MERGE (child_a)-[:equivalent_to]-(child_b)
                     SET child_b._visited = true
                 )
                 RETURN count(child_a) as processed
@@ -79,7 +79,7 @@ class GraphDiffBatched:
             "MATCH (a:ConnectionNode {timestamp: $ts_init})
             WHERE a.GlobalId IS NOT NULL RETURN a, a.GlobalId AS globalid",
             "MATCH (b:ConnectionNode {timestamp: $ts_updt, GlobalId: globalid})
-            MERGE (a)-[:EQUIVALENT_TO]-(b)",
+            MERGE (a)-[:equivalent_to]-(b)",
             {batchSize: $batch_size, parallel: false, params: {ts_init: $ts_init, ts_updt: $ts_updt, batch_size: $batch_size}}
         )
         """
@@ -94,7 +94,7 @@ class GraphDiffBatched:
         CALL apoc.periodic.iterate(
             "MATCH (c:ConnectionNode)
              WHERE c.timestamp = $ts_init OR c.timestamp = $ts_updt
-             WITH id(c) AS cid, size([(c)-[:RELATION_TO]->() | 1]) AS childCount
+             WITH id(c) AS cid, size([(c)-[:rel]->() | 1]) AS childCount
              RETURN cid, childCount",
             "MATCH (c) WHERE id(c) = cid SET c._childCount = childCount",
             {batchSize: $batch_size, parallel: false, params: {ts_init: $ts_init, ts_updt: $ts_updt}}
@@ -110,19 +110,19 @@ class GraphDiffBatched:
         CALL apoc.periodic.iterate(
             // Outer query: Find all unpaired 'a' nodes with children.
             "MATCH (a:ConnectionNode {timestamp: $ts_init})
-             WHERE NOT (a)-[:EQUIVALENT_TO]-() AND a._childCount > 0
+             WHERE NOT (a)-[:equivalent_to]-() AND a._childCount > 0
              RETURN a",
             
             // Inner query: For each 'a', find candidate 'b's and check IoU.
             "// Use the pre-computed count for an efficient lookup.
              MATCH (b:ConnectionNode {timestamp: $ts_updt, _childCount: a._childCount})
-             WHERE NOT (b)-[:EQUIVALENT_TO]-()
+             WHERE NOT (b)-[:equivalent_to]-()
 
              // Now, for the small set of candidates, do the expensive IoU check.
              WITH a, b, a._childCount as count_a
              // Count common children
-             MATCH (a)-[:RELATION_TO]->(ca)-[:EQUIVALENT_TO]->(cb)
-             WHERE (b)-[:RELATION_TO]->(cb)
+             MATCH (a)-[:rel]->(ca)-[:equivalent_to]->(cb)
+             WHERE (b)-[:rel]->(cb)
              WITH a, b, count_a, count(DISTINCT ca) as common
              
              // An IoU of 1.0 means the union equals the intersection.
@@ -131,7 +131,7 @@ class GraphDiffBatched:
              
              // Since multiple 'b' nodes could match, take the first one and stop.
              WITH a, b LIMIT 1
-             MERGE (a)-[:EQUIVALENT_TO]-(b)",
+             MERGE (a)-[:equivalent_to]-(b)",
             {batchSize: $batch_size, parallel: false, params: {ts_init: $ts_init, ts_updt: $ts_updt}}
         )
         """
