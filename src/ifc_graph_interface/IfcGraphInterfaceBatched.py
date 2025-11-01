@@ -25,7 +25,7 @@ class IfcGraphInterfaceBatched:
                     inline_patterns.append({
                         "props": {
                             "EntityType": val.is_a(),
-                            "wrappedValue": val.wrappedValue,
+                            "wrappedValue": str(val.wrappedValue),
                             "timestamp": timestamp
                         },
                         "relation": {
