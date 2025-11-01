@@ -72,11 +72,12 @@ print(f"Diffing models with timestamps {timestamp_2_batched} and {timestamp_3_ba
 graph_diff_batched.run_diff(timestamp_2_batched, timestamp_3_batched, 20000)
 print(f"\n#\nDiffing with batching took {time.time()-start_time_batched_diff} seconds.\n#\n")
 
+# Test if Patch works on CYPHER
+print(f"Creating patches for all diffs using Neomodel ONLY.")
+graph_patch = GraphPatch()
+graph_patch.create_patch(project_id, timestamp_1_neomodel, timestamp_2_neomodel)
+graph_patch.create_patch(project_id, timestamp_2_neomodel, timestamp_3_neomodel)
+graph_patch.create_patch(project_id, timestamp_1_batched, timestamp_2_batched)
+graph_patch.create_patch(project_id, timestamp_2_batched, timestamp_3_batched)
 
-# Patching does not result in the same way for Neomodel and Cypher Batched!!!
-# # Test if Patch works on CYPHER
-# graph_patch = GraphPatch()
-# graph_patch.create_patch(project_id, timestamp_1_neomodel, timestamp_2_neomodel)
-# graph_patch.create_patch(project_id, timestamp_2_neomodel, timestamp_3_neomodel)
-# graph_patch.create_patch(project_id, timestamp_1_batched, timestamp_2_batched)
-# graph_patch.create_patch(project_id, timestamp_2_batched, timestamp_3_batched)
+print("Done.")
