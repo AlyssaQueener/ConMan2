@@ -9,8 +9,8 @@ from graph_patch.GraphPatch import GraphPatch
 #     "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v3-purified.ifc"
 # ]
 
-path_init = "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v1-purified.ifc"
-path_updt = "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v3-purified.ifc"
+path_init = "src/00_sampleData/IFC_stepP21/diss-casestudy/ARC-v1-purified.ifc"
+path_updt = "src/00_sampleData/IFC_stepP21/diss-casestudy/ARC-v3-purified.ifc"
 # path_init = "./00_sampleData/IFC_stepP21/DepMod2025/2025-DepMod2HVAC-Model-v1.ifc"
 # path_updt = "./00_sampleData/IFC_stepP21/DepMod2025/2025-DepMod2HVAC-Model-v3.ifc"
 
@@ -58,19 +58,19 @@ print('''#####################
 # Patch Application #
 #####################''')
 
-db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
-db.cypher_query("MATCH (n) DETACH DELETE n")
+#db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
+#db.cypher_query("MATCH (n) DETACH DELETE n")
 
 # Parse IFC to Graph
-application_neo4j_ifc_interface = IfcGraphInterface()
-print(f"Parsing {path_init} with timestamp {timestamp_init}.")
-application_neo4j_ifc_interface.ifc_2_graph(path_init, timestamp=timestamp_init)
+#application_neo4j_ifc_interface = IfcGraphInterface()
+#print(f"Parsing {path_init} with timestamp {timestamp_init}.")
+#application_neo4j_ifc_interface.ifc_2_graph(path_init, timestamp=timestamp_init)
 
 # Load Patch from File
-application_graph_patch = GraphPatch()
+#application_graph_patch = GraphPatch()
 
 #Apply Patch
-print(f"Applying Patch.")
-application_graph_patch.apply_patch(project_id, timestamp_init, timestamp_updt)
+#print(f"Applying Patch.")
+#application_graph_patch.apply_patch(project_id, timestamp_init, timestamp_updt)
 
-application_neo4j_ifc_interface.graph_2_ifc("./wat_denn.ifc", timestamp="updt")
+#application_neo4j_ifc_interface.graph_2_ifc("./wat_denn.ifc", timestamp="updt")

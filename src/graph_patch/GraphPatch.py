@@ -204,8 +204,10 @@ class GraphPatch:
         # Write out the patches.
         os.makedirs("patch_data", exist_ok=True)
         with open(f"patch_data/Patch_Topo_{project_id}_{timestamp_init}_{timestamp_updt}.json", "w") as f:
+            print(self.semantic_patch_pattern)
             json.dump(self.topological_patch_pattern, f, indent=4)
         with open(f"patch_data/Patch_Sema_{project_id}_{timestamp_init}_{timestamp_updt}.json", "w") as f:
+            print(self.topological_patch_pattern)
             json.dump(self.semantic_patch_pattern, f, indent=4)
 
     
