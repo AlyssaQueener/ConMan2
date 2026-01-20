@@ -2,6 +2,10 @@
 
 SPDX-License-Identifier: MIT
 
+
+https://github.com/user-attachments/assets/cbe32cb9-8c09-4314-855f-b8cbd3bbfe47
+
+
 ## Problem statement 
 
 BIM and Digital Twin workflows currently depend largely on loosely connected, monolithic files specific to certain disciplines. 
