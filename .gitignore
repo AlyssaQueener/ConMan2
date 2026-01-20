@@ -271,3 +271,4 @@ Patch_*.json
 PatchBundle_*.json
 Diff_*.json
 timeline.json
+.DS_Store
