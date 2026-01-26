@@ -63,7 +63,10 @@ Once forking is done, run `git clone` to download the repo on your machine.
 Once the repository is cloned, navigate to `<...>/conman2/src/`. This is the base directory of the application.
 
 The codebase acts as an intermediate server between an end-user and a running neo4j graph database. 
-Therefore, please download and install the following products on your machine before continuing: 
+You can either use a local installation of neo4j or you create an instance on Neo4j Aura. 
+
+#### Local Installation
+Download and install the following products on your machine before continuing: 
 
  - Download and install the latest version of [neo4j Desktop](https://neo4j.com/download-v2/).
    You can test its successful installation by creating and starting a new database instance. 
@@ -75,6 +78,12 @@ Default credentials:
 | ----- |:----------:|
 | user  | `neo4j`    |
 | pw    | `password` |
+
+#### Neo4j Aura
+
+Create a Neo4j Aura instance at https://console.neo4j.io/. 
+Download the credentials file, rename it from `*.txt` to `*.env`, and place it in the `src/` folder.
+The connector reads `src/*.env` to connect to your Aura instance; if no `*.env` is present, it falls back to `localhost:7687`.
 
 - OPTIONAL: Download and install [Anaconda](https://www.anaconda.com/products/individual) or create a virtual environment.
 
@@ -111,3 +120,4 @@ The IFC schema includes cases where the general translation of entities, relatio
 | --------------- |:-------------:| ------- |
 |[IfcOpenShell](http://ifcopenshell.org/)| https://github.com/IfcOpenShell/IfcOpenShell |LGPL-3.0, see `third_party_licenses/lgpl-3.0.txt` for further details |
 |[Neomodel](https://neomodel.readthedocs.io/)| https://github.com/neo4j-contrib/neomodel | MIT,  see `third_party_licenses/neomodel-mit.txt` for further details |
+| [Python-dotenv](https://github.com/theskumar/python-dotenv) | https://github.com/theskumar/python-dotenv | BSD-3 | 

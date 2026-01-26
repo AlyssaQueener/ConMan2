@@ -15,7 +15,6 @@ def load_neo4j_config_from_env():
     search_paths = [
         Path.cwd(),
         Path.cwd().parent,
-        Path.cwd().parent.parent,
         Path(__file__).parent.parent,  # src directory
         Path(__file__).parent.parent.parent,  # repo root
     ]
@@ -37,7 +36,7 @@ def load_neo4j_config_from_env():
                     "from_env": True
                 }
     
-    print(f"[Neo4j] No .env file found. Searched in: {[str(p) for p in search_paths]}")
+    # print(f"[Neo4j] No .env file found. Searched in: {[str(p) for p in search_paths]}")
     return None
 
 
