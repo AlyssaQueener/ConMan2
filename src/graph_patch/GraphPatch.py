@@ -5,12 +5,12 @@ from data_handler.DataHandler import DataHandler
 
 class GraphPatch:
 
-    # node_ids_to_unique_paths_mapping = {}
-    # init_side_node_ids_to_unique_paths_mapping = {} #includes pushout nodes in path, used to identify non-danlging pushout nodes to delete
+    node_ids_to_unique_paths_mapping = {}
+    init_side_node_ids_to_unique_paths_mapping = {} #includes pushout nodes in path, used to identify non-danlging pushout nodes to delete
 
-    # topological_patch_pattern = {}
-    # semantic_patch_pattern = {}
-    # nodes_to_delete = []
+    topological_patch_pattern = {}
+    semantic_patch_pattern = {}
+    nodes_to_delete = []
 
     ########################
     ### Helper Functions ###
@@ -159,6 +159,14 @@ class GraphPatch:
         with open(path_topo, "r") as f:
             self.topological_patch_pattern = json.load(f)
 
+    def load_semantic_patch_from_file(self,path_sema):
+        """
+        To apply a semantic patch to a model, the previously created json-based patch files have to be loaded.
+        """
+        with open(path_sema, "r") as f:
+            self.semantic_patch_pattern = json.load(f)
+       
+
 
 
     ######################
@@ -192,22 +200,45 @@ class GraphPatch:
             if node.equivalent_to.all():
                 self.create_unique_path_mappings(node, timestamp_updt)
 
-        # Collect all pushout nodes and equivalent nodes using the equivalent_to relations from the diff.
+        # Convert node objects to dictionaries
+        def nodes_to_dict(nodes):
+            """Convert neomodel node objects to JSON-serializable dictionaries"""
+            return [
+                {
+                    'id': node.element_id,  # or node.uid if you have a uid property
+                    'labels': list(node.labels()),
+                    'properties': dict(node.__properties__)
+                }    
+                for node in nodes
+            ]
+
+        # Query the nodes
         pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
         pushout_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all()
         equivalent_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=True).all()
+
+        # Convert to dictionaries
+        pushout_init_data = nodes_to_dict(pushout_nodes_init)
+        pushout_updt_data = nodes_to_dict(pushout_nodes_updt)
+
+        # Write out pushout nodes
+        os.makedirs("test_data", exist_ok=True)
+        with open(f"test_data/Pushout_Init_{project_id}_{timestamp_init}.json", "w") as f:
+            json.dump(pushout_init_data, f, indent=4)
+    
+        with open(f"test_data/Pushout_Updt_{project_id}_{timestamp_updt}.json", "w") as f:
+            json.dump(pushout_updt_data, f, indent=4)
 
         self.create_semantic_patch_pattern(equivalent_nodes_init, timestamp_init, timestamp_updt)
         self.create_topological_patch_pattern(pushout_nodes_init, timestamp_init)
         self.create_topological_patch_pattern(pushout_nodes_updt, timestamp_updt)
 
+
         # Write out the patches.
         os.makedirs("patch_data", exist_ok=True)
         with open(f"patch_data/Patch_Topo_{project_id}_{timestamp_init}_{timestamp_updt}.json", "w") as f:
-            print(self.semantic_patch_pattern)
             json.dump(self.topological_patch_pattern, f, indent=4)
         with open(f"patch_data/Patch_Sema_{project_id}_{timestamp_init}_{timestamp_updt}.json", "w") as f:
-            print(self.topological_patch_pattern)
             json.dump(self.semantic_patch_pattern, f, indent=4)
 
     
@@ -319,3 +350,59 @@ class GraphPatch:
         for node in Node.nodes.all():
             setattr(node, "timestamp", timestamp_updt)
             node.save()
+
+
+    def apply_patch_semantic(self, path_sema, timestamp_init, timestamp_updt):
+        self.semantic_patch_pattern = {}
+        self.load_semantic_patch_from_file(path_sema)
+        for unique_path in self.semantic_patch_pattern.keys():
+                node = self.find_node_from_unique_path(unique_path=unique_path, timestamp=timestamp_init)
+                for property_key in self.semantic_patch_pattern[unique_path].keys():
+                    property_value_init = self.semantic_patch_pattern[unique_path][property_key][timestamp_init]
+                    property_value_updt = self.semantic_patch_pattern[unique_path][property_key][timestamp_updt]
+                    if isinstance(property_value_updt, dict):
+                        if "path" in property_value_updt.keys():
+                            adjacent = self.find_node_from_unique_path(property_value_updt["path"], timestamp_init)
+                            node.relation_to.connect(adjacent, {"rel_type": property_value_updt["rel_type"], "list_index": property_value_updt["list_index"]})
+                            setattr(node, property_key, None)
+                    elif isinstance(property_value_updt, dict):
+                        if "path" in property_value_init.keys():
+                            adjacent = self.find_node_from_unique_path(property_value_init["path"], timestamp_init)
+                            node.relation_to.disconnect(adjacent)
+                            setattr(node, property_key, "$")
+                    else:
+                        setattr(node, "change_type", "modified")
+                        setattr(node, "changed_value", property_key)
+                        setattr(node, "old_value", self.semantic_patch_pattern[unique_path][property_key][timestamp_init])
+                        setattr(node, "new_value", self.semantic_patch_pattern[unique_path][property_key][timestamp_updt])
+                    node.save()
+
+    def create_patch_semantic(self, project_id: str, timestamp_init:str, timestamp_updt:str):
+        """
+        Use the two models that have been diffed and create a semanicpatch.
+        """
+        self.node_ids_to_unique_paths_mapping = {timestamp_init: {}, timestamp_updt: {}}
+        self.semantic_patch_pattern = {}
+
+        # Get all Primary and Connection Nodes.
+        prim_and_con_init = list(PrimaryNode.nodes.filter(timestamp=timestamp_init)) + list(ConnectionNode.nodes.filter(timestamp=timestamp_init))
+        prim_and_con_updt = list(PrimaryNode.nodes.filter(timestamp=timestamp_updt)) + list(ConnectionNode.nodes.filter(timestamp=timestamp_updt))
+
+        # Create unique paths starting from all Primary and all Connection nodes.
+        for node in prim_and_con_init:
+            if node.equivalent_to.all():
+                # This mapping is the universal one for both models to identify context nodes.
+                self.create_unique_path_mappings(node, timestamp_init)
+        for node in prim_and_con_updt:
+            if node.equivalent_to.all():
+                self.create_unique_path_mappings(node, timestamp_updt)
+
+        equivalent_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=True).all()
+
+        self.create_semantic_patch_pattern(equivalent_nodes_init, timestamp_init, timestamp_updt)
+        with open(f"patch_data/Patch_Sema_{project_id}_{timestamp_init}_{timestamp_updt}.json", "w") as f:
+            json.dump(self.semantic_patch_pattern, f, indent=4)
+        path_semantic = f"patch_data/Patch_Sema_{project_id}_{timestamp_init}_{timestamp_updt}.json"
+        return path_semantic
+
+

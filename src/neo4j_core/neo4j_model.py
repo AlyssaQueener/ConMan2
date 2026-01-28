@@ -24,8 +24,8 @@ class Node(SemiStructuredNode):
     relation_from = RelationshipFrom('Node', 'rel', model=RelProperties)
     equivalent_to = Relationship('Node', 'equivalent_to')
 
-
-    timestamp = StringProperty(required=True)
+    graph_type = StringProperty()
+    timestamp = StringProperty()
 
 
 class GenericNode(Node):

@@ -9,14 +9,16 @@ from graph_patch.GraphPatch import GraphPatch
 #     "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v3-purified.ifc"
 # ]
 
-path_init = "src/00_sampleData/IFC_stepP21/diss-casestudy/ARC-v1-purified.ifc"
-path_updt = "src/00_sampleData/IFC_stepP21/diss-casestudy/ARC-v3-purified.ifc"
+#path_init = "src/00_sampleData/IFC_stepP21/diss-casestudy/ARC-v1-purified.ifc"
+#path_updt = "src/00_sampleData/IFC_stepP21/diss-casestudy/ARC-v3-purified.ifc"
 # path_init = "./00_sampleData/IFC_stepP21/DepMod2025/2025-DepMod2HVAC-Model-v1.ifc"
 # path_updt = "./00_sampleData/IFC_stepP21/DepMod2025/2025-DepMod2HVAC-Model-v3.ifc"
+path_init = "src/example_data/example-2.ifc"
+path_updt="src/example_data/example-2-moved-slab.ifc"
 
 project_id = "1ODmFv4Jv9ZO9fO_v2Tu_8"
-timestamp_init = "init"
-timestamp_updt = "updt"
+timestamp_init = "init-example2"
+timestamp_updt = "updt-example2"
 
 
 
