@@ -1,0 +1,4 @@
+python conman2.py add -p "C:\Users\ga38hep\OneDrive - TUM\01_TUMCMS\01_Forschung\2026-IncrementTracking\data\IBC-ExitSample\2026-01-IBC-ExitSample-v1-purified.ifc" -t "1" 
+python conman2.py commit -p "2bvm2ce056s8gvbOmq1rEA" -b "main" 
+python conman2.py add -p "C:\Users\ga38hep\OneDrive - TUM\01_TUMCMS\01_Forschung\2026-IncrementTracking\data\IBC-ExitSample\2026-01-IBC-ExitSample-v2-purified.ifc" -t "2"  
+python conman2.py commit -p "2bvm2ce056s8gvbOmq1rEA" -b "main" 
