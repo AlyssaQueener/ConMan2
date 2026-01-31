@@ -63,6 +63,14 @@ class GraphEmbeddingCalculator:
                 else:
                     graph_embedding_modified = list(map(add, graph_embedding_modified, embedding))
                 count_modified += 1
+
+        i = list(map(add, graph_embedding_added, graph_embedding_deleted))
+        graph_embedding_all_changes = list(map(add, i, graph_embedding_modified))
+        count_all_changes = count_added + count_deleted + count_modified
+        if graph_embedding_all_changes and count_all_changes > 0:
+            graph_embedding_all_changes = [x / count_all_changes for x in graph_embedding_all_changes]
+        else:
+            graph_embedding_all_changes = None
         
         # Calculate means by dividing by counts
         if graph_embedding_added and count_added > 0:
@@ -95,6 +103,8 @@ class GraphEmbeddingCalculator:
                 embeddings_complete.extend([0.0] * 128)  # assuming embedding dimension is 128
         
         count_total = count_added + count_deleted + count_modified + count_msc
+
+
         
         graph_embeddings_mean_statistic = {
             "Complete Graph": {
@@ -116,6 +126,10 @@ class GraphEmbeddingCalculator:
             "Graph Modified": {
                 "embedding": graph_embedding_modified,
                 "node_count": count_modified
+            },
+            "All changes": {
+                "embedding": graph_embedding_all_changes,
+                "node count": count_all_changes
             }
         }
         
@@ -129,38 +143,39 @@ complete_embedding_rotated = []
 complete_embedding_translated = []
 complete_embedding_scaled = []
 
+
 for i,graph_type in enumerate(['rotated-slab', 'translated-slab', 'scaled_wall']):
     stats = graph_calc.calculate_mean_graph_embedding(graph_type)
     
-    print(f"\n{graph_type}:")
-    print(f"  Total nodes: {stats['Complete Graph']['node_count']}")
-    print(f"  Total embedding: {stats['Complete Graph']['embedding']}")
-    print(f"  Added: {stats['Graph Added']['node_count']}")
-    print(f"  Added: {stats['Graph Added']['embedding']}")
-    print(f"  Deleted: {stats['Graph Deleted']['node_count']}")
-    print(f"  Deleted: {stats['Graph Deleted']['embedding']}")
-    print(f"  Modified: {stats['Graph Modified']['node_count']}")
-    print(f"  Modified: {stats['Graph Modified']['embedding']}")
-    print(f"  MSC: {stats['Graph MSC']['node_count']}")
-    print(f"  MSC: {stats['Graph MSC']['embedding']}")
-    print(f"  Complete embedding dimension: {len(stats['Complete Graph']['embedding'])}")
+    #print(f"\n{graph_type}:")
+    #print(f"  Total nodes: {stats['Complete Graph']['node_count']}")
+    #print(f"  Total embedding: {stats['Complete Graph']['embedding']}")
+    #print(f"  Added: {stats['Graph Added']['node_count']}")
+    #print(f"  Added: {stats['Graph Added']['embedding']}")
+    #print(f"  Deleted: {stats['Graph Deleted']['node_count']}")
+    #print(f"  Deleted: {stats['Graph Deleted']['embedding']}")
+    #print(f"  Modified: {stats['Graph Modified']['node_count']}")
+    #print(f"  Modified: {stats['Graph Modified']['embedding']}")
+    #print(f"  MSC: {stats['Graph MSC']['node_count']}")
+    #print(f"  MSC: {stats['Graph MSC']['embedding']}")
+    #print(f"  Complete embedding dimension: {len(stats['Complete Graph']['embedding'])}")
 
     if graph_type == "rotated-slab":
-        complete_embedding_rotated = stats['Complete Graph']['embedding']
+        complete_embedding_rotated = stats['All changes']['embedding']
     if graph_type == "translated-slab":
-        complete_embedding_translated = stats['Complete Graph']['embedding']
+        complete_embedding_translated = stats['All changes']['embedding']
     if graph_type == "scaled_wall":
-        complete_embedding_scaled = stats['Complete Graph']['embedding']
+        complete_embedding_scaled = stats['All changes']['embedding']
 
-    full_result[i] = stats
+    full_result[graph_type] = stats
 
 
 from scipy.spatial.distance import cosine
 
 
-
+print('graph type order: rotated, translated, scaled')
 for item in full_result.items():
-    print(item)
+    print("Similarity ADDED /DELTED")
     similarity_added_deleted = 1 - cosine(stats['Graph Added']['embedding'], stats['Graph Deleted']['embedding'])
     print(similarity_added_deleted)
 
