@@ -1,0 +1,809 @@
+{
+	"IfcRoot": {
+		"id": 0,
+		"children": {
+			"IfcObjectDefinition": {
+				"id": 1,
+				"children": {
+					"IfcContext": {
+						"id": 2,
+						"children": {
+							"IfcProject": 3,
+							"IfcProjectLibrary": 4
+						}
+					},
+					"IfcObject": {
+						"id": 5,
+						"children": {
+							"IfcActor": {
+								"id": 6,
+								"children": {
+									"IfcOccupant": 7
+								}
+							},
+							"IfcControl": {
+								"id": 8,
+								"children": {
+									"IfcActionRequest": 9,
+									"IfcCostItem": 10,
+									"IfcCostSchedule": 11,
+									"IfcPerformanceHistory": 12,
+									"IfcPermit": 13,
+									"IfcProjectOrder": 14,
+									"IfcWorkCalendar": 15,
+									"IfcWorkControl": {
+										"id": 16,
+										"children": {
+											"IfcWorkPlan": 17,
+											"IfcWorkSchedule": 18
+										}
+									}
+								}
+							},
+							"IfcGroup": {
+								"id": 19,
+								"children": {
+									"IfcAsset": 20,
+									"IfcInventory": 21,
+									"IfcStructuralLoadGroup": {
+										"id": 22,
+										"children": {
+											"IfcStructuralLoadCase": 23
+										}
+									},
+									"IfcStructuralResultGroup": 24,
+									"IfcSystem": {
+										"id": 25,
+										"children": {
+											"IfcBuildingSystem": 26,
+											"IfcDistributionSystem": {
+												"id": 27,
+												"children": {
+													"IfcDistributionCircuit": 28
+												}
+											},
+											"IfcStructuralAnalysisModel": 29,
+											"IfcZone": 30
+										}
+									}
+								}
+							},
+							"IfcProcess": {
+								"id": 31,
+								"children": {
+									"IfcEvent": 32,
+									"IfcProcedure": 33,
+									"IfcTask": 34
+								}
+							},
+							"IfcProduct": {
+								"id": 35,
+								"children": {
+									"IfcAnnotation": 36,
+									"IfcElement": {
+										"id": 37,
+										"children": {
+											"IfcBuildingElement": {
+												"id": 38,
+												"children": {
+													"IfcBeam": {
+														"id": 39,
+														"children": {
+															"IfcBeamStandardCase": 40
+														}
+													},
+													"IfcBuildingElementProxy": 41,
+													"IfcChimney": 42,
+													"IfcColumn": {
+														"id": 43,
+														"children": {
+															"IfcColumnStandardCase": 44
+														}
+													},
+													"IfcCovering": 45,
+													"IfcCurtainWall": 46,
+													"IfcDoor": {
+														"id": 47,
+														"children": {
+															"IfcDoorStandardCase": 48
+														}
+													},
+													"IfcFooting": 49,
+													"IfcMember": {
+														"id": 50,
+														"children": {
+															"IfcMemberStandardCase": 51
+														}
+													},
+													"IfcPile": 52,
+													"IfcPlate": {
+														"id": 53,
+														"children": {
+															"IfcPlateStandardCase": 54
+														}
+													},
+													"IfcRailing": 55,
+													"IfcRamp": 56,
+													"IfcRampFlight": 57,
+													"IfcRoof": 58,
+													"IfcShadingDevice": 59,
+													"IfcSlab": {
+														"id": 60,
+														"children": {
+															"IfcSlabElementedCase": 61,
+															"IfcSlabStandardCase": 62
+														}
+													},
+													"IfcStair": 63,
+													"IfcStairFlight": 64,
+													"IfcWall": {
+														"id": 65,
+														"children": {
+															"IfcWallElementedCase": 66,
+															"IfcWallStandardCase": 67
+														}
+													},
+													"IfcWindow": {
+														"id": 68,
+														"children": {
+															"IfcWindowStandardCase": 69
+														}
+													}
+												}
+											},
+											"IfcCivilElement": 70,
+											"IfcDistributionElement": {
+												"id": 71,
+												"children": {
+													"IfcDistributionControlElement": {
+														"id": 72,
+														"children": {
+															"IfcActuator": 73,
+															"IfcAlarm": 74,
+															"IfcController": 75,
+															"IfcFlowInstrument": 76,
+															"IfcProtectiveDeviceTrippingUnit": 77,
+															"IfcSensor": 78,
+															"IfcUnitaryControlElement": 79
+														}
+													},
+													"IfcDistributionFlowElement": {
+														"id": 80,
+														"children": {
+															"IfcDistributionChamberElement": 81,
+															"IfcEnergyConversionDevice": {
+																"id": 82,
+																"children": {
+																	"IfcAirToAirHeatRecovery": 83,
+																	"IfcBoiler": 84,
+																	"IfcBurner": 85,
+																	"IfcChiller": 86,
+																	"IfcCoil": 87,
+																	"IfcCondenser": 88,
+																	"IfcCooledBeam": 89,
+																	"IfcCoolingTower": 90,
+																	"IfcElectricGenerator": 91,
+																	"IfcElectricMotor": 92,
+																	"IfcEngine": 93,
+																	"IfcEvaporativeCooler": 94,
+																	"IfcEvaporator": 95,
+																	"IfcHeatExchanger": 96,
+																	"IfcHumidifier": 97,
+																	"IfcMotorConnection": 98,
+																	"IfcSolarDevice": 99,
+																	"IfcTransformer": 100,
+																	"IfcTubeBundle": 101,
+																	"IfcUnitaryEquipment": 102
+																}
+															},
+															"IfcFlowController": {
+																"id": 103,
+																"children": {
+																	"IfcAirTerminalBox": 104,
+																	"IfcDamper": 105,
+																	"IfcElectricDistributionBoard": 106,
+																	"IfcElectricTimeControl": 107,
+																	"IfcFlowMeter": 108,
+																	"IfcProtectiveDevice": 109,
+																	"IfcSwitchingDevice": 110,
+																	"IfcValve": 111
+																}
+															},
+															"IfcFlowFitting": {
+																"id": 112,
+																"children": {
+																	"IfcCableCarrierFitting": 113,
+																	"IfcCableFitting": 114,
+																	"IfcDuctFitting": 115,
+																	"IfcJunctionBox": 116,
+																	"IfcPipeFitting": 117
+																}
+															},
+															"IfcFlowMovingDevice": {
+																"id": 118,
+																"children": {
+																	"IfcCompressor": 119,
+																	"IfcFan": 120,
+																	"IfcPump": 121
+																}
+															},
+															"IfcFlowSegment": {
+																"id": 122,
+																"children": {
+																	"IfcCableCarrierSegment": 123,
+																	"IfcCableSegment": 124,
+																	"IfcDuctSegment": 125,
+																	"IfcPipeSegment": 126
+																}
+															},
+															"IfcFlowStorageDevice": {
+																"id": 127,
+																"children": {
+																	"IfcElectricFlowStorageDevice": 128,
+																	"IfcTank": 129
+																}
+															},
+															"IfcFlowTerminal": {
+																"id": 130,
+																"children": {
+																	"IfcAirTerminal": 131,
+																	"IfcAudioVisualAppliance": 132,
+																	"IfcCommunicationsAppliance": 133,
+																	"IfcElectricAppliance": 134,
+																	"IfcFireSuppressionTerminal": 135,
+																	"IfcLamp": 136,
+																	"IfcLightFixture": 137,
+																	"IfcMedicalDevice": 138,
+																	"IfcOutlet": 139,
+																	"IfcSanitaryTerminal": 140,
+																	"IfcSpaceHeater": 141,
+																	"IfcStackTerminal": 142,
+																	"IfcWasteTerminal": 143
+																}
+															},
+															"IfcFlowTreatmentDevice": {
+																"id": 144,
+																"children": {
+																	"IfcDuctSilencer": 145,
+																	"IfcFilter": 146,
+																	"IfcInterceptor": 147
+																}
+															}
+														}
+													}
+												}
+											},
+											"IfcElementAssembly": 148,
+											"IfcElementComponent": {
+												"id": 149,
+												"children": {
+													"IfcBuildingElementPart": 150,
+													"IfcDiscreteAccessory": 151,
+													"IfcFastener": 152,
+													"IfcMechanicalFastener": 153,
+													"IfcReinforcingElement": {
+														"id": 154,
+														"children": {
+															"IfcReinforcingBar": 155,
+															"IfcReinforcingMesh": 156,
+															"IfcTendon": 157,
+															"IfcTendonAnchor": 158
+														}
+													},
+													"IfcVibrationIsolator": 159
+												}
+											},
+											"IfcFeatureElement": {
+												"id": 160,
+												"children": {
+													"IfcFeatureElementAddition": {
+														"id": 161,
+														"children": {
+															"IfcProjectionElement": 162
+														}
+													},
+													"IfcFeatureElementSubtraction": {
+														"id": 163,
+														"children": {
+															"IfcOpeningElement": {
+																"id": 164,
+																"children": {
+																	"IfcOpeningStandardCase": 165
+																}
+															},
+															"IfcVoidingFeature": 166
+														}
+													},
+													"IfcSurfaceFeature": 167
+												}
+											},
+											"IfcFurnishingElement": {
+												"id": 168,
+												"children": {
+													"IfcFurniture": 169,
+													"IfcSystemFurnitureElement": 170
+												}
+											},
+											"IfcGeographicElement": 171,
+											"IfcTransportElement": 172,
+											"IfcVirtualElement": 173
+										}
+									},
+									"IfcGrid": 174,
+									"IfcPort": {
+										"id": 175,
+										"children": {
+											"IfcDistributionPort": 176
+										}
+									},
+									"IfcProxy": 177,
+									"IfcSpatialElement": {
+										"id": 178,
+										"children": {
+											"IfcExternalSpatialStructureElement": {
+												"id": 179,
+												"children": {
+													"IfcExternalSpatialElement": 180
+												}
+											},
+											"IfcSpatialStructureElement": {
+												"id": 181,
+												"children": {
+													"IfcBuilding": 182,
+													"IfcBuildingStorey": 183,
+													"IfcSite": 184,
+													"IfcSpace": 185
+												}
+											},
+											"IfcSpatialZone": 186
+										}
+									},
+									"IfcStructuralActivity": {
+										"id": 187,
+										"children": {
+											"IfcStructuralAction": {
+												"id": 188,
+												"children": {
+													"IfcStructuralCurveAction": {
+														"id": 189,
+														"children": {
+															"IfcStructuralLinearAction": 190
+														}
+													},
+													"IfcStructuralPointAction": 191,
+													"IfcStructuralSurfaceAction": {
+														"id": 192,
+														"children": {
+															"IfcStructuralPlanarAction": 193
+														}
+													}
+												}
+											},
+											"IfcStructuralReaction": {
+												"id": 194,
+												"children": {
+													"IfcStructuralCurveReaction": 195,
+													"IfcStructuralPointReaction": 196,
+													"IfcStructuralSurfaceReaction": 197
+												}
+											}
+										}
+									},
+									"IfcStructuralItem": {
+										"id": 198,
+										"children": {
+											"IfcStructuralConnection": {
+												"id": 199,
+												"children": {
+													"IfcStructuralCurveConnection": 200,
+													"IfcStructuralPointConnection": 201,
+													"IfcStructuralSurfaceConnection": 202
+												}
+											},
+											"IfcStructuralMember": {
+												"id": 203,
+												"children": {
+													"IfcStructuralCurveMember": {
+														"id": 204,
+														"children": {
+															"IfcStructuralCurveMemberVarying": 205
+														}
+													},
+													"IfcStructuralSurfaceMember": {
+														"id": 206,
+														"children": {
+															"IfcStructuralSurfaceMemberVarying": 207
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							},
+							"IfcResource": {
+								"id": 208,
+								"children": {
+									"IfcConstructionResource": {
+										"id": 209,
+										"children": {
+											"IfcConstructionEquipmentResource": 210,
+											"IfcConstructionMaterialResource": 211,
+											"IfcConstructionProductResource": 212,
+											"IfcCrewResource": 213,
+											"IfcLaborResource": 214,
+											"IfcSubContractResource": 215
+										}
+									}
+								}
+							}
+						}
+					},
+					"IfcTypeObject": {
+						"id": 216,
+						"children": {
+							"IfcTypeProcess": {
+								"id": 217,
+								"children": {
+									"IfcEventType": 218,
+									"IfcProcedureType": 219,
+									"IfcTaskType": 220
+								}
+							},
+							"IfcTypeProduct": {
+								"id": 221,
+								"children": {
+									"IfcDoorStyle": 222,
+									"IfcElementType": {
+										"id": 223,
+										"children": {
+											"IfcBuildingElementType": {
+												"id": 224,
+												"children": {
+													"IfcBeamType": 225,
+													"IfcBuildingElementProxyType": 226,
+													"IfcChimneyType": 227,
+													"IfcColumnType": 228,
+													"IfcCoveringType": 229,
+													"IfcCurtainWallType": 230,
+													"IfcDoorType": 231,
+													"IfcFootingType": 232,
+													"IfcMemberType": 233,
+													"IfcPileType": 234,
+													"IfcPlateType": 235,
+													"IfcRailingType": 236,
+													"IfcRampFlightType": 237,
+													"IfcRampType": 238,
+													"IfcRoofType": 239,
+													"IfcShadingDeviceType": 240,
+													"IfcSlabType": 241,
+													"IfcStairFlightType": 242,
+													"IfcStairType": 243,
+													"IfcWallType": 244,
+													"IfcWindowType": 245
+												}
+											},
+											"IfcCivilElementType": 246,
+											"IfcDistributionElementType": {
+												"id": 247,
+												"children": {
+													"IfcDistributionControlElementType": {
+														"id": 248,
+														"children": {
+															"IfcActuatorType": 249,
+															"IfcAlarmType": 250,
+															"IfcControllerType": 251,
+															"IfcFlowInstrumentType": 252,
+															"IfcProtectiveDeviceTrippingUnitType": 253,
+															"IfcSensorType": 254,
+															"IfcUnitaryControlElementType": 255
+														}
+													},
+													"IfcDistributionFlowElementType": {
+														"id": 256,
+														"children": {
+															"IfcDistributionChamberElementType": 257,
+															"IfcEnergyConversionDeviceType": {
+																"id": 258,
+																"children": {
+																	"IfcAirToAirHeatRecoveryType": 259,
+																	"IfcBoilerType": 260,
+																	"IfcBurnerType": 261,
+																	"IfcChillerType": 262,
+																	"IfcCoilType": 263,
+																	"IfcCondenserType": 264,
+																	"IfcCooledBeamType": 265,
+																	"IfcCoolingTowerType": 266,
+																	"IfcElectricGeneratorType": 267,
+																	"IfcElectricMotorType": 268,
+																	"IfcEngineType": 269,
+																	"IfcEvaporativeCoolerType": 270,
+																	"IfcEvaporatorType": 271,
+																	"IfcHeatExchangerType": 272,
+																	"IfcHumidifierType": 273,
+																	"IfcMotorConnectionType": 274,
+																	"IfcSolarDeviceType": 275,
+																	"IfcTransformerType": 276,
+																	"IfcTubeBundleType": 277,
+																	"IfcUnitaryEquipmentType": 278
+																}
+															},
+															"IfcFlowControllerType": {
+																"id": 279,
+																"children": {
+																	"IfcAirTerminalBoxType": 280,
+																	"IfcDamperType": 281,
+																	"IfcElectricDistributionBoardType": 282,
+																	"IfcElectricTimeControlType": 283,
+																	"IfcFlowMeterType": 284,
+																	"IfcProtectiveDeviceType": 285,
+																	"IfcSwitchingDeviceType": 286,
+																	"IfcValveType": 287
+																}
+															},
+															"IfcFlowFittingType": {
+																"id": 288,
+																"children": {
+																	"IfcCableCarrierFittingType": 289,
+																	"IfcCableFittingType": 290,
+																	"IfcDuctFittingType": 291,
+																	"IfcJunctionBoxType": 292,
+																	"IfcPipeFittingType": 293
+																}
+															},
+															"IfcFlowMovingDeviceType": {
+																"id": 294,
+																"children": {
+																	"IfcCompressorType": 295,
+																	"IfcFanType": 296,
+																	"IfcPumpType": 297
+																}
+															},
+															"IfcFlowSegmentType": {
+																"id": 298,
+																"children": {
+																	"IfcCableCarrierSegmentType": 299,
+																	"IfcCableSegmentType": 300,
+																	"IfcDuctSegmentType": 301,
+																	"IfcPipeSegmentType": 302
+																}
+															},
+															"IfcFlowStorageDeviceType": {
+																"id": 303,
+																"children": {
+																	"IfcElectricFlowStorageDeviceType": 304,
+																	"IfcTankType": 305
+																}
+															},
+															"IfcFlowTerminalType": {
+																"id": 306,
+																"children": {
+																	"IfcAirTerminalType": 307,
+																	"IfcAudioVisualApplianceType": 308,
+																	"IfcCommunicationsApplianceType": 309,
+																	"IfcElectricApplianceType": 310,
+																	"IfcFireSuppressionTerminalType": 311,
+																	"IfcLampType": 312,
+																	"IfcLightFixtureType": 313,
+																	"IfcMedicalDeviceType": 314,
+																	"IfcOutletType": 315,
+																	"IfcSanitaryTerminalType": 316,
+																	"IfcSpaceHeaterType": 317,
+																	"IfcStackTerminalType": 318,
+																	"IfcWasteTerminalType": 319
+																}
+															},
+															"IfcFlowTreatmentDeviceType": {
+																"id": 320,
+																"children": {
+																	"IfcDuctSilencerType": 321,
+																	"IfcFilterType": 322,
+																	"IfcInterceptorType": 323
+																}
+															}
+														}
+													}
+												}
+											},
+											"IfcElementAssemblyType": 324,
+											"IfcElementComponentType": {
+												"id": 325,
+												"children": {
+													"IfcBuildingElementPartType": 326,
+													"IfcDiscreteAccessoryType": 327,
+													"IfcFastenerType": 328,
+													"IfcMechanicalFastenerType": 329,
+													"IfcReinforcingElementType": {
+														"id": 330,
+														"children": {
+															"IfcReinforcingBarType": 331,
+															"IfcReinforcingMeshType": 332,
+															"IfcTendonAnchorType": 333,
+															"IfcTendonType": 334
+														}
+													},
+													"IfcVibrationIsolatorType": 335
+												}
+											},
+											"IfcFurnishingElementType": {
+												"id": 336,
+												"children": {
+													"IfcFurnitureType": 337,
+													"IfcSystemFurnitureElementType": 338
+												}
+											},
+											"IfcGeographicElementType": 339,
+											"IfcTransportElementType": 340
+										}
+									},
+									"IfcSpatialElementType": {
+										"id": 341,
+										"children": {
+											"IfcSpatialStructureElementType": {
+												"id": 342,
+												"children": {
+													"IfcSpaceType": 343
+												}
+											},
+											"IfcSpatialZoneType": 344
+										}
+									},
+									"IfcWindowStyle": 345
+								}
+							},
+							"IfcTypeResource": {
+								"id": 346,
+								"children": {
+									"IfcConstructionResourceType": {
+										"id": 347,
+										"children": {
+											"IfcConstructionEquipmentResourceType": 348,
+											"IfcConstructionMaterialResourceType": 349,
+											"IfcConstructionProductResourceType": 350,
+											"IfcCrewResourceType": 351,
+											"IfcLaborResourceType": 352,
+											"IfcSubContractResourceType": 353
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"IfcPropertyDefinition": {
+				"id": 354,
+				"children": {
+					"IfcPropertySetDefinition": {
+						"id": 355,
+						"children": {
+							"IfcPreDefinedPropertySet": {
+								"id": 356,
+								"children": {
+									"IfcDoorLiningProperties": 357,
+									"IfcDoorPanelProperties": 358,
+									"IfcPermeableCoveringProperties": 359,
+									"IfcReinforcementDefinitionProperties": 360,
+									"IfcWindowLiningProperties": 361,
+									"IfcWindowPanelProperties": 362
+								}
+							},
+							"IfcPropertySet": 363,
+							"IfcQuantitySet": {
+								"id": 364,
+								"children": {
+									"IfcElementQuantity": 365
+								}
+							}
+						}
+					},
+					"IfcPropertyTemplateDefinition": {
+						"id": 366,
+						"children": {
+							"IfcPropertySetTemplate": 367,
+							"IfcPropertyTemplate": {
+								"id": 368,
+								"children": {
+									"IfcComplexPropertyTemplate": 369,
+									"IfcSimplePropertyTemplate": 370
+								}
+							}
+						}
+					}
+				}
+			},
+			"IfcRelationship": {
+				"id": 371,
+				"children": {
+					"IfcRelAssigns": {
+						"id": 372,
+						"children": {
+							"IfcRelAssignsToActor": 373,
+							"IfcRelAssignsToControl": 374,
+							"IfcRelAssignsToGroup": {
+								"id": 375,
+								"children": {
+									"IfcRelAssignsToGroupByFactor": 376
+								}
+							},
+							"IfcRelAssignsToProcess": 377,
+							"IfcRelAssignsToProduct": 378,
+							"IfcRelAssignsToResource": 379
+						}
+					},
+					"IfcRelAssociates": {
+						"id": 380,
+						"children": {
+							"IfcRelAssociatesApproval": 381,
+							"IfcRelAssociatesClassification": 382,
+							"IfcRelAssociatesConstraint": 383,
+							"IfcRelAssociatesDocument": 384,
+							"IfcRelAssociatesLibrary": 385,
+							"IfcRelAssociatesMaterial": 386
+						}
+					},
+					"IfcRelConnects": {
+						"id": 387,
+						"children": {
+							"IfcRelConnectsElements": {
+								"id": 388,
+								"children": {
+									"IfcRelConnectsPathElements": 389,
+									"IfcRelConnectsWithRealizingElements": 390
+								}
+							},
+							"IfcRelConnectsPortToElement": 391,
+							"IfcRelConnectsPorts": 392,
+							"IfcRelConnectsStructuralActivity": 393,
+							"IfcRelConnectsStructuralMember": {
+								"id": 394,
+								"children": {
+									"IfcRelConnectsWithEccentricity": 395
+								}
+							},
+							"IfcRelContainedInSpatialStructure": 396,
+							"IfcRelCoversBldgElements": 397,
+							"IfcRelCoversSpaces": 398,
+							"IfcRelFillsElement": 399,
+							"IfcRelFlowControlElements": 400,
+							"IfcRelInterferesElements": 401,
+							"IfcRelReferencedInSpatialStructure": 402,
+							"IfcRelSequence": 403,
+							"IfcRelServicesBuildings": 404,
+							"IfcRelSpaceBoundary": {
+								"id": 405,
+								"children": {
+									"IfcRelSpaceBoundary1stLevel": {
+										"id": 406,
+										"children": {
+											"IfcRelSpaceBoundary2ndLevel": 407
+										}
+									}
+								}
+							}
+						}
+					},
+					"IfcRelDeclares": 408,
+					"IfcRelDecomposes": {
+						"id": 409,
+						"children": {
+							"IfcRelAggregates": 410,
+							"IfcRelNests": 411,
+							"IfcRelProjectsElement": 412,
+							"IfcRelVoidsElement": 413
+						}
+					},
+					"IfcRelDefines": {
+						"id": 414,
+						"children": {
+							"IfcRelDefinesByObject": 415,
+							"IfcRelDefinesByProperties": 416,
+							"IfcRelDefinesByTemplate": 417,
+							"IfcRelDefinesByType": 418
+						}
+					}
+				}
+			}
+		}
+	}
+}
