@@ -67,6 +67,74 @@ class IfcGraphInterface:
             else:
                 traverse(key, val)
 
+    def process_node_attribute(self, ifc_entity, key, val):
+        """
+        Process node attributes. These are the directly attached primtive node properties that are directly attached to a neo4j node.
+
+        @param ifc_entity: An ifcopenshell model entity.
+        @param key: The key of the node attribute.
+        @param val: The attribute value. This can either be a primitive type, a string, or a stringified list of primitives.
+        """
+        # print(f"Processing {ifc_entity, key, val}")
+        if val == "$":
+            pass
+        # Check if it is any primitive but a string. If so, leave it.
+        elif not isinstance(val, str):
+            # Store the processed attribute in the IFC entity.
+            setattr(ifc_entity, key, val)
+        # Check if it is a list of primitives that was parsed as a string. If so, leave it.
+        # While neo4j allows lists, it does not allow for nested lists, so every list is stored as a string for consistency.
+        elif not val.startswith("(") or not val.endswith(")"):
+            # Store the processed attribute in the IFC entity.
+            setattr(ifc_entity, key, val)
+        # If it is a stringified list of primitives, evaluate it back into a Python list.
+        else:
+            val = tuple(ast.literal_eval(val))
+            # Store the processed attribute in the IFC entity.
+            setattr(ifc_entity, key, val)
+
+    def process_node_relation(self, model, ifc_entity, rel_type, related_nodes, id_mapping):
+        """
+        From the relations in neo4j, create entity attributes and inline attributes for every STEP IFC object.
+
+        @param model: The parsed ifcopenshell IFC model.
+        @param ifc_entity: The current IFC entity.
+        @param rel_type: The name of the relation in neo4j which will become the attribute key in the STEP attribute.
+        @param related_nodes: The list of nodes that are all connected via a relation with the rel_type name.
+        @param id_mapping: A dictionary that maps the newly created STEP ids to the node ids.
+        """
+        # Create list for entities to then set as the attribute value.
+        ents = []
+        # Iterate over all nodes that are grouped under the rel_attribute in the dict. This means that initially, all these nodes were part of the same IFC attribute.
+        for node, list_index in related_nodes:
+            # Check if Inline node, if so, create new entity.
+            if isinstance(node, InlineNode):
+                ent = model.create_entity(node.EntityType)
+                # WrappedValue is the actual input data of inline entities like "(6,5,1)" in "IfcArcIndex(6,5,1)". Process this like any other non-entity attribute.
+                self.process_node_attribute(ent, "wrappedValue", node.wrappedValue)
+                ents.append((ent, list_index))
+            # If entity is a real STEP entity, get the existing IFC entity and append that to the list.
+            else:
+                ent = model.by_id(id_mapping[node.element_id])
+                ents.append((ent, list_index))
+
+        # Every attribute value is a list, for some attributes this datatype is correct. Others need single values.
+        if len(ents) <= 1:
+            # Required try block because if a list has only 1 entry, it might have to be passed as a list with one entry, or it may have to be passed as a single entry.
+            try:
+                setattr(ifc_entity, rel_type, ents[0][0])
+            except:
+                setattr(ifc_entity, rel_type, [ents[0][0]])
+        # If multiple entities in the list, set the list as attribute value.
+        else:
+            # Sort the entity list by the list index before setting as attribute. This rebuilds the same order.
+            ents_sorted = sorted(ents, key=lambda x: x[1])
+            ents_final = [ent[0] for ent in ents_sorted]
+            setattr(ifc_entity, rel_type, ents_final)
+
+
+
+
     ######################
     ### Main Functions ###
     ######################
@@ -170,7 +238,7 @@ class IfcGraphInterface:
         UNWIND $batch AS r
         MATCH (a:GenericNode {p21_id: r.source_p21_id, timestamp: r.timestamp})
         MATCH (b:GenericNode {p21_id: r.target_p21_id, timestamp: r.timestamp})
-        CREATE (a)-[:RELATION_TO {rel_type: r.rel_type, list_index: r.list_index}]->(b)   
+        CREATE (a)-[:rel {rel_type: r.rel_type, list_index: r.list_index}]->(b)   
         """
         neo4j_helper.bulk_cypher_query(query_relationships, relationships, batch_size)
 
@@ -181,7 +249,7 @@ class IfcGraphInterface:
         MATCH (a:GenericNode {p21_id: r.relation.source_p21_id, timestamp: r.props.timestamp})
         CREATE (b:InlineNode:Node)
         SET b = r.props
-        CREATE (a)-[:RELATION_TO {rel_type: r.relation.rel_type, list_index: r.relation.list_index}]->(b)
+        CREATE (a)-[:rel {rel_type: r.relation.rel_type, list_index: r.relation.list_index}]->(b)
         """
         neo4j_helper.bulk_cypher_query(query_inline_patterns, inline_patterns, batch_size)
 
@@ -201,6 +269,7 @@ class IfcGraphInterface:
 
         # Per method call, only one IFC file is created from the nodes. Therefore, filter all nodes with the timestamp of that IFC file.
         # First iteraton: Create IFC entities (STEP entities with p21 id) from all nodes that are not Inline Nodes
+        print("Creating IFC entities from nodes. ")
         for node in GenericNode.nodes.filter(timestamp=timestamp):
             ifc_entity = model.create_entity(node.EntityType)
             # Add node id and id of new IFC entity to mapping for later use
@@ -215,6 +284,7 @@ class IfcGraphInterface:
                     # Call function that handles primitives or stringified (nested) list of primitives.
                     self.process_node_attribute(ifc_entity, key, val)
 
+
         # Second iteration: Go over all node relations (either to existing Step entities in the model or to inline attributes that will be created).
         for node in GenericNode.nodes.filter(timestamp=timestamp):
             # Find ifc entity for current neo4j graph using the dictionary.
@@ -223,7 +293,7 @@ class IfcGraphInterface:
             relations_dict = {}
 
             # Iterate over all related nodes.
-            for related_node in node.relation_to.all():
+            for related_node in node.relation_to.all(): 
                 # Rel type will be used as the attribute key.
                 rel_type = node.relation_to.relationship(related_node).rel_type
                 list_index = node.relation_to.relationship(related_node).list_index
@@ -236,11 +306,14 @@ class IfcGraphInterface:
                     else:
                         relations_dict[rel_type] = [[related_node, list_index]]
 
+            print("Creating relationships between entities. ")
             # Iterate over the dictionary and process the lists of related nodes
             for rel_type, related_nodes in relations_dict.items():
                 self.process_node_relation(model, ifc_entity, rel_type, related_nodes, id_mapping)
         # Save the IFC model to file.
+        print("Write model to file. ")
         model.write(ifc_path)
+        print("Finished IFC file generation. ")
 
     @staticmethod
     def get_project_id_from_timestamp(timestamp: str):
