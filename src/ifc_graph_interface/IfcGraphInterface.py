@@ -270,7 +270,8 @@ class IfcGraphInterface:
         # Per method call, only one IFC file is created from the nodes. Therefore, filter all nodes with the timestamp of that IFC file.
         # First iteraton: Create IFC entities (STEP entities with p21 id) from all nodes that are not Inline Nodes
         print("Creating IFC entities from nodes. ")
-        for node in GenericNode.nodes.filter(timestamp=timestamp):
+        all_nodes = GenericNode.nodes.filter(timestamp=timestamp)
+        for node in all_nodes:
             ifc_entity = model.create_entity(node.EntityType)
             # Add node id and id of new IFC entity to mapping for later use
             id_mapping[node.element_id] = ifc_entity.id()
@@ -284,9 +285,12 @@ class IfcGraphInterface:
                     # Call function that handles primitives or stringified (nested) list of primitives.
                     self.process_node_attribute(ifc_entity, key, val)
 
+        all_relationships = all_nodes.relation_to.all()
+        print(f"Found {len(all_relationships)} relationships. ")
 
+        print("Creating relationships between entities. ")
         # Second iteration: Go over all node relations (either to existing Step entities in the model or to inline attributes that will be created).
-        for node in GenericNode.nodes.filter(timestamp=timestamp):
+        for node in all_nodes:
             # Find ifc entity for current neo4j graph using the dictionary.
             ifc_entity = model.by_id(id_mapping[node.element_id])
             # Create a dictionary to collect all related entities. This is important, because one entity attribute may be a list of entity references. So first group all nodes by their rel_type.
@@ -306,7 +310,7 @@ class IfcGraphInterface:
                     else:
                         relations_dict[rel_type] = [[related_node, list_index]]
 
-            print("Creating relationships between entities. ")
+            
             # Iterate over the dictionary and process the lists of related nodes
             for rel_type, related_nodes in relations_dict.items():
                 self.process_node_relation(model, ifc_entity, rel_type, related_nodes, id_mapping)
