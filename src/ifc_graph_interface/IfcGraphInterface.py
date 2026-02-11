@@ -145,11 +145,6 @@ class IfcGraphInterface:
         # Create Neo4J_Helper instance.
         neo4j_helper = Neo4J_Helper()
 
-        # Create index for p21_id and timestamp for faster lookup.
-        db.cypher_query("CREATE INDEX generic_p21_ts IF NOT EXISTS FOR (n:GenericNode) ON (n.p21_id, n.timestamp)")
-        # Wait until the index is online.
-        db.cypher_query("CALL db.awaitIndexes()")
-
         # Load IFC model.
         print("Loading IFC model.")
         model = ifcopenshell.open(ifc_path)
@@ -254,6 +249,12 @@ class IfcGraphInterface:
         """
         neo4j_helper.bulk_cypher_query(query_inline_patterns, inline_patterns, batch_size)
 
+        # Create indexes for faster lookup.
+        db.cypher_query("CREATE INDEX generic_p21_ts IF NOT EXISTS FOR (n:GenericNode) ON (n.p21_id, n.timestamp)")
+        db.cypher_query("CREATE INDEX generic_ts IF NOT EXISTS FOR (n:GenericNode) ON (n.timestamp)")
+        # Wait until the indexes are online.
+        db.cypher_query("CALL db.awaitIndexes()")
+
         print("Finished IFC parsing.")
 
     def graph_2_ifc(self, ifc_path:str, timestamp:str):
@@ -271,7 +272,8 @@ class IfcGraphInterface:
         # Per method call, only one IFC file is created from the nodes. Therefore, filter all nodes with the timestamp of that IFC file.
         # First iteraton: Create IFC entities (STEP entities with p21 id) from all nodes that are not Inline Nodes
         print("Creating IFC entities from nodes. ")
-        all_nodes = GenericNode.nodes.filter(timestamp=timestamp)
+        # Materialize the queryset once so we don't re-hit the database on subsequent iterations.
+        all_nodes = list(GenericNode.nodes.filter(timestamp=timestamp))
         for node in all_nodes:
             ifc_entity = model.create_entity(node.EntityType)
             # Add node id and id of new IFC entity to mapping for later use
