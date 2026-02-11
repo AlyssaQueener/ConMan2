@@ -4,6 +4,7 @@ import ifcopenshell.api.project
 from .neo4j_helper import Neo4J_Helper
 
 import ast
+from collections import defaultdict
 
 from neo4j_core.neo4j_model import GenericNode, PrimaryNode, SecondaryNode, ConnectionNode, InlineNode
 
@@ -279,14 +280,25 @@ class IfcGraphInterface:
             # Iterate over all node attributes. These are only primitive attributes and can therefore be appended to the new IFC entity independently of what other entities already exist in the model.
             for key, val in node.__properties__.items():
                 # Check if the ifc entity has an attribute with the name of the node attribute. Make sure e.g. node id or p21_id is ignored.
-                if key in ["TrueNorth"]: #Add other edge cases to list.
+                if key in ["TrueNorth"]:  # Add other edge cases to list.
                     continue
                 if hasattr(ifc_entity, key):
                     # Call function that handles primitives or stringified (nested) list of primitives.
                     self.process_node_attribute(ifc_entity, key, val)
 
-        all_relationships = all_nodes.relation_to.all()
-        print(f"Found {len(all_relationships)} relationships. ")
+        # Load all relationships for the given timestamp in a single query
+        query = """
+        MATCH (a:GenericNode {timestamp: $timestamp})-[r:rel]->(b:Node)
+        RETURN a, b, r.rel_type AS rel_type, r.list_index AS list_index
+        """
+        results, _ = db.cypher_query(query, {"timestamp": timestamp}, resolve_objects=True)
+
+        # Build an in-memory mapping from source node -> list of (related_node, list_index, rel_type)
+        relationships_by_source = defaultdict(list)
+        for source_node, target_node, rel_type, list_index in results:
+            relationships_by_source[source_node.element_id].append((target_node, list_index, rel_type))
+
+        print(f"Found {len(results)} relationships. ")
 
         print("Creating relationships between entities. ")
         # Second iteration: Go over all node relations (either to existing Step entities in the model or to inline attributes that will be created).
@@ -296,21 +308,17 @@ class IfcGraphInterface:
             # Create a dictionary to collect all related entities. This is important, because one entity attribute may be a list of entity references. So first group all nodes by their rel_type.
             relations_dict = {}
 
-            # Iterate over all related nodes.
-            for related_node in node.relation_to.all(): 
-                # Rel type will be used as the attribute key.
-                rel_type = node.relation_to.relationship(related_node).rel_type
-                list_index = node.relation_to.relationship(related_node).list_index
+            # Iterate over all related nodes, using the pre-fetched relationships
+            for related_node, list_index, rel_type in relationships_by_source.get(node.element_id, []):
                 # Check if IFC entity has an attribute with the name of the rel_type
                 if hasattr(ifc_entity, rel_type):
                     # Rel type already exists in dict? Append node to its value that is a list.
                     if rel_type in relations_dict:
                         relations_dict[rel_type].append([related_node, list_index])
-                    # Rel type appears for the first time? Create new entry for that attribtue in the dict.
+                    # Rel type appears for the first time? Create new entry for that attribute in the dict.
                     else:
                         relations_dict[rel_type] = [[related_node, list_index]]
 
-            
             # Iterate over the dictionary and process the lists of related nodes
             for rel_type, related_nodes in relations_dict.items():
                 self.process_node_relation(model, ifc_entity, rel_type, related_nodes, id_mapping)
