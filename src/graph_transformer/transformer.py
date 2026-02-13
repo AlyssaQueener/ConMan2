@@ -69,9 +69,18 @@ class Transformer:
         print('############### Apply semantic changes ###########')
         graph_patch = GraphPatch()
         graph_patch.apply_patch_semantic(path_patch_semantic, timestamp_init,timestamp_updt)
+        self.deletedScondaryAndInlineNodes()
         self.edit_pushout_nodes(timestamp_init, timestamp_updt, graph_type)
         self.merge_msc_nodes(timestamp_init, graph_type)
 
+    def deletedScondaryAndInlineNodes(self):
+        query = """
+            MATCH (n)
+            WHERE n:InlineNode OR n:SecondaryNode
+            DETACH DELETE n
+            
+            """
+        self.db.cypher_query(query)
     def embed_text(self, text):
         embedding = self.ollama_embedding.get_text_embedding(text)
         return list(embedding)
