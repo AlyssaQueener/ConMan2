@@ -377,7 +377,7 @@ class IfcEncodedGraphInterface:
                             mapped_representation_items = item.MappingSource.MappedRepresentation.Items
                             for i in mapped_representation_items:
                                 geo_info = self.process_body_representations(i)
-                                geo_node, geo_rel = self.create_node_and_relationship(entity,item, geo_info, repIdentifier, timestamp)
+                                geo_node, geo_rel = self.create_node_and_relationship(entity,i, geo_info, repIdentifier, timestamp)
                                 geo_nodes.append(geo_node)
                                 geo_relationships.append(geo_rel)
                         else:
@@ -390,7 +390,7 @@ class IfcEncodedGraphInterface:
                             mapped_representation_items = item.MappingSource.MappedRepresentation.Items
                             for i in mapped_representation_items:
                                 geo_info = self.process_footprint_representation(i)
-                                geo_node, geo_rel = self.create_node_and_relationship(entity,item, geo_info, repIdentifier, timestamp)
+                                geo_node, geo_rel = self.create_node_and_relationship(entity,i, geo_info, repIdentifier, timestamp)
                                 geo_nodes.append(geo_node)
                                 geo_relationships.append(geo_rel)
                         else:
