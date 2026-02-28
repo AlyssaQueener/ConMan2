@@ -28,6 +28,8 @@ test_path = "src/01_sampleData/basic-geometric-changes/base-w-wall-2x3.ifc"
 test_path_2 = "src/01_sampleData/basic-geometric-changes/translated-wall.ifc"
 ifc_4="src/02_sampleData/test.ifc"
 
+ifc_4_test = "src/01_sample_data/base-example-wall-ifc4.ifc"
+
 counter = 0
 timestamp = "translated_wall_init"
 timestamp_updt = "translated_wall_updt"
@@ -40,4 +42,4 @@ timestamp_updt = "translated_wall_updt"
     
 #neo4j_ifc_interface.ifc_2_graph(test_path, timestamp)
 
-neo4j_encoded.ifc_2_graph(ifc_4, timestamp)
+neo4j_encoded.ifc_2_graph(ifc_4_test, timestamp)

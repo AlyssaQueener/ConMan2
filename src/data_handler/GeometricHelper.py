@@ -3,7 +3,7 @@ import ifcopenshell
 import ifcopenshell.geom
 import ifcopenshell.util.shape
 
-class GeometryHelper:
+class GeometricHelper:
     
     def get_coordinates_Ifc_poly_line(self, poly_line):
         points = poly_line.Points
@@ -42,8 +42,8 @@ class GeometryHelper:
         geometric_info = {}
         for i,element in enumerate(elements):
             if element.is_a("IfcPolyline"):
-                coordinates = self.get_coordinates_poly_line(element)
-                geometric_info[i] = coordinates
+                coordinates = self.get_coordinates_Ifc_poly_line(element)
+                geometric_info[str(i)] = coordinates
             else:
                 ## TO DO: implement differentt cases
                 return None
@@ -76,7 +76,7 @@ class GeometryHelper:
             geometry_info["swept_area"] = "IfcArbitraryClosedProfileDef"
             outer_curve = sweptArea.OuterCurve ### IfcPolyline
             if outer_curve.is_a("IfcPolyline"):
-                coordinates = self.get_coordinates_poly_line(outer_curve)
+                coordinates = self.get_coordinates_Ifc_poly_line(outer_curve)
             elif outer_curve.is_a("IfcIndexedPolyCurve"):
                 coordinates = self.get_coordinates_Ifc_Indexed_Poly_Curve(outer_curve)
             else:
@@ -98,7 +98,7 @@ class GeometryHelper:
             for bound in bounds:
                 orientation = bound.Orientation #Orientation of bound, True or False
                 actual_bound = bound.Bound ## for facetedBrep always Polyloop (Polygon defined by Points)
-                polygon_coordinates = self.get_coordinates_polygon(actual_bound.Polygon)
+                polygon_coordinates = self.get_coordinates_Ifc_polygon(actual_bound.Polygon)
                 face_bound = {
                     "orientation": orientation,
                     "polygon_coordinates": polygon_coordinates
@@ -106,7 +106,7 @@ class GeometryHelper:
                 face_bounds.append(face_bound)
                             #print(f"      Polygon: {polygon_coordinates}")
                             #print(f"      Orientation: {orientation}")
-            geometry_info[i]=face_bounds
+            geometry_info[str(i)]=face_bounds
         return geometry_info
     
     def get_coordinates_Ifc_Indexed_Poly_Curve(self, outer_curve):
@@ -116,106 +116,84 @@ class GeometryHelper:
         self_intersect = outer_curve.SelfIntersect
         return points
     
-ifc_path = "src/01_sampleData/basic-geometric-changes/base-w-wall-2x3.ifc"
-ifc_path_2 = "src/01_sampleData/basic-geometric-changes/translated-wall.ifc"
-ifc_4="src/02_sampleData/test.ifc"
-ifc_4_1 = "src/01_sample_data/base-example-wall-ifc4.ifc"
-model = ifcopenshell.open(ifc_4_1)
-# Retrieve IFC entities that will be PrimaryNodes, same for ConnectionNodes.
-primary_entities_object_definitions = model.by_type("IfcObjectDefinition") 
-primary_ent_product_definitions = model.by_type("IfcProduct")
-primar_entities_property_def = model.by_type("IfcPropertyDefinition")
-connection_entities = model.by_type("IfcRelationship")
+
 #geo_repr = model.by_type("IfcProfilDef")
 
 
+def process_body_representations(item):
+    helper = GeometricHelper()
+    geometric_rep = {}
+    if item.is_a("IfcFacetedBrep"):
+        geometric_rep = helper.get_geometry_IfcFacetedBrep(item)
+    elif item.is_a("IfcExtrudedAreaSolid"):
+        geometric_rep = helper.get_geometry_IfcExtruded_Area_Solid(item)
+    elif item.is_a("IfcPolygonalFaceSet"):
+        geometric_rep = helper.get_geometry_Ifc_Polygonal_Face_Set(item)
+    else:
+        print(f"Body representation Not yet implemented: {item}")
+        return None
+    return geometric_rep
 
+def process_footprint_representation(item):
+    helper = GeometricHelper()
+    info = {}
+    if item.is_a("IfcPolyline"):
+        info = helper.get_coordinates_poly_line(item)
+    elif item.is_a("IfcIndexedPolyCurve"):
+        info = helper.get_coordinates_Ifc_Indexed_Poly_Curve(item)   
+    elif item.is_a("IfcGeometricCurveSet"):
+        info = helper.get_IfcGeometric_Curve_Set(item)
+    else: 
+        print(f"footprint representation not yet implement: {item} ") 
+        return None
+    return info
     
-helper = GeometryHelper()                   
-geo_repis = []
-for entity in primary_entities_object_definitions:
+def process_ifc_entity_for_geometries(entity):
+    helper = GeometricHelper()
     if hasattr(entity, "Representation") and entity.Representation is not None:
-        print(f"IfcEntity: {entity}")
-        #print(ifcopenshell.util.element.get_material(entity))
-        
+        entity_geo = {}
         ## IFC Product Representation (-> IfcTopologyRepresentation/ IfcShapeRepresentation)
         rep = entity.Representation
         
         ## IfcShapeRepresentation
         representation = entity.Representation.Representations
         
+        geo_infos = []
         for i,rep in enumerate(representation):
         ## IfcShapeRepresentaion - Type
-            print(f"   {i+1}. IfcShapeRepresentaion:")
             repType = rep.RepresentationType
-            #print(f"   IfcShapeRepresentaion - Type: {repType}")
         
         ## IfcShapeRepresentaion - Identifier
-            repIdnetifier = rep.RepresentationIdentifier
-            print(f"   IfcShapeRepresentaion - Identifier: {repIdnetifier}")
-        
+            repIdentifier = rep.RepresentationIdentifier ### Body, Footprint
         
         ## IfcShapeRepresentation - IfcRepresentationItems
             repItems = rep.Items
+            
             for item in repItems:
                 
-                #print(f"   IfcShapeRepresentaion - RepresentationItems: {repItems}")
-                if item.is_a("IfcFacetedBrep"):
-                    geo_representation = helper.get_geometry_IfcFacetedBrep(item)
-                    #print(f"              Faceted Brep: {geo_representation}")
-                          
-                elif item.is_a("IfcBoundingBox"):
-                    continue
-                elif item.is_a("IfcPolyline"):
-                    points_coordinates = helper.get_coordinates_poly_line(item)
-                    #print(f"      Polyline-Points: {points_coordinates}")
-                elif item.is_a("IfcExtrudedAreaSolid"):
-                        geo_rep = helper.get_geometry_IfcExtruded_Area_Solid(item)
-                        #print(f"      Extruded Solid: {geo_rep}")  
-                elif item.is_a("IfcExtrudedAreaSolid"):
-                    print("")
-                        
-                elif item.is_a("IfcGeometricCurveSet"):
-                    info = helper.get_IfcGeometric_Curve_Set(item)           
-                    #print(f"              GeometricCurveSet: {info}")
-                elif repType == "MappedRepresentation":
-                    mappingsrc = repItems[0].MappingSource
-                    mapped_representation = mappingsrc.MappedRepresentation
-                    mapped_type = mapped_representation.RepresentationType
-                    #print(f"       Mapped Representation- Type: {mapped_type}")
-                    mapped_items = mapped_representation.Items
-                    #print(f"       Mapped Representation- Items: {mapped_items}")
-                elif item.is_a("IfcPolygonalFaceSet"):
-                    geometric_rep = helper.get_geometry_Ifc_Polygonal_Face_Set(item)
-                    print(f"       {geometric_rep}")
-                elif item.is_a("IfcGeometricCurveSet"):
-                    elements = item.Elements # Set of IfcGeometricSetSelected (Points, Curves, Surfaces)
-                    for element in elements:
-                        if element.is_a("IfcPolyline"):
-                            coordinates = helper.get_coordinates_poly_line(element)
-                            #print(f"     Coordinates: {coordinates}")
-                    
+                if repIdentifier == "Body":
+                    if repType == "MappedRepresentation":
+                        mapped_representation_items = item.MappingSource.MappedRepresentation.Items
+                        for i in mapped_representation_items:
+                            geo_info = process_body_representations(i)
+                            geo_infos.append(geo_info)
+                    else:
+                        geo_info = process_body_representations(item)
+                        p21_id = item.id()
+                        geo_infos.append(geo_info)  
+                elif repIdentifier == "FootPrint":            
+                    if repType == "MappedRepresentation":
+                        mapped_representation_items = item.MappingSource.MappedRepresentation.Items
+                        for i in mapped_representation_items:
+                            geo_info = process_footprint_representation(i)
+                            geo_infos.append(geo_info)
+                    else:
+                        geo_info = process_footprint_representation(item)
+                        geo_infos.append(geo_info)  
                 else:
                     print(f"    not recoginzed Items:   {item}")
-                    
-                  
-                    
-                    
-                    
-            
-            
+        entity_geo[repIdentifier] = geo_infos            
         
-        #for i in traversed:
-            #print(f"   {i}")
-    
+        
 
-resources = model.by_type("IfcMaterialDefinition")
-resources2 = model.by_type("IfcObjectPlacement")
-#print(resources)
-
-
-print("Placements:")
-print()
-print()
-#print(resources2)
 

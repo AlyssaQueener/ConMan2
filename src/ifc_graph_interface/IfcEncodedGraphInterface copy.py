@@ -9,6 +9,7 @@ import ast
 from neo4j_core.neo4j_model import GenericNode, PrimaryNode, SecondaryNode, ConnectionNode, InlineNode, GeoNode
 
 class IfcEncodedGraphInterface:
+    #### with localization and material 
 
     ########################
     ### Helper Functions ###
@@ -20,7 +21,7 @@ class IfcEncodedGraphInterface:
     ### Process ifc attributes in a different way. only process
     ### whatever there is for geometric description /localization / 
     
-    def process_ifc_attributes(self, entity:ifcopenshell.entity_instance, timestamp:str, props_map:dict, relationships:list, related_nodes:set, prim_conn_ids:list):
+    def process_ifc_attributes(self, entity:ifcopenshell.entity_instance, timestamp:str, props_map:dict, relationships:list, related_nodes:set, p21_ids_secondary_nodes:list, prim_conn_ids:list):
         p21_id = f"#{entity.id()}"
 
 
@@ -28,7 +29,7 @@ class IfcEncodedGraphInterface:
         def traverse(key, val, list_index=0):
             if isinstance(val, ifcopenshell.entity_instance):
                 # Instead of creating Inline Nodes i set these as attributes
-                if val.id() in prim_conn_ids:
+                if val.id() in p21_ids_secondary_nodes or val.id() in prim_conn_ids:
                     related_p21_id = f"#{val.id()}"
                     relationships.append({
                         "source_p21_id": p21_id,
@@ -38,12 +39,12 @@ class IfcEncodedGraphInterface:
                         "list_index": list_index
                     })
                     related_nodes.add(related_p21_id)
-                #if key=="RelativePlacement":
-                    #if val.is_a("IfcAxis2Placement3D") or val.is_a("IfcAxis2Placement2D"):
-                        #coordinates = val.Location.Coordinates if val.Location is not None else "$"
-                        #direction = val.RefDirection.DirectionRatios if val.RefDirection is not None else "$"
-                        #props_map.setdefault(p21_id, {})["relative placement - direction"] = direction
-                        #props_map.setdefault(p21_id, {})["relative placement - coordinates"] = coordinates
+                if key=="RelativePlacement":
+                    if val.is_a("IfcAxis2Placement3D") or val.is_a("IfcAxis2Placement2D"):
+                        coordinates = val.Location.Coordinates if val.Location is not None else "$"
+                        direction = val.RefDirection.DirectionRatios if val.RefDirection is not None else "$"
+                        props_map.setdefault(p21_id, {})["relative placement - direction"] = direction
+                        props_map.setdefault(p21_id, {})["relative placement - coordinates"] = coordinates
 
                  
             elif isinstance(val, (tuple, list)):
@@ -61,7 +62,7 @@ class IfcEncodedGraphInterface:
             else:
                 # Case where value is primitive.
                 props_map.setdefault(p21_id, {})[key] = val
-        if entity.id() in prim_conn_ids:
+        if entity.id() in p21_ids_secondary_nodes or entity.id() in prim_conn_ids:
             info = entity.get_info()
             for key, val in info.items():
                 # Ignore any IDs or types as they are already saved in the node and must not be changed
@@ -127,16 +128,16 @@ class IfcEncodedGraphInterface:
             "timestamp": timestamp
         } for e in connection_entities]
 
-        #secondary_nodes = []
-        #p21_ids_secondary_nodes = []
-        #for e in secondary_entities:
-            #sec_node = {
-             #   "EntityType": e.is_a(),
-              #  "p21_id": f"#{e.id()}",
-               # "timestamp": timestamp
-            #}
-            #secondary_nodes.append(sec_node)
-            #p21_ids_secondary_nodes.append(e.id())
+        secondary_nodes = []
+        p21_ids_secondary_nodes = []
+        for e in secondary_entities:
+            sec_node = {
+                "EntityType": e.is_a(),
+                "p21_id": f"#{e.id()}",
+                "timestamp": timestamp
+            }
+            secondary_nodes.append(sec_node)
+            p21_ids_secondary_nodes.append(e.id())
       
 
 
@@ -153,11 +154,11 @@ class IfcEncodedGraphInterface:
         SET n = props
         """
 
-        #query_secondary_nodes = """
-        #UNWIND $batch AS props
-        #CREATE (n:SecondaryNode:GenericNode:Node)
-        #SET n = props
-        #"""
+        query_secondary_nodes = """
+        UNWIND $batch AS props
+        CREATE (n:SecondaryNode:GenericNode:Node)
+        SET n = props
+        """
         
         query_geo_nodes = """
         UNWIND $batch AS props
@@ -172,8 +173,8 @@ class IfcEncodedGraphInterface:
         print(f"Creating {len(connection_nodes)} ConnectionNodes.")
         neo4j_helper.bulk_cypher_query(query_connection_nodes, connection_nodes, batch_size)
 
-        #print(f"Creating {len(secondary_nodes)} SecondaryNodes")
-        #neo4j_helper.bulk_cypher_query(query_secondary_nodes, secondary_nodes, batch_size)
+        print(f"Creating {len(secondary_nodes)} SecondaryNodes")
+        neo4j_helper.bulk_cypher_query(query_secondary_nodes, secondary_nodes, batch_size)
         
         print(f"Creating {len(geo_nodes)} GeoNodes")
         neo4j_helper.bulk_cypher_query(query_geo_nodes, geo_nodes, batch_size)
@@ -185,8 +186,7 @@ class IfcEncodedGraphInterface:
         related_nodes = set()
 
         for entity in model:
-            #self.process_ifc_attributes(entity, timestamp, props_map, relationships, related_nodes, p21_ids_secondary_nodes, prim_conn_ids)
-            self.process_ifc_attributes(entity, timestamp, props_map, relationships, related_nodes, prim_conn_ids)
+            self.process_ifc_attributes(entity, timestamp, props_map, relationships, related_nodes, p21_ids_secondary_nodes, prim_conn_ids)
 
         # Bulk update primitive attributes on nodes.
         print(f"Updating attributes on {len(props_map)} nodes.")
