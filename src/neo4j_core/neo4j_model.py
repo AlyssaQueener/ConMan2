@@ -15,6 +15,7 @@ class RelProperties(StructuredRel):
     '''
     rel_type = StringProperty(required=True)
     list_index = IntegerProperty()
+    
 
 
 class Node(SemiStructuredNode):
@@ -40,6 +41,11 @@ class PrimaryNode(GenericNode):
 
 
 class SecondaryNode(GenericNode):
+    
+    def __repr__(self):
+        return f"SecondaryNode(EntityType='{self.EntityType}', timestamp='{self.timestamp}')"
+    
+class GeoNode(GenericNode):
     
     def __repr__(self):
         return f"SecondaryNode(EntityType='{self.EntityType}', timestamp='{self.timestamp}')"
