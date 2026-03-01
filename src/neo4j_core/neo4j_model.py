@@ -10,24 +10,30 @@ from neomodel.contrib import SemiStructuredNode
 
 
 class RelProperties(StructuredRel):
-    '''
-    Relationship class for defining properties of relationships between nodes.
-    '''
     rel_type = StringProperty(required=True)
     list_index = IntegerProperty()
-    
 
+class GeoRelProperties(StructuredRel):
+    rel_type = StringProperty(required=True)
 
 class Node(SemiStructuredNode):
     EntityType = StringProperty(required=True)
-
-    relation_to = RelationshipTo('Node', 'rel', model=RelProperties)
-    relation_from = RelationshipFrom('Node', 'rel', model=RelProperties)
-    equivalent_to = Relationship('Node', 'equivalent_to')
-
+    relation_to = RelationshipTo('Node', 'RELATION_TO', model=RelProperties)
+    relation_from = RelationshipFrom('Node', 'RELATION_TO', model=RelProperties)
+    relation_to_geo = RelationshipTo('GenericGeoNode', 'GEO_RELATION_TO', model=GeoRelProperties)
+    relation_from_geo = RelationshipFrom('GenericGeoNode', 'GEO_RELATION_TO', model=GeoRelProperties)
+    equivalent_to = Relationship('Node', 'EQUIVALENT_TO')
     graph_type = StringProperty()
     timestamp = StringProperty()
 
+class GenericGeoNode(SemiStructuredNode):
+    p21_id = StringProperty(required=True)
+    EntityType = StringProperty(required=True)
+    relation_from = RelationshipFrom('Node', 'GEO_RELATION_TO', model=GeoRelProperties)  # same type as Node.relation_to_geo
+    relation_to = RelationshipTo('Node', 'GEO_RELATION_TO', model=GeoRelProperties)  # same type as Node.relation_to_geo
+    equivalent_to = Relationship('GenericGeoNode', 'EQUIVALENT_TO')
+    graph_type = StringProperty()
+    timestamp = StringProperty()
 
 class GenericNode(Node):
     p21_id = StringProperty(required=True)
@@ -45,7 +51,7 @@ class SecondaryNode(GenericNode):
     def __repr__(self):
         return f"SecondaryNode(EntityType='{self.EntityType}', timestamp='{self.timestamp}')"
     
-class GeoNode(GenericNode):
+class GeoNode(GenericGeoNode):
     
     def __repr__(self):
         return f"SecondaryNode(EntityType='{self.EntityType}', timestamp='{self.timestamp}')"

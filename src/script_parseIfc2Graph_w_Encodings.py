@@ -4,6 +4,9 @@ from neo4j_core.neo4j_connection import Neo4jConnection
 from ifc_graph_interface.IfcGraphInterface_Simple import IfcGraphInterfaceSimple
 from ifc_graph_interface.IfcGraphInterface import IfcGraphInterface
 from ifc_graph_interface.IfcEncodedGraphInterface import IfcEncodedGraphInterface
+from graph_diff.GraphDiff import GraphDiff
+from neo4j_core.neo4j_model import Node, GenericNode, PrimaryNode, ConnectionNode, SecondaryNode, InlineNode, RelProperties
+
 
 paths = [
     "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v1.ifc",
@@ -43,3 +46,8 @@ timestamp_updt = "translated_wall_updt"
 #neo4j_ifc_interface.ifc_2_graph(test_path, timestamp)
 
 neo4j_encoded.ifc_2_graph(ifc_4_test, timestamp)
+#primary_node_updt = PrimaryNode.nodes.get()
+nodes = Node.nodes.all()
+for n in nodes:
+    for child_init in n.relation_to.all():
+        print(child_init)

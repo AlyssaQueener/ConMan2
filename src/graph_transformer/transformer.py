@@ -40,10 +40,12 @@ class Transformer:
         msc_2 = Node.nodes.filter(timestamp="msc").all()
         for node in msc_2:
             if hasattr(node, "change_type"): 
+                setattr(node, "encoded_change_type", [1,0,0])
                 delattr(node, "timestamp")
                 setattr(node, "graph_type", graph_type)
             else:
                 setattr(node, "change_type", "msc")
+                setattr(node, "encoded_change_type", [1,0,0])
                 delattr(node, "timestamp")
                 setattr(node, "graph_type", graph_type)
             node.save()
@@ -53,6 +55,7 @@ class Transformer:
         pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
         for node in pushout_nodes_init:
             setattr(node, "change_type", "deleted")
+            setattr(node, "encoded_change_type", [0,1,0])
             setattr(node, "graph_type", graph_type)
             delattr(node, "timestamp")
             node.save()
@@ -61,15 +64,14 @@ class Transformer:
         pushout_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all()
         for node in pushout_nodes_updt:
             setattr(node, "change_type", "added")
+            setattr(node, "encoded_change_type", [0,0,1])
             delattr(node, "timestamp")
             setattr(node, "graph_type", graph_type)
             node.save()
         print(pushout_nodes_updt)
     def create_change_graph(self, path_patch_semantic, timestamp_init, timestamp_updt, graph_type):
         print('############### Apply semantic changes ###########')
-        graph_patch = GraphPatch()
-        graph_patch.apply_patch_semantic(path_patch_semantic, timestamp_init,timestamp_updt)
-        self.deletedScondaryAndInlineNodes()
+        #self.deletedScondaryAndInlineNodes()
         self.edit_pushout_nodes(timestamp_init, timestamp_updt, graph_type)
         self.merge_msc_nodes(timestamp_init, graph_type)
 

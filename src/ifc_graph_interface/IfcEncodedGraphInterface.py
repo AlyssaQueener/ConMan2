@@ -6,7 +6,7 @@ import json
 from data_handler.GeometricHelper import GeometricHelper  # import the class from the module
 import ast
 
-from neo4j_core.neo4j_model import GenericNode, PrimaryNode, SecondaryNode, ConnectionNode, InlineNode, GeoNode
+from neo4j_core.neo4j_model import GenericNode, GenericGeoNode, PrimaryNode, SecondaryNode, ConnectionNode, InlineNode, GeoNode
 
 class IfcEncodedGraphInterface:
 
@@ -89,7 +89,8 @@ class IfcEncodedGraphInterface:
         model = ifcopenshell.open(ifc_path)
 
         # Retrieve IFC entities that will be PrimaryNodes, same for ConnectionNodes.
-        primary_entities = model.by_type("IfcObjectDefinition") + model.by_type("IfcPropertyDefinition")
+        #  + model.by_type("IfcPropertyDefinition")
+        primary_entities = model.by_type("IfcObjectDefinition")
         connection_entities = model.by_type("IfcRelationship")
         prim_conn_entities = primary_entities + connection_entities
 
@@ -161,7 +162,7 @@ class IfcEncodedGraphInterface:
         
         query_geo_nodes = """
         UNWIND $batch AS props
-        CREATE (n:GeoNode:GenericNode:Node)
+        CREATE (n:GeoNode:GenericGeoNode)
         SET n = props
         """
 
@@ -209,13 +210,13 @@ class IfcEncodedGraphInterface:
         neo4j_helper.bulk_cypher_query(query_relationships, relationships, batch_size)
         
         
-        # Bulk create relationships from IFC attributes.
+        # Bulk create relationships from Geo relationsships
         print(f"Creating {len(relationships)} relationships.")
         query_geo_relationships = """
         UNWIND $batch AS r
         MATCH (a:GenericNode {p21_id: r.source_p21_id, timestamp: r.timestamp})
-        MATCH (b:GenericNode {p21_id: r.target_p21_id, timestamp: r.timestamp})
-        CREATE (a)-[:RELATION_TO {rel_type: r.rel_type}]->(b)   
+        MATCH (b:GenericGeoNode {p21_id: r.target_p21_id, timestamp: r.timestamp})
+        CREATE (a)-[:GEO_RELATION_TO {rel_type: r.rel_type}]->(b)   
         """
         neo4j_helper.bulk_cypher_query(query_geo_relationships, geo_relationships, batch_size)
 
@@ -333,13 +334,18 @@ class IfcEncodedGraphInterface:
             return None
         return info
     
-    def create_node_and_relationship(self, entity, item, geo_info, repIdentifier, timestamp):
+    def create_node_and_relationship(self, entity, item, geo_info, repIdentifier, timestamp, body):
         ## EntityType -> IfcEntity of GeometryRepresentation
         ## Representation Identifier -> rel_type
+        if body:
+            encoded_rep_type = [0,1,0]
+        else:
+            encoded_rep_type = [0,0,1]
         geo_node = {
                     "EntityType": item.is_a(),
                     "p21_id": f"#{item.id()}",
-                    "timestamp": timestamp 
+                    "timestamp": timestamp,
+                    "encoded_representation_type" : encoded_rep_type
                 }
         geo_node.update(self.sanitize_for_neo4j(geo_info))
         
@@ -377,12 +383,12 @@ class IfcEncodedGraphInterface:
                             mapped_representation_items = item.MappingSource.MappedRepresentation.Items
                             for i in mapped_representation_items:
                                 geo_info = self.process_body_representations(i)
-                                geo_node, geo_rel = self.create_node_and_relationship(entity,i, geo_info, repIdentifier, timestamp)
+                                geo_node, geo_rel = self.create_node_and_relationship(entity,i, geo_info, repIdentifier, timestamp, True)
                                 geo_nodes.append(geo_node)
                                 geo_relationships.append(geo_rel)
                         else:
                             geo_info = self.process_body_representations(item)
-                            geo_node, geo_rel = self.create_node_and_relationship(entity,item, geo_info, repIdentifier, timestamp)
+                            geo_node, geo_rel = self.create_node_and_relationship(entity,item, geo_info, repIdentifier, timestamp, True)
                             geo_nodes.append(geo_node)
                             geo_relationships.append(geo_rel)
                     elif repIdentifier == "FootPrint":            
@@ -390,12 +396,12 @@ class IfcEncodedGraphInterface:
                             mapped_representation_items = item.MappingSource.MappedRepresentation.Items
                             for i in mapped_representation_items:
                                 geo_info = self.process_footprint_representation(i)
-                                geo_node, geo_rel = self.create_node_and_relationship(entity,i, geo_info, repIdentifier, timestamp)
+                                geo_node, geo_rel = self.create_node_and_relationship(entity,i, geo_info, repIdentifier, timestamp, False)
                                 geo_nodes.append(geo_node)
                                 geo_relationships.append(geo_rel)
                         else:
                             geo_info = self.process_footprint_representation(item)
-                            geo_node, geo_rel = self.create_node_and_relationship(entity,item, geo_info, repIdentifier, timestamp)
+                            geo_node, geo_rel = self.create_node_and_relationship(entity,item, geo_info, repIdentifier, timestamp, False)
                             geo_nodes.append(geo_node)
                             geo_relationships.append(geo_rel)
                     else:
@@ -412,7 +418,8 @@ class IfcEncodedGraphInterface:
                 geo_node = {
                     "EntityType": "SimpleBBox",
                     "p21_id": fake_p21_id,
-                    "timestamp": timestamp 
+                    "timestamp": timestamp,
+                    "encoded_representation_type": [1,0,0] 
                 }
                 geo_node.update(geo)
                 geo_nodes.append(geo_node)

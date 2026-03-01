@@ -1,4 +1,4 @@
-from neo4j_core.neo4j_model import Node, GenericNode, PrimaryNode, ConnectionNode, SecondaryNode, InlineNode, RelProperties
+from neo4j_core.neo4j_model import Node, GenericNode, PrimaryNode, ConnectionNode, SecondaryNode, InlineNode, RelProperties, GenericGeoNode
 import json
 import os
 from data_handler.DataHandler import DataHandler
@@ -33,7 +33,10 @@ class GraphPatchSimple:
             for child in node.relation_to.all():
                 if child.equivalent_to.all():
                     rel = node.relation_to.relationship(child)
-                    new_path = unique_path + [{"rel_type": rel.rel_type, "list_index": rel.list_index, "EntityType": child.EntityType}]
+                    if isinstance(child, GenericGeoNode):
+                        new_path = unique_path + [{"rel_type": rel.rel_type, "EntityType": child.EntityType}]
+                    else:
+                        new_path = unique_path + [{"rel_type": rel.rel_type, "list_index": rel.list_index, "EntityType": child.EntityType}]
                     self.create_unique_path_mappings(child, timestamp, new_path)
 
     def create_init_side_unique_path_mappings(self, node, timestamp, unique_path=None):
@@ -65,6 +68,13 @@ class GraphPatchSimple:
         # Traverse the graph using the unique path as a template to find the node in question.
         for i in range(1, len(path)):
             # A unique step in the unique path is defined by the relation type, the list index of the relation, and the entity type of the target node.
+            match_kwargs = {"rel_type": path[i]["rel_type"]}
+            if "list_index" in path[i]:
+                match_kwargs["list_index"] = path[i]["list_index"]
+            for contestant in latest_node.relation_to.match(**match_kwargs):
+                if contestant.EntityType == path[i]["EntityType"]:
+                    latest_node = contestant
+            i += 1
             for contestant in latest_node.relation_to.match(rel_type=path[i]["rel_type"], list_index=path[i]["list_index"]):
                 if contestant.EntityType == path[i]["EntityType"]:
                     latest_node = contestant
@@ -117,6 +127,34 @@ class GraphPatchSimple:
                             self.semantic_patch_pattern[unique_path][property_key] = {}
                             self.semantic_patch_pattern[unique_path][property_key][timestamp_init] = property_value
                             self.semantic_patch_pattern[unique_path][property_key][timestamp_updt] = property_value_updt
+                            
+    def semantic_patch(self, equivalent_nodes_init, timestamp_init, timestamp_updt, semantic_patch):
+        """
+        Among the nodes that are deemed equivalent during the Diff, compare the attributes and note and differences in nodes. 
+        """
+        for node_init in equivalent_nodes_init:
+            # Find the corresponding equivalent node in the db.
+            node_updt = node_init.equivalent_to.all()[0]
+
+            for property_key, property_value in node_init.__properties__.items():
+                # Exclude checking for the attributes timestamp and node id, as these are supposed to be different..
+                if property_key not in ["timestamp", "element_id_property"]:
+                    # Compare the attribute values.
+                    property_value_updt = node_updt.__properties__.get(property_key)
+                    if property_value != property_value_updt:
+                        setattr(node_init, "change_type", "modified")
+                        setattr(node_init, "changed_value", property_key)
+                        setattr(node_init, "old_value", property_value )
+                        setattr(node_init, "new_value", property_value_updt )
+                        pattern = {
+                            "EntityType" : node_init.EntityType,
+                            "changed_value": property_key,
+                            "old_value": property_value,
+                            "new_value": property_value_updt
+                        }
+                        semantic_patch.append(pattern)
+
+
 
 
    
@@ -142,6 +180,20 @@ class GraphPatchSimple:
     ######################
     ### Main Functions ###
     ######################
+    
+    def modify_semantic(self, project_id: str, timestamp_init:str, timestamp_updt:str):
+        """
+        Use the two models that have been diffed and create a semanicpatch.
+        """
+        semantic_patch_pattern= {}
+        
+        equivalent_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=True).all()
+
+        self.semantic_patch(equivalent_nodes_init, timestamp_init, timestamp_updt, semantic_patch_pattern)
+        with open(f"patch_data/Patch_Sema_{project_id}_{timestamp_init}_{timestamp_updt}.json", "w") as f:
+            json.dump(semantic_patch_pattern, f, indent=4)
+        path_semantic = f"patch_data/Patch_Sema_{project_id}_{timestamp_init}_{timestamp_updt}.json"
+        return path_semantic
 
    
     def create_patch_semantic(self, project_id: str, timestamp_init:str, timestamp_updt:str):
