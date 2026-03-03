@@ -274,3 +274,4 @@ Diff_*.json
 timeline.json
 .DS_Store
 *.env
+*.gpickle
