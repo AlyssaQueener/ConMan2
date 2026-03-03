@@ -136,3 +136,4 @@ The IFC schema includes cases where the general translation of entities, relatio
 |[IfcOpenShell](http://ifcopenshell.org/)| https://github.com/IfcOpenShell/IfcOpenShell |LGPL-3.0, see `third_party_licenses/lgpl-3.0.txt` for further details |
 |[Neomodel](https://neomodel.readthedocs.io/)| https://github.com/neo4j-contrib/neomodel | MIT,  see `third_party_licenses/neomodel-mit.txt` for further details |
 | [Python-dotenv](https://github.com/theskumar/python-dotenv) | https://github.com/theskumar/python-dotenv | BSD-3 | 
+| [NetworkX](https://github.com/networkx/networkx) | https://github.com/networkx/networkx | BSD-3, see `third_party_licenses/bsd3-networkX.txt` for further details |
