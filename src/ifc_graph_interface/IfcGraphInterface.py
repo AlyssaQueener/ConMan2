@@ -9,11 +9,27 @@ from neo4j_core.neo4j_model import GenericNode, PrimaryNode, SecondaryNode, Conn
 
 class IfcGraphInterface:
 
+    # list of graph providers that are supported by the interface. 
+    # This can be used in the future to extend the interface to other graph databases or graph libraries.
+    graph_providers = ("neo4j", "networkx") 
+
+    def __init__(self, graph_provider: str = "neo4j") -> None:
+        """
+        Initialize the IfcGraphInterface.
+
+        Args:
+            graph_provider (str, optional): The graph provider that sets the endpoint 
+                where the graph representations are handled. Defaults to "neo4j".
+        """
+        if graph_provider not in self.graph_providers:
+            raise ValueError(f"Graph provider '{graph_provider}' not supported. Available providers: {self.graph_providers}")
+        self.graph_provider = graph_provider
+
     ########################
     ### Helper Functions ###
     ########################
 
-    def process_ifc_attributes(self, entity:ifcopenshell.entity_instance, timestamp:str, props_map:dict, relationships:list, related_nodes:set, inline_patterns:list):
+    def __process_ifc_attributes(self, entity:ifcopenshell.entity_instance, timestamp:str, props_map:dict, relationships:list, related_nodes:set, inline_patterns:list):
         p21_id = f"#{entity.id()}"
 
         # Recursively handle IFC attributes to catch primitives to nested lists.
@@ -67,7 +83,7 @@ class IfcGraphInterface:
             else:
                 traverse(key, val)
 
-    def process_node_attribute(self, ifc_entity, key, val):
+    def __process_node_attribute(self, ifc_entity, key, val):
         """
         Process node attributes. These are the directly attached primtive node properties that are directly attached to a neo4j node.
 
@@ -93,7 +109,7 @@ class IfcGraphInterface:
             # Store the processed attribute in the IFC entity.
             setattr(ifc_entity, key, val)
 
-    def process_node_relation(self, model, ifc_entity, rel_type, related_nodes, id_mapping):
+    def __process_node_relation(self, model, ifc_entity, rel_type, related_nodes, id_mapping):
         """
         From the relations in neo4j, create entity attributes and inline attributes for every STEP IFC object.
 
@@ -111,7 +127,7 @@ class IfcGraphInterface:
             if isinstance(node, InlineNode):
                 ent = model.create_entity(node.EntityType)
                 # WrappedValue is the actual input data of inline entities like "(6,5,1)" in "IfcArcIndex(6,5,1)". Process this like any other non-entity attribute.
-                self.process_node_attribute(ent, "wrappedValue", node.wrappedValue)
+                self.__process_node_attribute(ent, "wrappedValue", node.wrappedValue)
                 ents.append((ent, list_index))
             # If entity is a real STEP entity, get the existing IFC entity and append that to the list.
             else:
@@ -143,11 +159,6 @@ class IfcGraphInterface:
 
         # Create Neo4J_Helper instance.
         neo4j_helper = Neo4J_Helper()
-
-        # Create index for p21_id and timestamp for faster lookup.
-        db.cypher_query("CREATE INDEX generic_p21_ts IF NOT EXISTS FOR (n:GenericNode) ON (n.p21_id, n.timestamp)")
-        # Wait until the index is online.
-        db.cypher_query("CALL db.awaitIndexes()")
 
         # Load IFC model.
         print("Loading IFC model.")
@@ -220,7 +231,7 @@ class IfcGraphInterface:
         related_nodes = set()
 
         for entity in model:
-            self.process_ifc_attributes(entity, timestamp, props_map, relationships, related_nodes, inline_patterns)
+            self.__process_ifc_attributes(entity, timestamp, props_map, relationships, related_nodes, inline_patterns)
 
         # Bulk update primitive attributes on nodes.
         print(f"Updating attributes on {len(props_map)} nodes.")
@@ -253,6 +264,13 @@ class IfcGraphInterface:
         """
         neo4j_helper.bulk_cypher_query(query_inline_patterns, inline_patterns, batch_size)
 
+        print("Perform node indexing based on timestamp and p21_id for faster lookup.")
+
+        # Create index for p21_id and timestamp for faster lookup.
+        db.cypher_query("CREATE INDEX generic_p21_ts IF NOT EXISTS FOR (n:GenericNode) ON (n.p21_id, n.timestamp)")
+        # Wait until the index is online.
+        db.cypher_query("CALL db.awaitIndexes()")
+
         print("Finished IFC parsing.")
 
     def graph_2_ifc(self, ifc_path:str, timestamp:str):
@@ -283,7 +301,7 @@ class IfcGraphInterface:
                     continue
                 if hasattr(ifc_entity, key):
                     # Call function that handles primitives or stringified (nested) list of primitives.
-                    self.process_node_attribute(ifc_entity, key, val)
+                    self.__process_node_attribute(ifc_entity, key, val)
 
         all_relationships = all_nodes.relation_to.all()
         print(f"Found {len(all_relationships)} relationships. ")
@@ -313,7 +331,7 @@ class IfcGraphInterface:
             
             # Iterate over the dictionary and process the lists of related nodes
             for rel_type, related_nodes in relations_dict.items():
-                self.process_node_relation(model, ifc_entity, rel_type, related_nodes, id_mapping)
+                self.__process_node_relation(model, ifc_entity, rel_type, related_nodes, id_mapping)
         # Save the IFC model to file.
         print("Write model to file. ")
         model.write(ifc_path)
