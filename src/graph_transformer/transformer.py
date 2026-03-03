@@ -1,5 +1,4 @@
 from neo4j_core.neo4j_connection import Neo4jConnection
-from graph_patch.GraphPatch import GraphPatch
 from neo4j_core.neo4j_model import *
 from llama_index.embeddings.ollama import OllamaEmbedding
 
@@ -13,13 +12,14 @@ class Transformer:
     )
     def merge_msc_nodes(self, timestamp_init, graph_type):
         print ("###### MSC ###########")
-        msc = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=True).all()
+        msc = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=True).all() + GenericGeoNode.nodes.filter(timestamp=timestamp_init).has(equivalent_to=True).all() 
         for node in msc:
             equvivalent = node.equivalent_to.single()
-            print(node)
-            print("is equvivalent to")
-            print(equvivalent)
+            #print(node)
+            #print("is equvivalent to")
+            #print(equvivalent)
             node.equivalent_to.disconnect(equvivalent)
+            # Don't disconnect first - let APOC handle it via mergeRels:true
             query = """
             MATCH (n1), (n2)
             WHERE elementId(n1) = $node1_id AND elementId(n2) = $node2_id
@@ -29,49 +29,45 @@ class Transformer:
             SET node.timestamp = "msc"
             RETURN count(*)
             """
-    
             result, meta = self.db.cypher_query(query, {
                 'node1_id': node.element_id,
                 'node2_id': equvivalent.element_id
             })
+            
     
-            print(f"Merged {node} with {equvivalent}")
+            print(f"Merged {node.EntityType} with {equvivalent.EntityType}")
 
-        msc_2 = Node.nodes.filter(timestamp="msc").all()
+        msc_2 = Node.nodes.filter(timestamp="msc").all() + GenericGeoNode.nodes.filter(timestamp="msc").all()
         for node in msc_2:
             if hasattr(node, "change_type"): 
-                setattr(node, "encoded_change_type", [1,0,0])
-                delattr(node, "timestamp")
                 setattr(node, "graph_type", graph_type)
             else:
                 setattr(node, "change_type", "msc")
                 setattr(node, "encoded_change_type", [1,0,0])
-                delattr(node, "timestamp")
                 setattr(node, "graph_type", graph_type)
+            print(node)
             node.save()
+        self.db.cypher_query("MATCH ()-[r:EQUIVALENT_TO]->() DELETE r")
 
     def edit_pushout_nodes(self, timestamp_init, timestamp_updt, graph_type):
         print("######## Pushout init ############")
-        pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
+        pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all() + GenericGeoNode.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
         for node in pushout_nodes_init:
             setattr(node, "change_type", "deleted")
             setattr(node, "encoded_change_type", [0,1,0])
             setattr(node, "graph_type", graph_type)
-            delattr(node, "timestamp")
             node.save()
         print(pushout_nodes_init)
         print("######## Pushout updated ############")
-        pushout_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all()
+        pushout_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all() + GenericGeoNode.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all()
         for node in pushout_nodes_updt:
             setattr(node, "change_type", "added")
             setattr(node, "encoded_change_type", [0,0,1])
-            delattr(node, "timestamp")
             setattr(node, "graph_type", graph_type)
             node.save()
         print(pushout_nodes_updt)
     def create_change_graph(self, path_patch_semantic, timestamp_init, timestamp_updt, graph_type):
         print('############### Apply semantic changes ###########')
-        #self.deletedScondaryAndInlineNodes()
         self.edit_pushout_nodes(timestamp_init, timestamp_updt, graph_type)
         self.merge_msc_nodes(timestamp_init, graph_type)
 

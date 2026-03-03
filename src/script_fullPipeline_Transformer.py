@@ -1,23 +1,26 @@
 from neo4j_core.neo4j_connection import Neo4jConnection
 from ifc_graph_interface.IfcEncodedGraphInterface import IfcEncodedGraphInterface
-from ifc_graph_interface.IfcGraphInterface_Simple import IfcGraphInterfaceSimple
 from graph_diff.GraphDiffSimple import GraphDiffSimple
-from graph_diff.GraphDiff import GraphDiff
 from graph_patch.GraphPatchSimple import GraphPatchSimple
 from graph_transformer.transformer import Transformer
 from data_handler.clean_up import Clean_up
 
 
 
+#path_init = "src/01_sample_data/add-column-base-example-wall.ifc"
+#path_updt = "src/01_sample_data/move-column-base-example-wall.ifc"
+
 path_init = "src/01_sample_data/base-example-wall-ifc4.ifc"
-#path_updt = "src/01_sampleData/basic-geometric-changes/moved-window-2x3.ifc"
-path_updt = "src/01_sample_data/moved-wall.ifc"
+#path_updt = "src/01_sample_data/scaled-wall.ifc"
+path_updt = "src/01_sample_data/change-wall-type.ifc"
 
 #project_id = "1ODmFv4Jv9ZO9fO_v2Tu_8"
-timestamp_init = "init_moved_wall"
-timestamp_updt = "updt_moved_wall"
+timestamp_init = "init_wall_type"
+timestamp_updt = "updt_wall_type"
 
-graph_type = "moved_wall"
+graph_type = "wall_type"
+#moved_column
+#scaled_wall
 
 db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
 db.cypher_query("MATCH (n) DETACH DELETE n")

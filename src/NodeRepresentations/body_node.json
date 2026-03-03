@@ -1,0 +1,55 @@
+{"IfcExtrudedAreaSolid": {
+    "EntityType": "IfcExtrudedAreaSolid",
+    "p_21_id": "id",
+    "timestamp": "timestamp",
+
+    "graph_type": "",
+    "change_type": "",
+
+    "swept_area": "type of ExtruedeAreaSolid",
+
+    "direction": "of ExtrudedAreaSolid",
+    "delta_direction": "of ExtrudedAreaSolid",
+
+    "depth": "of ExtrudedAreaSolid",
+    "delta_depth": "of ExtrudedAreaSolid",
+
+    "volume": "of ExtrudedAreaSolid",
+    "delta_volume": "of ExtrudedAreaSolid",
+
+    "bbox_x": "of ExtrudedAreaSolid- swept Surface",
+    "delta_bbox_x": "of ExtrudedAreaSolid- swept Surface",
+
+    "bbox_y": "of ExtrudedAreaSolid - swept Surface",
+    "delta_bbox_y": "of ExtrudedAreaSolid - swept Surface",
+
+    "area": "of ExtrudedAreaSolid swept Surface",
+    "delta_area": "of ExtrudedAreaSolid swept Surface",
+
+    "perimeter": "of ExtrudedAreaSolid swept Surface",
+    "delta_perimeter": "of ExtrudedAreaSolid swept Surface",
+
+    "num_vertices": "of ExtrudedAreaSolid - swept- Surface",
+    "delta_num_vertices": "of ExtrudedAreaSolid - swept- Surface",
+
+    "compactness": "of ExtrudedAreaSolid - swept- Surface",
+    "delta_compactness": "of ExtrudedAreaSolid - swept- Surface"
+
+},
+"IfcPolygonalFaceSet": {
+    "total_surface_area": "of IfcPolygonalFaceSet",
+    "delta_total_surface_area": 0,
+            
+    "max_face_area": "of IfcPolygonalFaceSet",
+    "delta_max_face_area": 0,
+
+    "min_face_area": "of IfcPolygonalFaceSet",
+            "delta_min_face_area": 0,
+
+    "n_faces": "of IfcPolygonalFaceSet",
+            "delta_n_faces": 0,
+            
+    "n_vertices": "of IfcPolygonalFaceSet",
+    "delta_n_vertices": 0
+}
+}

@@ -1,5 +1,4 @@
 from neo4j_core.neo4j_connection import Neo4jConnection
-from graph_patch.GraphPatch import GraphPatch
 from neo4j_core.neo4j_model import *
 from operator import add
 

@@ -1,4 +1,4 @@
-from neo4j_core.neo4j_model import Node, GenericNode, PrimaryNode, ConnectionNode, SecondaryNode, InlineNode, RelProperties
+from neo4j_core.neo4j_model import Node, GenericNode, PrimaryNode, ConnectionNode, RelProperties, GeoRelProperties, GenericGeoNode
 from data_handler.DataHandler import DataHandler
 
 from neomodel import Traversal #???
@@ -13,60 +13,23 @@ class GraphDiffSimple:
     ### Helper Functions ###
     ########################
     def create_equvivalence_relationships_for_geo_nodes(self, equiv_node_init, equiv_node_updt):
-        for child_init in equiv_node_init.relation_to_geo.all():
-            rel_init = equiv_node_init.relation_to_geo.relationship(child_init)
+        for child_init in equiv_node_init.relation_geo.all():
+            rel_init = equiv_node_init.relation_geo.relationship(child_init)
             # Iterate over all corresponding node's related nodes.
-            for child_updt in equiv_node_updt.relation_to_geo.all():
-                rel_updt = equiv_node_updt.relation_to_geo.relationship(child_updt)
+            for child_updt in equiv_node_updt.relation_geo.all():
+                rel_updt = equiv_node_updt.relation_geo.relationship(child_updt)
                 # Check if the child nodes are equivalent.
                 if (
                     rel_init.rel_type == rel_updt.rel_type
                     and child_init.EntityType == child_updt.EntityType
+                    and child_init.rep_item_nr == child_updt.rep_item_nr
                     and not child_init.equivalent_to.filter(timestamp=child_init.timestamp)
                     and not child_updt.equivalent_to.filter(timestamp=child_updt.timestamp)
                 ):
                     # Create equivalent_to edge and recursively run the funciton.
                     child_init.equivalent_to.connect(child_updt)
         
-    def create_equivalence_relations_primary(self, equiv_node_init, equiv_node_updt):
-        """
-        Traverse the two parsed models starting from PrimaryNodes and find equivalent nodes. Create equilavent_to relations between them.
-        """
-        # Iterate over all related nodes.
-        for child_init in equiv_node_init.relation_to.all():
-            rel_init = equiv_node_init.relation_to.relationship(child_init)
-            # Iterate over all corresponding node's related nodes.
-            for child_updt in equiv_node_updt.relation_to.all():
-                rel_updt = equiv_node_updt.relation_to.relationship(child_updt)
-                # Check if the child nodes are equivalent.
-                if (
-                    rel_init.rel_type == rel_updt.rel_type
-                    and rel_init.list_index == rel_updt.list_index
-                    and child_init.EntityType == child_updt.EntityType
-                    and not child_init.equivalent_to.filter(timestamp=child_init.timestamp)
-                    and not child_updt.equivalent_to.filter(timestamp=child_updt.timestamp)
-                ):
-                    # Create equivalent_to edge and recursively run the funciton.
-                    child_init.equivalent_to.connect(child_updt)
-                    self.create_equivalence_relations_primary(child_init, child_updt)
-        for child_init in equiv_node_init.relation_to_geo.all():
-            rel_init = equiv_node_init.relation_to_geo.relationship(child_init)
-            # Iterate over all corresponding node's related nodes.
-            for child_updt in equiv_node_updt.relation_to_geo.all():
-                rel_updt = equiv_node_updt.relation_to_geo.relationship(child_updt)
-                # Check if the child nodes are equivalent.
-                if (
-                    rel_init.rel_type == rel_updt.rel_type
-                    and child_init.EntityType == child_updt.EntityType
-                    and not child_init.equivalent_to.filter(timestamp=child_init.timestamp)
-                    and not child_updt.equivalent_to.filter(timestamp=child_updt.timestamp)
-                ):
-                    # Create equivalent_to edge and recursively run the funciton.
-                    child_init.equivalent_to.connect(child_updt)
-                    self.create_equivalence_relations_primary(child_init, child_updt)
-
     
-
     def create_equivalence_relations_connection(self, connection_node_init, connection_node_updt):
         """
         Traverse the two parsed models starting from ConnectionNodes and find equivalent nodes. Create equilavent_to relations between them.
@@ -101,7 +64,6 @@ class GraphDiffSimple:
                 continue
             primary_node_init.equivalent_to.connect(primary_node_updt)
             self.create_equvivalence_relationships_for_geo_nodes(primary_node_init, primary_node_updt)
-            #self.create_equivalence_relations_primary(primary_node_init, primary_node_updt)
         # For ConnectionNodes, find all in both models, then run the Intersection over Union function.
         for connection_node_init in ConnectionNode.nodes.filter(timestamp=timestamp_init):
             for connection_node_updt in ConnectionNode.nodes.filter(timestamp=timestamp_updt):

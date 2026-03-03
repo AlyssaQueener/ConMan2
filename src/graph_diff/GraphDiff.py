@@ -1,4 +1,4 @@
-from neo4j_core.neo4j_model import Node, GenericNode, PrimaryNode, ConnectionNode, SecondaryNode, InlineNode, RelProperties
+from neo4j_core.neo4j_model import Node, GenericNode, PrimaryNode, ConnectionNode, RelProperties
 from data_handler.DataHandler import DataHandler
 
 from neomodel import Traversal #???

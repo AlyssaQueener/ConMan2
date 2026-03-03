@@ -1,0 +1,22 @@
+{
+    "Indexed_Poly_Curve": 
+    {
+        "bbox_x": "bbox_x",
+        "delta_bbox_x": 0,
+    
+        "bbox_y": "bbox_y",
+        "delta_bbox_y": 0,
+    
+        "area": "area",
+        "delta_area": 0,
+    
+        "perimeter": "perimeter",
+        "delta_perimeter": 0,
+    
+        "num_vertices": "n",
+        "delta_num_vertices": 0,
+    
+        "compactness": "compactness",
+        "delta_compactness": 0
+}
+}

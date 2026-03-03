@@ -1,11 +1,7 @@
 from datetime import datetime
 
 from neo4j_core.neo4j_connection import Neo4jConnection
-from ifc_graph_interface.IfcGraphInterface_Simple import IfcGraphInterfaceSimple
-from ifc_graph_interface.IfcGraphInterface import IfcGraphInterface
 from ifc_graph_interface.IfcEncodedGraphInterface import IfcEncodedGraphInterface
-from graph_diff.GraphDiff import GraphDiff
-from neo4j_core.neo4j_model import Node, GenericNode, PrimaryNode, ConnectionNode, SecondaryNode, InlineNode, RelProperties
 
 
 paths = [
@@ -17,9 +13,7 @@ paths = [
 ]
 
 db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
-neo4j_ifc_interface = IfcGraphInterfaceSimple()
 
-neo4j_original = IfcGraphInterface()
 
 neo4j_encoded = IfcEncodedGraphInterface()
 
@@ -27,14 +21,11 @@ neo4j_encoded = IfcEncodedGraphInterface()
 
 # enable next line to truncate the database before loading new data
 db.cypher_query("MATCH (n) DETACH DELETE n")
-test_path = "src/01_sampleData/basic-geometric-changes/base-w-wall-2x3.ifc"
-test_path_2 = "src/01_sampleData/basic-geometric-changes/translated-wall.ifc"
-ifc_4="src/02_sampleData/test.ifc"
+ifc_4="src/model graph/newBase.ifc"
 
-ifc_4_test = "src/01_sample_data/base-example-wall-ifc4.ifc"
 
 counter = 0
-timestamp = "translated_wall_init"
+timestamp = "base_init"
 timestamp_updt = "translated_wall_updt"
 
 #for path in paths:
@@ -45,9 +36,4 @@ timestamp_updt = "translated_wall_updt"
     
 #neo4j_ifc_interface.ifc_2_graph(test_path, timestamp)
 
-neo4j_encoded.ifc_2_graph(ifc_4_test, timestamp)
-#primary_node_updt = PrimaryNode.nodes.get()
-nodes = Node.nodes.all()
-for n in nodes:
-    for child_init in n.relation_to.all():
-        print(child_init)
+neo4j_encoded.ifc_2_graph(ifc_4, timestamp)
