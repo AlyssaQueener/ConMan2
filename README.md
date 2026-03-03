@@ -66,10 +66,14 @@ Once forking is done, run `git clone` to download the repo on your machine.
 
 Once the repository is cloned, navigate to `<...>/conman2/src/`. This is the base directory of the application.
 
-The codebase acts as an intermediate server between an end-user and a running neo4j graph database. 
+The codebase acts as an intermediate server between an end-user and a running graph database. 
+The system was primarily implemented with neo4j, but is experimentally extended to networkx. 
+
+#### Neo4j 
+
 You can either use a local installation of neo4j or you create an instance on Neo4j Aura. 
 
-#### Local Installation
+##### Local Installation
 Download and install the following products on your machine before continuing: 
 
  - Download and install the latest version of [neo4j Desktop](https://neo4j.com/download-v2/).
@@ -83,7 +87,7 @@ Default credentials:
 | user  | `neo4j`    |
 | pw    | `password` |
 
-#### Neo4j Aura
+##### Neo4j Aura
 
 Create a Neo4j Aura instance at https://console.neo4j.io/. 
 Download the credentials file, rename it from `*.txt` to `*.env`, and place it in the `src/` folder.
@@ -92,6 +96,13 @@ The connector reads `src/*.env` to connect to your Aura instance; if no `*.env` 
 - OPTIONAL: Download and install [Anaconda](https://www.anaconda.com/products/individual) or create a virtual environment.
 
 - Install the Python requirements using: `pip install -r requirements.txt`.
+
+### NetworkX support
+
+NetworkX support has been recently added and is under development.  
+
+To use NetworkX instead of Neo4j, set the `graph_provider` parameter in the constructor of the IfcGraphInterface class. 
+If not specified, the system tries to connect to neo4j (as described before). 
 
 ## The ConMan2 CLI
 

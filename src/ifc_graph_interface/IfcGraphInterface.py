@@ -1,6 +1,8 @@
 from neomodel import db
 import ifcopenshell
 import ifcopenshell.api.project
+
+from networkX_core.networkx_connection import networkxConnection
 from .neo4j_helper import Neo4J_Helper
 
 import ast
@@ -148,52 +150,15 @@ class IfcGraphInterface:
             ents_final = [ent[0] for ent in ents_sorted]
             setattr(ifc_entity, rel_type, ents_final)
 
-
-
-
-    ######################
-    ### Main Functions ###
-    ######################
-
-    def ifc_2_graph(self, ifc_path:str, timestamp:str, batch_size:int = 20000):
+    ###########################
+    ### Provider Connectors ###
+    ########################### 
+    
+    def __send_to_neo4j(self, timestamp, batch_size, model, primary_nodes, connection_nodes, secondary_nodes):
+        inline_patterns = []
 
         # Create Neo4J_Helper instance.
         neo4j_helper = Neo4J_Helper()
-
-        # Load IFC model.
-        print("Loading IFC model.")
-        model = ifcopenshell.open(ifc_path)
-
-        # Retrieve IFC entities that will be PrimaryNodes, same for ConnectionNodes.
-        primary_entities = model.by_type("IfcObjectDefinition") + model.by_type("IfcPropertyDefinition")
-        connection_entities = model.by_type("IfcRelationship")
-        prim_conn_entities = primary_entities + connection_entities
-
-        prim_conn_ids = {e.id() for e in prim_conn_entities}
-        secondary_entities = [e for e in model if e.id() != 0 and e.id() not in prim_conn_ids]
-
-        # Create a list of node dicts that can be used for batch creation with UNWIND.
-        primary_nodes = [{
-            "GlobalId": e.GlobalId,
-            "EntityType": e.is_a(),
-            "p21_id": f"#{e.id()}",
-            "timestamp": timestamp
-        } for e in primary_entities]
-
-        connection_nodes = [{
-            "GlobalId": e.GlobalId,
-            "EntityType": e.is_a(),
-            "p21_id": f"#{e.id()}",
-            "timestamp": timestamp
-        } for e in connection_entities]
-
-        secondary_nodes = [{
-            "EntityType": e.is_a(),
-            "p21_id": f"#{e.id()}",
-            "timestamp": timestamp
-        } for e in secondary_entities]
-
-        inline_patterns = []
 
         # Bulk creation queries.
         query_primary_nodes = """
@@ -270,6 +235,88 @@ class IfcGraphInterface:
         db.cypher_query("CREATE INDEX generic_p21_ts IF NOT EXISTS FOR (n:GenericNode) ON (n.p21_id, n.timestamp)")
         # Wait until the index is online.
         db.cypher_query("CALL db.awaitIndexes()")
+
+    def __send_to_nx(self, timestamp, batch_size, model, primary_nodes, connection_nodes, secondary_nodes): 
+
+        nx_interface = networkxConnection()
+        # add node sceletons. Each node is identified by its p21_id and has a property dict with the other primitive attributes that are directly attached to the node 
+                
+        # make sure the timestamp is copied into the node‑attr dicts as well
+        primary_nodes_to_add = [
+            (
+            n["p21_id"],
+            {**{k: v for k, v in n.items() if k != "p21_id"}, "timestamp": n["timestamp"]}
+            )
+            for n in primary_nodes
+        ]
+        nx_interface.graph.add_nodes_from(primary_nodes_to_add)
+
+        connection_nodes_to_add = [
+            (
+            n["p21_id"],
+            {**{k: v for k, v in n.items() if k != "p21_id"}, "timestamp": n["timestamp"]}
+            )
+            for n in connection_nodes
+        ]
+        nx_interface.graph.add_nodes_from(connection_nodes_to_add)
+
+        secondary_nodes_to_add = [
+            (
+            n["p21_id"],
+            {**{k: v for k, v in n.items() if k != "p21_id"}, "timestamp": n["timestamp"]}
+            )
+            for n in secondary_nodes
+        ]
+        nx_interface.graph.add_nodes_from(secondary_nodes_to_add)
+        
+        print(nx_interface.graph.number_of_nodes()) 
+        print("a")
+
+    ######################
+    ### Main Functions ###
+    ######################
+
+    def ifc_2_graph(self, ifc_path:str, timestamp:str, batch_size:int = 20000):
+
+        # Load IFC model.
+        print("Loading IFC model.")
+        model = ifcopenshell.open(ifc_path)
+
+        # Retrieve IFC entities that will be PrimaryNodes, same for ConnectionNodes.
+        primary_entities = model.by_type("IfcObjectDefinition") + model.by_type("IfcPropertyDefinition")
+        connection_entities = model.by_type("IfcRelationship")
+        prim_conn_entities = primary_entities + connection_entities
+
+        prim_conn_ids = {e.id() for e in prim_conn_entities}
+        secondary_entities = [e for e in model if e.id() != 0 and e.id() not in prim_conn_ids]
+
+        # Create a list of node dicts that can be used for batch creation with UNWIND.
+        primary_nodes = [{
+            "GlobalId": e.GlobalId,
+            "EntityType": e.is_a(),
+            "p21_id": f"#{e.id()}",
+            "timestamp": timestamp
+        } for e in primary_entities]
+
+        connection_nodes = [{
+            "GlobalId": e.GlobalId,
+            "EntityType": e.is_a(),
+            "p21_id": f"#{e.id()}",
+            "timestamp": timestamp
+        } for e in connection_entities]
+
+        secondary_nodes = [{
+            "EntityType": e.is_a(),
+            "p21_id": f"#{e.id()}",
+            "timestamp": timestamp
+        } for e in secondary_entities]
+
+        # decide on provider and send data to that provider.
+
+        if self.graph_provider == "neo4j":
+            self.__send_to_neo4j(timestamp, batch_size, model, primary_nodes, connection_nodes, secondary_nodes)
+        elif self.graph_provider == "networkx":
+            self.__send_to_nx(timestamp, batch_size, model, primary_nodes, connection_nodes, secondary_nodes)
 
         print("Finished IFC parsing.")
 
