@@ -9,11 +9,12 @@ import ast
 
 from neo4j_core.neo4j_model import GenericNode, PrimaryNode, SecondaryNode, ConnectionNode, InlineNode
 
+
 class IfcGraphInterface:
 
-    # list of graph providers that are supported by the interface. 
+    # list of graph providers that are supported by the interface.
     # This can be used in the future to extend the interface to other graph databases or graph libraries.
-    graph_providers = ("neo4j", "networkx") 
+    graph_providers = ("neo4j", "networkx")
 
     def __init__(self, graph_provider: str = "neo4j") -> None:
         """
@@ -24,14 +25,15 @@ class IfcGraphInterface:
                 where the graph representations are handled. Defaults to "neo4j".
         """
         if graph_provider not in self.graph_providers:
-            raise ValueError(f"Graph provider '{graph_provider}' not supported. Available providers: {self.graph_providers}")
+            raise ValueError(
+                f"Graph provider '{graph_provider}' not supported. Available providers: {self.graph_providers}")
         self.graph_provider = graph_provider
 
     ########################
     ### Helper Functions ###
     ########################
 
-    def __process_ifc_attributes(self, entity:ifcopenshell.entity_instance, timestamp:str, props_map:dict, relationships:list, related_nodes:set, inline_patterns:list):
+    def __process_ifc_attributes(self, entity: ifcopenshell.entity_instance, timestamp: str, props_map: dict, relationships: list, related_nodes: set, inline_patterns: list):
         p21_id = f"#{entity.id()}"
 
         # Recursively handle IFC attributes to catch primitives to nested lists.
@@ -76,7 +78,7 @@ class IfcGraphInterface:
             else:
                 # Case where value is primitive.
                 props_map.setdefault(p21_id, {})[key] = val
-        
+
         info = entity.get_info()
         for key, val in info.items():
             # Ignore any IDs or types as they are already saved in the node and must not be changed
@@ -129,7 +131,8 @@ class IfcGraphInterface:
             if isinstance(node, InlineNode):
                 ent = model.create_entity(node.EntityType)
                 # WrappedValue is the actual input data of inline entities like "(6,5,1)" in "IfcArcIndex(6,5,1)". Process this like any other non-entity attribute.
-                self.__process_node_attribute(ent, "wrappedValue", node.wrappedValue)
+                self.__process_node_attribute(
+                    ent, "wrappedValue", node.wrappedValue)
                 ents.append((ent, list_index))
             # If entity is a real STEP entity, get the existing IFC entity and append that to the list.
             else:
@@ -152,10 +155,9 @@ class IfcGraphInterface:
 
     ###########################
     ### Provider Connectors ###
-    ########################### 
-    
+    ###########################
+
     def __send_to_neo4j(self, timestamp, batch_size, model, primary_nodes, connection_nodes, secondary_nodes):
-        inline_patterns = []
 
         # Create Neo4J_Helper instance.
         neo4j_helper = Neo4J_Helper()
@@ -181,32 +183,39 @@ class IfcGraphInterface:
 
         # Bulk creation.
         print(f"Creating {len(primary_nodes)} PrimaryNodes.")
-        neo4j_helper.bulk_cypher_query(query_primary_nodes, primary_nodes, batch_size)
+        neo4j_helper.bulk_cypher_query(
+            query_primary_nodes, primary_nodes, batch_size)
 
         print(f"Creating {len(connection_nodes)} ConnectionNodes.")
-        neo4j_helper.bulk_cypher_query(query_connection_nodes, connection_nodes, batch_size)
+        neo4j_helper.bulk_cypher_query(
+            query_connection_nodes, connection_nodes, batch_size)
 
         print(f"Creating {len(secondary_nodes)} SecondaryNodes")
-        neo4j_helper.bulk_cypher_query(query_secondary_nodes, secondary_nodes, batch_size)
+        neo4j_helper.bulk_cypher_query(
+            query_secondary_nodes, secondary_nodes, batch_size)
 
         # Process IFC attributes into collections for node attributes and relationships.
         print("Collecting attributes and relationships.")
         props_map = {}
         relationships = []
         related_nodes = set()
+        inline_patterns = []
 
         for entity in model:
-            self.__process_ifc_attributes(entity, timestamp, props_map, relationships, related_nodes, inline_patterns)
+            self.__process_ifc_attributes(
+                entity, timestamp, props_map, relationships, related_nodes, inline_patterns)
 
         # Bulk update primitive attributes on nodes.
         print(f"Updating attributes on {len(props_map)} nodes.")
-        attributes_list = [{"p21_id": p21_id, "timestamp": timestamp, "properties": properties} for p21_id, properties in props_map.items()]
+        attributes_list = [{"p21_id": p21_id, "timestamp": timestamp,
+                            "properties": properties} for p21_id, properties in props_map.items()]
         query_properties = """
         UNWIND $batch AS row
         MATCH (n:GenericNode {p21_id: row.p21_id, timestamp: row.timestamp})
         SET n += row.properties
         """
-        neo4j_helper.bulk_cypher_query(query_properties, attributes_list, batch_size)
+        neo4j_helper.bulk_cypher_query(
+            query_properties, attributes_list, batch_size)
 
         # Bulk create relationships from IFC attributes.
         print(f"Creating {len(relationships)} relationships.")
@@ -216,7 +225,8 @@ class IfcGraphInterface:
         MATCH (b:GenericNode {p21_id: r.target_p21_id, timestamp: r.timestamp})
         CREATE (a)-[:rel {rel_type: r.rel_type, list_index: r.list_index}]->(b)   
         """
-        neo4j_helper.bulk_cypher_query(query_relationships, relationships, batch_size)
+        neo4j_helper.bulk_cypher_query(
+            query_relationships, relationships, batch_size)
 
         # Bulk create InlinePatterns
         print(f"Creating {len(inline_patterns)} InlineNode patterns.")
@@ -227,68 +237,135 @@ class IfcGraphInterface:
         SET b = r.props
         CREATE (a)-[:rel {rel_type: r.relation.rel_type, list_index: r.relation.list_index}]->(b)
         """
-        neo4j_helper.bulk_cypher_query(query_inline_patterns, inline_patterns, batch_size)
+        neo4j_helper.bulk_cypher_query(
+            query_inline_patterns, inline_patterns, batch_size)
 
         print("Perform node indexing based on timestamp and p21_id for faster lookup.")
 
         # Create index for p21_id and timestamp for faster lookup.
-        db.cypher_query("CREATE INDEX generic_p21_ts IF NOT EXISTS FOR (n:GenericNode) ON (n.p21_id, n.timestamp)")
+        db.cypher_query(
+            "CREATE INDEX generic_p21_ts IF NOT EXISTS FOR (n:GenericNode) ON (n.p21_id, n.timestamp)")
         # Wait until the index is online.
         db.cypher_query("CALL db.awaitIndexes()")
 
-    def __send_to_nx(self, timestamp, batch_size, model, primary_nodes, connection_nodes, secondary_nodes): 
+    def __send_to_nx(self, timestamp, batch_size, model, primary_nodes, connection_nodes, secondary_nodes):
 
         nx_interface = networkxConnection()
-        # add node sceletons. Each node is identified by its p21_id and has a property dict with the other primitive attributes that are directly attached to the node 
-                
-        # make sure the timestamp is copied into the node‑attr dicts as well
+        # add node sceletons. Each node is identified by its p21_id and has a property dict with the other primitive attributes that are directly attached to the node
+
+        print(f"Creating {len(primary_nodes)} PrimaryNodes.")
         primary_nodes_to_add = [
             (
-            n["p21_id"],
-            {**{k: v for k, v in n.items() if k != "p21_id"}, "timestamp": n["timestamp"]}
+                n["p21_id"],
+                {**{k: v for k, v in n.items() if k != "p21_id"},
+                 "timestamp": n["timestamp"], "label": "PrimaryNode"}
             )
             for n in primary_nodes
         ]
         nx_interface.graph.add_nodes_from(primary_nodes_to_add)
 
+        print(f"Creating {len(connection_nodes)} ConnectionNodes.")
         connection_nodes_to_add = [
             (
-            n["p21_id"],
-            {**{k: v for k, v in n.items() if k != "p21_id"}, "timestamp": n["timestamp"]}
+                n["p21_id"],
+                {**{k: v for k, v in n.items() if k != "p21_id"},
+                 "timestamp": n["timestamp"], "label": "ConnectionNode"}
             )
             for n in connection_nodes
         ]
         nx_interface.graph.add_nodes_from(connection_nodes_to_add)
 
+        print(f"Creating {len(secondary_nodes)} SecondaryNodes.")
         secondary_nodes_to_add = [
             (
-            n["p21_id"],
-            {**{k: v for k, v in n.items() if k != "p21_id"}, "timestamp": n["timestamp"]}
+                n["p21_id"],
+                {**{k: v for k, v in n.items() if k != "p21_id"},
+                 "timestamp": n["timestamp"], "label": "SecondaryNode"}
             )
             for n in secondary_nodes
         ]
         nx_interface.graph.add_nodes_from(secondary_nodes_to_add)
-        
-        print(nx_interface.graph.number_of_nodes()) 
-        print("a")
+
+        print("Collecting attributes and relationships.")
+        props_map = {}  # contains all additional node properties that go beyond this already parsed
+        relationships = []  # contains all relationships between nodes that are derived from IFC attributes that reference other IFC entities. These are stored as edges in the graph with the rel_type as edge attribute. List attributes are stored as multiple edges with a list_index attribute to keep track of the order.
+        related_nodes = set()  # contains all nodes that are related to other nodes via relationships. This is used to filter out the nodes that have no relations and can be stored as node attributes instead of separate nodes with relationships.
+        inline_patterns = []  # contains all attributes that have to be stored as separate nodes because they are inline attributes with primitive values. These are stored as separate nodes with the attribute value and a relation to the entity node. The relation has the same name as the attribute in IFC and a list_index attribute in case the attribute is a list of inline attributes. The inline attribute nodes have a property "wrappedValue" that contains the actual primitive value of the inline attribute and an EntityType property that contains the IFC type of the inline attribute, e.g. IfcArcIndex.
+
+        # perform extraction
+        for entity in model:
+            self.__process_ifc_attributes(
+                entity, timestamp, props_map, relationships, related_nodes, inline_patterns)
+
+        # after the traversal above we have a props_map that maps p21_ids to a
+        # dict of primitive properties; push those back onto the nodes that were
+        # just added. the graph uses the p21_id as the key and stores the
+        # timestamp as a node attribute, so use both to make sure we update the
+        # correct instance.
+        print(
+            f"Updating attributes on {len(props_map)} nodes in networkx graph.")
+        for p21_id, properties in props_map.items():
+            node_data = nx_interface.graph.nodes[p21_id]
+            node_data.update(properties)
+
+        # after the primitive properties have been pushed back onto the
+        # nodes, create the edges that were collected while traversing the
+        # model. every entry in *relationships* already contains the source
+        # and target p21_ids, the rel‑type and the list index. we simply
+        # attach those as edge attributes.
+        print(f"Adding {len(relationships)} relationships to networkx graph.")
+        for r in relationships:
+            src = r["source_p21_id"]
+            tgt = r["target_p21_id"]
+            nx_interface.graph.add_edge(
+                src,
+                tgt,
+                rel_type=r["rel_type"],
+                list_index=r["list_index"]
+            )
+
+        print(f"Creating {len(inline_patterns)} inline attribute nodes.")
+        for pat in inline_patterns:
+            props = pat["props"]
+            rel = pat["relation"]
+            inline_id = f"{rel['source_p21_id']}_inline_{rel['rel_type']}_{rel['list_index']}"
+            if not nx_interface.graph.has_node(inline_id):
+                node_attrs = {
+                    **props,
+                    "p21_id": inline_id,
+                    "label": "InlineNode",
+                }
+                nx_interface.graph.add_node(inline_id, **node_attrs)
+                nx_interface.graph.add_edge(
+                    rel["source_p21_id"],
+                    inline_id,
+                    rel_type=rel["rel_type"],
+                    list_index=rel["list_index"],
+                    timestamp=props.get("timestamp"),
+                )
+
+        nx_interface.save_graph(f"networkx_graph_{timestamp}.gpickle")
+
 
     ######################
     ### Main Functions ###
     ######################
 
-    def ifc_2_graph(self, ifc_path:str, timestamp:str, batch_size:int = 20000):
+    def ifc_2_graph(self, ifc_path: str, timestamp: str, batch_size: int = 20000):
 
         # Load IFC model.
         print("Loading IFC model.")
         model = ifcopenshell.open(ifc_path)
 
         # Retrieve IFC entities that will be PrimaryNodes, same for ConnectionNodes.
-        primary_entities = model.by_type("IfcObjectDefinition") + model.by_type("IfcPropertyDefinition")
+        primary_entities = model.by_type(
+            "IfcObjectDefinition") + model.by_type("IfcPropertyDefinition")
         connection_entities = model.by_type("IfcRelationship")
         prim_conn_entities = primary_entities + connection_entities
 
         prim_conn_ids = {e.id() for e in prim_conn_entities}
-        secondary_entities = [e for e in model if e.id() != 0 and e.id() not in prim_conn_ids]
+        secondary_entities = [
+            e for e in model if e.id() != 0 and e.id() not in prim_conn_ids]
 
         # Create a list of node dicts that can be used for batch creation with UNWIND.
         primary_nodes = [{
@@ -314,13 +391,15 @@ class IfcGraphInterface:
         # decide on provider and send data to that provider.
 
         if self.graph_provider == "neo4j":
-            self.__send_to_neo4j(timestamp, batch_size, model, primary_nodes, connection_nodes, secondary_nodes)
+            self.__send_to_neo4j(timestamp, batch_size, model,
+                                 primary_nodes, connection_nodes, secondary_nodes)
         elif self.graph_provider == "networkx":
-            self.__send_to_nx(timestamp, batch_size, model, primary_nodes, connection_nodes, secondary_nodes)
+            self.__send_to_nx(timestamp, batch_size, model,
+                              primary_nodes, connection_nodes, secondary_nodes)
 
         print("Finished IFC parsing.")
 
-    def graph_2_ifc(self, ifc_path:str, timestamp:str):
+    def graph_2_ifc(self, ifc_path: str, timestamp: str):
         """
         Generate an IFC file from a graph stored in a Neo4J database.
 
@@ -344,7 +423,7 @@ class IfcGraphInterface:
             # Iterate over all node attributes. These are only primitive attributes and can therefore be appended to the new IFC entity independently of what other entities already exist in the model.
             for key, val in node.__properties__.items():
                 # Check if the ifc entity has an attribute with the name of the node attribute. Make sure e.g. node id or p21_id is ignored.
-                if key in ["TrueNorth"]: #Add other edge cases to list.
+                if key in ["TrueNorth"]:  # Add other edge cases to list.
                     continue
                 if hasattr(ifc_entity, key):
                     # Call function that handles primitives or stringified (nested) list of primitives.
@@ -362,23 +441,25 @@ class IfcGraphInterface:
             relations_dict = {}
 
             # Iterate over all related nodes.
-            for related_node in node.relation_to.all(): 
+            for related_node in node.relation_to.all():
                 # Rel type will be used as the attribute key.
                 rel_type = node.relation_to.relationship(related_node).rel_type
-                list_index = node.relation_to.relationship(related_node).list_index
+                list_index = node.relation_to.relationship(
+                    related_node).list_index
                 # Check if IFC entity has an attribute with the name of the rel_type
                 if hasattr(ifc_entity, rel_type):
                     # Rel type already exists in dict? Append node to its value that is a list.
                     if rel_type in relations_dict:
-                        relations_dict[rel_type].append([related_node, list_index])
+                        relations_dict[rel_type].append(
+                            [related_node, list_index])
                     # Rel type appears for the first time? Create new entry for that attribtue in the dict.
                     else:
                         relations_dict[rel_type] = [[related_node, list_index]]
 
-            
             # Iterate over the dictionary and process the lists of related nodes
             for rel_type, related_nodes in relations_dict.items():
-                self.__process_node_relation(model, ifc_entity, rel_type, related_nodes, id_mapping)
+                self.__process_node_relation(
+                    model, ifc_entity, rel_type, related_nodes, id_mapping)
         # Save the IFC model to file.
         print("Write model to file. ")
         model.write(ifc_path)
@@ -387,12 +468,14 @@ class IfcGraphInterface:
     @staticmethod
     def get_project_id_from_timestamp(timestamp: str):
         try:
-            project = PrimaryNode.nodes.get(EntityType="IfcProject", timestamp=timestamp)
+            project = PrimaryNode.nodes.get(
+                EntityType="IfcProject", timestamp=timestamp)
             return project.GlobalId
         except Exception as e:
-            print(f"Error retrieving project ID for timestamp {timestamp}: {e}")
+            print(
+                f"Error retrieving project ID for timestamp {timestamp}: {e}")
             return None
-        
+
     @staticmethod
     def get_project_id_from_ifc_path(ifc_path: str):
         try:
@@ -402,12 +485,14 @@ class IfcGraphInterface:
         except Exception as e:
             print(f"Error retrieving project ID from IFC file {ifc_path}: {e}")
             return None
-    
+
     @staticmethod
     def get_timestamp_from_project_id(project_id: str):
         try:
-            project = PrimaryNode.nodes.filter(GlobalId=project_id, EntityType="IfcProject").all()
+            project = PrimaryNode.nodes.filter(
+                GlobalId=project_id, EntityType="IfcProject").all()
             return [p.timestamp for p in project]
         except Exception as e:
-            print(f"Error retrieving latest timestamp for project ID {project_id}: {e}")
+            print(
+                f"Error retrieving latest timestamp for project ID {project_id}: {e}")
             return None
