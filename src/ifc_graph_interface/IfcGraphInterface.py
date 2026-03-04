@@ -6,6 +6,7 @@ from networkX_core.networkx_connection import networkxConnection
 from .neo4j_helper import Neo4J_Helper
 
 import ast
+from collections import defaultdict
 
 from neo4j_core.neo4j_model import GenericNode, PrimaryNode, SecondaryNode, ConnectionNode, InlineNode
 
@@ -346,6 +347,116 @@ class IfcGraphInterface:
 
         nx_interface.save_graph(f"networkx_graph_{timestamp}.gpickle")
 
+    def __retrieve_from_neo4j(self, timestamp: str, model: ifcopenshell.file): 
+        """
+        Populate an IFC model from a Neo4j graph snapshot.
+        This private helper reads all `GenericNode` instances at a given
+        `timestamp` from the database and reconstructs the corresponding
+        IFC entities in the supplied `model`. The operation proceeds in
+        two phases:
+        1. **Entity creation** – iterate over every node matching the
+           timestamp, create an IFC entity of the node's `EntityType`,
+           copy primitive properties and maintain a mapping from the
+           original Neo4j `element_id` to the new IFC entity id.
+        2. **Relationship wiring** – traverse all outgoing relationships
+           (`relation_to`) of the same node set, group related nodes by
+           relationship type and list index, and use the mapping to set
+           the appropriate attributes on the IFC entities. Inline lists
+           of references are handled and attributes which are not present
+           on the IFC class are ignored.
+        Special cases such as attributes that should be skipped
+        (e.g. `"TrueNorth"`) are filtered in the first phase.
+        Parameters
+        ----------
+        ifc_path : str
+            Path or identifier of the IFC source (not used directly in
+            this method but part of the abstraction).
+        timestamp : Any
+            Timestamp value used to filter `GenericNode` instances in Neo4j.
+        model : ifcopenshell.file
+            An open IFC model into which entities and relationships will be
+            created.
+        Returns
+        -------
+        ifcopenshell.file
+            The same `model` instance with new entities and relationships
+            inserted according to the graph data.
+        Notes
+        -----
+        The caller is responsible for committing or exporting the model
+        after this method returns. This method assumes that all nodes and
+        relationships necessary to reconstruct the model at `timestamp`
+        exist and that `GenericNode` and `relation_to` APIs behave as
+        expected.
+        """
+
+        raise NotImplementedError("This method has issues with the edge parsing atm. Fix this before use. ")
+
+        print("Creating IFC entities from nodes. ")
+        # Dictionary to map newly created IFC entities to their source node ids.
+        id_mapping = {}
+        all_nodes = GenericNode.nodes.filter(timestamp=timestamp)
+        for node in all_nodes:
+            ifc_entity = model.create_entity(node.EntityType)
+            # Add node id and id of new IFC entity to mapping for later use
+            id_mapping[node.element_id] = ifc_entity.id()
+
+            # Iterate over all node attributes. These are only primitive attributes and can therefore be appended to the new IFC entity independently of what other entities already exist in the model.
+            for key, val in node.__properties__.items():
+                # Check if the ifc entity has an attribute with the name of the node attribute. Make sure e.g. node id or p21_id is ignored.
+                if key in ["TrueNorth"]:  # Add other edge cases to list.
+                    continue
+                if hasattr(ifc_entity, key):
+                    # Call function that handles primitives or stringified (nested) list of primitives.
+                    self.__process_node_attribute(ifc_entity, key, val)
+
+        # Load all relationships for the given timestamp in a single query
+        query = """
+        MATCH (a:GenericNode {timestamp: $timestamp})-[r:rel]->(b:Node)
+        RETURN a, b, r.rel_type AS rel_type, r.list_index AS list_index
+        """
+        results, _ = db.cypher_query(query, {"timestamp": timestamp}, resolve_objects=True)
+
+        # Build an in-memory mapping from source node -> list of (related_node, list_index, rel_type)
+        relationships_by_source = defaultdict(list)
+        for source_node, target_node, rel_type, list_index in results:
+            relationships_by_source[source_node.element_id].append((target_node, list_index, rel_type))
+
+        print(f"Found {len(results)} relationships. ")
+
+        print("Creating relationships between entities. ")
+        # Second iteration: Go over all node relations (either to existing Step entities in the model or to inline attributes that will be created).
+        for node in all_nodes:
+            # Find ifc entity for current neo4j graph using the dictionary.
+            ifc_entity = model.by_id(id_mapping[node.element_id])
+            # Create a dictionary to collect all related entities. This is important, because one entity attribute may be a list of entity references. So first group all nodes by their rel_type.
+            relations_dict = {}
+
+            # Iterate over all related nodes, using the pre-fetched relationships
+            for related_node, list_index, rel_type in relationships_by_source.get(node.element_id, []):
+                # Check if IFC entity has an attribute with the name of the rel_type
+                if hasattr(ifc_entity, rel_type):
+                    # Rel type already exists in dict? Append node to its value that is a list.
+                    if rel_type in relations_dict:
+                        relations_dict[rel_type].append([related_node, list_index])
+                    # Rel type appears for the first time? Create new entry for that attribute in the dict.
+                    else:
+                        relations_dict[rel_type] = [[related_node, list_index]]
+
+            # Iterate over the dictionary and process the lists of related nodes
+            for rel_type, related_nodes in relations_dict.items():
+                self.__process_node_relation(model, ifc_entity, rel_type, related_nodes, id_mapping)
+
+            # define return 
+            return model
+
+    def __retrieve_from_nx(self, timestamp: str, model: ifcopenshell.file):
+        nx_interface = networkxConnection()
+        nx_interface.load_graph(f"networkx_graph_{timestamp}.gpickle")
+        all_nodes = [n for n, data in nx_interface.graph.nodes(data=True) if data.get("timestamp") == timestamp]
+
+        # define return 
+        return model    
 
     ######################
     ### Main Functions ###
@@ -401,69 +512,23 @@ class IfcGraphInterface:
 
     def graph_2_ifc(self, ifc_path: str, timestamp: str):
         """
-        Generate an IFC file from a graph stored in a Neo4J database.
+        Generate an IFC file from a graph.
 
         @param ifc_path: Target path of the generated IFC file.
         @param timestamp: ID to keep track of what nodes in the graph belong to the same origin IFC file.
         """
         model = ifcopenshell.api.project.create_file("IFC4")
-
-        # Dictionary to map newly created IFC entities to their source node ids.
-        id_mapping = {}
-
-        # Per method call, only one IFC file is created from the nodes. Therefore, filter all nodes with the timestamp of that IFC file.
-        # First iteraton: Create IFC entities (STEP entities with p21 id) from all nodes that are not Inline Nodes
-        print("Creating IFC entities from nodes. ")
-        all_nodes = GenericNode.nodes.filter(timestamp=timestamp)
-        for node in all_nodes:
-            ifc_entity = model.create_entity(node.EntityType)
-            # Add node id and id of new IFC entity to mapping for later use
-            id_mapping[node.element_id] = ifc_entity.id()
-
-            # Iterate over all node attributes. These are only primitive attributes and can therefore be appended to the new IFC entity independently of what other entities already exist in the model.
-            for key, val in node.__properties__.items():
-                # Check if the ifc entity has an attribute with the name of the node attribute. Make sure e.g. node id or p21_id is ignored.
-                if key in ["TrueNorth"]:  # Add other edge cases to list.
-                    continue
-                if hasattr(ifc_entity, key):
-                    # Call function that handles primitives or stringified (nested) list of primitives.
-                    self.__process_node_attribute(ifc_entity, key, val)
-
-        all_relationships = all_nodes.relation_to.all()
-        print(f"Found {len(all_relationships)} relationships. ")
-
-        print("Creating relationships between entities. ")
-        # Second iteration: Go over all node relations (either to existing Step entities in the model or to inline attributes that will be created).
-        for node in all_nodes:
-            # Find ifc entity for current neo4j graph using the dictionary.
-            ifc_entity = model.by_id(id_mapping[node.element_id])
-            # Create a dictionary to collect all related entities. This is important, because one entity attribute may be a list of entity references. So first group all nodes by their rel_type.
-            relations_dict = {}
-
-            # Iterate over all related nodes.
-            for related_node in node.relation_to.all():
-                # Rel type will be used as the attribute key.
-                rel_type = node.relation_to.relationship(related_node).rel_type
-                list_index = node.relation_to.relationship(
-                    related_node).list_index
-                # Check if IFC entity has an attribute with the name of the rel_type
-                if hasattr(ifc_entity, rel_type):
-                    # Rel type already exists in dict? Append node to its value that is a list.
-                    if rel_type in relations_dict:
-                        relations_dict[rel_type].append(
-                            [related_node, list_index])
-                    # Rel type appears for the first time? Create new entry for that attribtue in the dict.
-                    else:
-                        relations_dict[rel_type] = [[related_node, list_index]]
-
-            # Iterate over the dictionary and process the lists of related nodes
-            for rel_type, related_nodes in relations_dict.items():
-                self.__process_node_relation(
-                    model, ifc_entity, rel_type, related_nodes, id_mapping)
+        
+        if self.graph_provider == "neo4j":
+            model = self.__retrieve_from_neo4j(timestamp, model)
+        elif self.graph_provider == "networkx":
+            model = self.__retrieve_from_nx(timestamp, model)
+                
         # Save the IFC model to file.
         print("Write model to file. ")
         model.write(ifc_path)
         print("Finished IFC file generation. ")
+
 
     @staticmethod
     def get_project_id_from_timestamp(timestamp: str):
