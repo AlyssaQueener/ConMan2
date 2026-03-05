@@ -8,11 +8,11 @@ paths = [
     # "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v2-purified_AFTER.ifc",
     # "./00_sampleData/IFC_stepP21/diss-casestudy/ARC-v3-purified_AFTER.ifc",
     # "./00_sampleData/IFC_stepP21/DepMod2025/2025-DepMod2HVAC-Model-v3_AFTER.ifc", 
-    "C:\dev\out.ifc"
+    "C:\dev\out-nx.ifc"
 ]
 
 db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
-ifc_interface = IfcGraphInterface(graph_provider="neo4j")
+ifc_interface = IfcGraphInterface(graph_provider="networkx")
 
 counter = 1
 for path in paths:

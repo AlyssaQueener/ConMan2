@@ -128,16 +128,30 @@ class IfcGraphInterface:
         ents = []
         # Iterate over all nodes that are grouped under the rel_attribute in the dict. This means that initially, all these nodes were part of the same IFC attribute.
         for node, list_index in related_nodes:
-            # Check if Inline node, if so, create new entity.
+            # Determine if this is an inline node
+            is_inline = False
+            
+            raise NotImplementedError("Neo4j processing is not yet fully removed here. ")
+
+            # Check if node is a neomodel instance (Neo4j)
             if isinstance(node, InlineNode):
+                is_inline = True
+            # Check if node is a dict from NetworkX with label attribute
+            elif isinstance(node, dict) and node.get("label") == "InlineNode":
+                is_inline = True
+            
+            if is_inline:
+                # Create new entity for inline node
                 ent = model.create_entity(node.EntityType)
                 # WrappedValue is the actual input data of inline entities like "(6,5,1)" in "IfcArcIndex(6,5,1)". Process this like any other non-entity attribute.
                 self.__process_node_attribute(
                     ent, "wrappedValue", node.wrappedValue)
                 ents.append((ent, list_index))
-            # If entity is a real STEP entity, get the existing IFC entity and append that to the list.
             else:
-                ent = model.by_id(id_mapping[node.element_id])
+                # If entity is a real STEP entity, get the existing IFC entity and append that to the list.
+                # Handle both neomodel node (has element_id) and NetworkX node dict (has p21_id)
+                node_id = node.element_id if hasattr(node, 'element_id') else node.get("p21_id")
+                ent = model.by_id(id_mapping[node_id])
                 ents.append((ent, list_index))
 
         # Every attribute value is a list, for some attributes this datatype is correct. Others need single values.
@@ -453,7 +467,55 @@ class IfcGraphInterface:
     def __retrieve_from_nx(self, timestamp: str, model: ifcopenshell.file):
         nx_interface = networkxConnection()
         nx_interface.load_graph(f"networkx_graph_{timestamp}.gpickle")
-        all_nodes = [n for n, data in nx_interface.graph.nodes(data=True) if data.get("timestamp") == timestamp]
+        
+        # Dictionary to map newly created IFC entities to their source node ids.
+        id_mapping = {}
+        
+        # Phase 1: Create IFC entities from nodes
+        print("Creating IFC entities from nodes.")
+        for node_id, node_data in nx_interface.graph.nodes(data=True):
+            if node_data.get("timestamp") != timestamp:
+                continue
+            
+            entity_type = node_data.get("EntityType")
+            if not entity_type:
+                continue
+            
+            ifc_entity = model.create_entity(entity_type)
+            id_mapping[node_id] = ifc_entity.id()
+            
+            # Process node attributes
+            for key, val in node_data.items():
+                if key in ["TrueNorth", "timestamp", "label", "EntityType", "p21_id"]:
+                    continue
+                if hasattr(ifc_entity, key):
+                    self.__process_node_attribute(ifc_entity, key, val)
+        
+        # Phase 2: Process relationships between entities
+        print("Creating relationships between entities.")
+        for node_id, node_data in nx_interface.graph.nodes(data=True):
+            if node_data.get("timestamp") != timestamp:
+                continue
+            
+            ifc_entity = model.by_id(id_mapping[node_id])
+            relations_dict = {}
+            
+            # Collect all outgoing edges for this node
+            for target_node_id in nx_interface.graph.successors(node_id):
+                target_data = nx_interface.graph.nodes[target_node_id]
+                edge_data = nx_interface.graph.get_edge_data(node_id, target_node_id)
+                
+                rel_type = edge_data[0].get("rel_type")
+                list_index = edge_data[0].get("list_index", 0)
+                
+                if hasattr(ifc_entity, rel_type):
+                    if rel_type not in relations_dict:
+                        relations_dict[rel_type] = []
+                    relations_dict[rel_type].append([target_data, list_index])
+            
+            # Process each relationship type
+            for rel_type, related_nodes in relations_dict.items():
+                model = self.__process_node_relation(model, ifc_entity, rel_type, related_nodes, id_mapping)
 
         # define return 
         return model    
@@ -517,7 +579,11 @@ class IfcGraphInterface:
         @param ifc_path: Target path of the generated IFC file.
         @param timestamp: ID to keep track of what nodes in the graph belong to the same origin IFC file.
         """
+        # ToDo: set IFC version and MVD
         model = ifcopenshell.api.project.create_file("IFC4")
+        # add a marker in the IFC header so that the file can be traced back to this application.  
+        model.header.file_name.originating_system = "ConMan2"
+        # ToDo: fetch the operator's name from the system and add it to the model header. 
         
         if self.graph_provider == "neo4j":
             model = self.__retrieve_from_neo4j(timestamp, model)
