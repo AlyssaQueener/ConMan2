@@ -154,6 +154,8 @@ class IfcGraphInterface:
             ents_final = [ent[0] for ent in ents_sorted]
             setattr(ifc_entity, rel_type, ents_final)
 
+        return model 
+
     ###########################
     ### Provider Connectors ###
     ###########################
@@ -443,10 +445,10 @@ class IfcGraphInterface:
 
             # Iterate over the dictionary and process the lists of related nodes
             for rel_type, related_nodes in relations_dict.items():
-                self.__process_node_relation(model, ifc_entity, rel_type, related_nodes, id_mapping)
+                model = self.__process_node_relation(model, ifc_entity, rel_type, related_nodes, id_mapping)
 
-            # define return 
-            return model
+        # finished iterating all nodes, return assembled model
+        return model
 
     def __retrieve_from_nx(self, timestamp: str, model: ifcopenshell.file):
         nx_interface = networkxConnection()
