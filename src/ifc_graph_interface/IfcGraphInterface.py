@@ -390,8 +390,6 @@ class IfcGraphInterface:
         expected.
         """
 
-        raise NotImplementedError("This method has issues with the edge parsing atm. Fix this before use. ")
-
         print("Creating IFC entities from nodes. ")
         # Dictionary to map newly created IFC entities to their source node ids.
         id_mapping = {}
