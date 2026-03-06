@@ -13,7 +13,9 @@ paths = [
 ]
 
 db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
-neo4j_ifc_interface = IfcGraphInterface()
+# default graph provider is neo4j, so no need to specify that in the constructor. 
+# OPTIONS: neo4j, networkx 
+ifc_interface = IfcGraphInterface(graph_provider="neo4j")
 
 # enable next line to truncate the database before loading new data
 # db.cypher_query("MATCH (n) DETACH DELETE n")
@@ -23,5 +25,5 @@ counter = 1
 for path in paths:
     # timestamp = f"ts{datetime.now().strftime("%Y%m%d%H%M%S")}"
     print(f"Processing '{path}' with Timestamp '{counter}'")
-    neo4j_ifc_interface.ifc_2_graph(path, timestamp=str(counter))
+    ifc_interface.ifc_2_graph(path, timestamp=str(counter))
     counter += 1
