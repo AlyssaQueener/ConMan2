@@ -129,10 +129,8 @@ class IfcGraphInterface:
         # Iterate over all nodes that are grouped under the rel_attribute in the dict. This means that initially, all these nodes were part of the same IFC attribute.
         for node, list_index in related_nodes:
             # Determine if this is an inline node
-            is_inline = False
-            
-            raise NotImplementedError("Neo4j processing is not yet fully removed here. ")
-
+            is_inline = False            
+           
             # Check if node is a neomodel instance (Neo4j)
             if isinstance(node, InlineNode):
                 is_inline = True
@@ -142,17 +140,24 @@ class IfcGraphInterface:
             
             if is_inline:
                 # Create new entity for inline node
-                ent = model.create_entity(node.EntityType)
+                ent = model.create_entity(node.get("EntityType")) 
                 # WrappedValue is the actual input data of inline entities like "(6,5,1)" in "IfcArcIndex(6,5,1)". Process this like any other non-entity attribute.
                 self.__process_node_attribute(
-                    ent, "wrappedValue", node.wrappedValue)
+                    ent, "wrappedValue", node.get("wrappedValue"))
                 ents.append((ent, list_index))
             else:
                 # If entity is a real STEP entity, get the existing IFC entity and append that to the list.
                 # Handle both neomodel node (has element_id) and NetworkX node dict (has p21_id)
-                node_id = node.element_id if hasattr(node, 'element_id') else node.get("p21_id")
-                ent = model.by_id(id_mapping[node_id])
-                ents.append((ent, list_index))
+                if hasattr(node, 'element_id'):
+                    node_id = node.element_id
+                elif isinstance(node, dict) and "p21_id" in node:
+                    node_id = node["p21_id"]
+                else:
+                    node_id = node.get("p21_id")
+                
+                if node_id and node_id in id_mapping:
+                    ent = model.by_id(id_mapping[node_id])
+                    ents.append((ent, list_index))
 
         # Every attribute value is a list, for some attributes this datatype is correct. Others need single values.
         if len(ents) <= 1:
@@ -496,6 +501,9 @@ class IfcGraphInterface:
         for node_id, node_data in nx_interface.graph.nodes(data=True):
             if node_data.get("timestamp") != timestamp:
                 continue
+            # exclude inlineNodes as they have been already reconstructed
+            elif node_data.get("label") == "InlineNode":
+                continue
             
             ifc_entity = model.by_id(id_mapping[node_id])
             relations_dict = {}
@@ -504,7 +512,9 @@ class IfcGraphInterface:
             for target_node_id in nx_interface.graph.successors(node_id):
                 target_data = nx_interface.graph.nodes[target_node_id]
                 edge_data = nx_interface.graph.get_edge_data(node_id, target_node_id)
+                target_data["p21_id"] = target_node_id  # Ensure target node has p21_id for later processing
                 
+                # here, extracting only the first edge is problematic if there are multiple edges between the same nodes with different rel_types. In that case, we would need to iterate over all edges and group them by rel_type and list_index, similar to how we do in Neo4j. For now, we assume there is only one edge between any two nodes.
                 rel_type = edge_data[0].get("rel_type")
                 list_index = edge_data[0].get("list_index", 0)
                 
