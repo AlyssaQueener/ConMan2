@@ -12,7 +12,7 @@ paths = [
 ]
 
 db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
-ifc_interface = IfcGraphInterface(graph_provider="networkx")
+ifc_interface = IfcGraphInterface(graph_provider="neo4j")
 
 counter = 1
 for path in paths:
@@ -20,3 +20,4 @@ for path in paths:
     print(f"Processing '{path}' with Timestamp '{counter}'")
     ifc_interface.graph_2_ifc(path, timestamp=str(counter))
     counter += 1
+    #  
