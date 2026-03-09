@@ -127,7 +127,8 @@ class IfcEncodedGraphInterface:
                 "EntityType": e.is_a(),
                 "p21_id": f"#{e.id()}",
                 "timestamp": timestamp,
-                "entity_type_index": entity_encodings.get(e.is_a(), -1)
+                "entity_type_index": float(entity_encodings.get(e.is_a(), -1)),
+                "delta_materials": 0.0
             }
             material = self.getMaterial(e)
             if material:
@@ -148,7 +149,8 @@ class IfcEncodedGraphInterface:
                     "GlobalId": e.GlobalId,
                     "EntityType": e.is_a(),
                     "p21_id": f"#{e.id()}",
-                    "timestamp": timestamp
+                    "timestamp": timestamp,
+                    "entity_type_index": float(entity_encodings.get(e.is_a(), -1))
                 }
                 connection_nodes.append(node)
        
@@ -307,6 +309,7 @@ class IfcEncodedGraphInterface:
             return materials
         except:
             return None
+        
     @staticmethod
     def get_project_id_from_timestamp(timestamp: str):
         try:
@@ -359,22 +362,22 @@ class IfcEncodedGraphInterface:
     
             bbox = {
                 "bb_min_x": round(float(bb_min[0]),3),
-                "delta_bb_min_x": 0,
+                "delta_bb_min_x": 0.0,
                 
                 "bb_min_y": round(float(bb_min[1]),3),
-                "delta_bb_min_y": 0,
+                "delta_bb_min_y": 0.0,
                 
                 "bb_min_z": round(float(bb_min[2]),3),
-                "delta_bb_min_z": 0,
+                "delta_bb_min_z": 0.0,
                 
                 "bb_max_x": round(float(bb_max[0]),3),
-                "delta_bb_max_x": 0,
+                "delta_bb_max_x": 0.0,
                 
                 "bb_max_y": round(float(bb_max[1]),3),
-                "delta_bb_max_y": 0,
+                "delta_bb_max_y": 0.0,
                 
                 "bb_max_z": round(float(bb_max[2]),3),
-                "delta_bb_max_z": 0
+                "delta_bb_max_z": 0.0
             }
     
             return bbox
@@ -426,7 +429,7 @@ class IfcEncodedGraphInterface:
             return None
         return info
     
-    def create_node_and_relationship(self, entity, item, geo_info, repIdentifier, timestamp, body):
+    def create_node_and_relationship(self, entity, item, geo_info, repIdentifier, timestamp, item_r):
         ## EntityType -> IfcEntity of GeometryRepresentation
         ## Representation Identifier -> rel_type
         success = True
@@ -445,6 +448,7 @@ class IfcEncodedGraphInterface:
                 "target_p21_id": f"#{item.id()}",
                 "timestamp": timestamp,
                 "rel_type": repIdentifier,
+                "list_index": item_r
              }
         return geo_node, geo_relationship, success
     
@@ -475,7 +479,7 @@ class IfcEncodedGraphInterface:
                             mapped_representation_items = item.MappingSource.MappedRepresentation.Items
                             for i in mapped_representation_items:
                                 geo_info, extruded = self.process_body_representations(i)
-                                geo_node, geo_rel, success = self.create_node_and_relationship(entity,i, geo_info, repIdentifier, timestamp, True)
+                                geo_node, geo_rel, success = self.create_node_and_relationship(entity,i, geo_info, repIdentifier, timestamp, item_nr)
                                 if success: 
                                     geo_node.update({
                                         "rep_item_nr": item_nr
@@ -540,8 +544,6 @@ class IfcEncodedGraphInterface:
                     "EntityType": "SimpleBBox",
                     "p21_id": fake_p21_id,
                     "timestamp": timestamp,
-                    "encoded_representation_type": [1,0,0],
-                    "rep_item_nr": 1
                 }
                 geo_node.update(geo)
                 geo_nodes.append(geo_node)
@@ -550,6 +552,7 @@ class IfcEncodedGraphInterface:
                         "target_p21_id": fake_p21_id,
                         "timestamp": timestamp,
                         "rel_type": "world_location",
+                        "list_index": fake_p21_id
                     })
                 
     def create_surface_and_solid_nodes(self, entity, surface_nodes, solid_nodes, surface_relationships, solid_relationships, brep_nodes, brep_relationships, timestamp):

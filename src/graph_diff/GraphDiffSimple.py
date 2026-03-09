@@ -21,8 +21,8 @@ class GraphDiffSimple:
                 # Check if the child nodes are equivalent.
                 if (
                     rel_init.rel_type == rel_updt.rel_type
+                    and rel_init.list_index == rel_updt.list_index
                     and child_init.EntityType == child_updt.EntityType
-                    and child_init.rep_item_nr == child_updt.rep_item_nr
                     and not child_init.equivalent_to.filter(timestamp=child_init.timestamp)
                     and not child_updt.equivalent_to.filter(timestamp=child_updt.timestamp)
                 ):

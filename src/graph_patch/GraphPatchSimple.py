@@ -119,9 +119,7 @@ class GraphPatchSimple:
                     property_value_updt = node_updt.__properties__.get(property_key)
                     if property_value != property_value_updt:
                         setattr(node_init, "change_type", "modified")
-                        delta_string = f"delta_{property_key}"
-                        setattr(node_init, delta_string, property_value_updt )
-                        setattr(node_init, "changed_value", property_key)
+                        setattr(node_init, "delta_materials", 1.0)
                         setattr(node_init, "old_value", property_value )
                         setattr(node_init, "new_value", property_value_updt )
                         node_init.save()

@@ -1,4 +1,7 @@
-{"IfcExtrudedAreaSolid": {
+[
+    {
+        "IfcExtrudedAreaSolid": 
+    {
     "EntityType": "IfcExtrudedAreaSolid",
     "p_21_id": "id",
     "timestamp": "timestamp",
@@ -35,8 +38,10 @@
     "compactness": "of ExtrudedAreaSolid - swept- Surface",
     "delta_compactness": "of ExtrudedAreaSolid - swept- Surface"
 
-},
-"IfcPolygonalFaceSet": {
+}
+    },
+{
+    "IfcPolygonalFaceSet": {
     "total_surface_area": "of IfcPolygonalFaceSet",
     "delta_total_surface_area": 0,
             
@@ -51,5 +56,6 @@
             
     "n_vertices": "of IfcPolygonalFaceSet",
     "delta_n_vertices": 0
+    }
 }
-}
+]

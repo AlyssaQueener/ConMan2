@@ -120,19 +120,19 @@ class GeometricHelper:
             "geometricRepresentation":[0,1],
             
             "total_surface_area": round(float(sum(face_areas)),3),
-            "delta_total_surface_area": 0,
+            "delta_total_surface_area": 0.0,
             
             "max_face_area": round(float(max(face_areas)),3),
-            "delta_max_face_area": 0,
+            "delta_max_face_area": 0.0,
 
             "min_face_area": round(float(min(face_areas)),3),
-            "delta_min_face_area": 0,
+            "delta_min_face_area": 0.0,
 
-            "n_faces": len(resolved_faces),
-            "delta_n_faces": 0,
+            "n_faces": float(len(resolved_faces)),
+            "delta_n_faces": 0.0,
             
-            "n_vertices": len(coord_list),
-            "delta_n_vertices": 0
+            "n_vertices": float(len(coord_list)),
+            "delta_n_vertices": 0.0
             
         }
 
@@ -154,7 +154,7 @@ class GeometricHelper:
             geometry_info.update(profile_features)
             geometry_info.update({
                     "volume": volume,
-                    "delta_volume": 0
+                    "delta_volume": 0.0
                 })
             return geometry_info
         elif sweptArea.is_a("IfcArbitraryClosedProfileDef"):
@@ -172,7 +172,7 @@ class GeometricHelper:
             geometry_info.update(profile_features)
             geometry_info.update({
                     "volume": volume,
-                    "delta_volume": 0
+                    "delta_volume": 0.0
                 })
             return geometry_info
         else:
@@ -218,23 +218,23 @@ class GeometricHelper:
         area = x_dim * y_dim
         perimeter = 2 * (x_dim + y_dim)
         return {
-            "bbox_x": x_dim,
-            "delta_bbox_x": 0,
+            "bbox_x": float(x_dim),
+            "delta_bbox_x": 0.0,
             
-            "bbox_y": y_dim,
-            "delta_bbox_y": 0,
+            "bbox_y": float(y_dim),
+            "delta_bbox_y": 0.0,
             
-            "area": area,
-            "delta_area": 0,
+            "area": float(area),
+            "delta_area": 0.0,
 
-            "perimeter": perimeter,
-            "delta_perimeter": 0,
+            "perimeter": float(perimeter),
+            "delta_perimeter": 0.0,
             
-            "num_vertices": 4,
-            "delta_num_vertices": 0,
+            "num_vertices": 4.0,
+            "delta_num_vertices": 0.0,
             
             "compactness": round(((4 * 3.14159265 * area) / perimeter**2),3),
-            "delta_compactness": 0,
+            "delta_compactness": 0.0,
             
         }
         
@@ -268,23 +268,23 @@ class GeometricHelper:
         compactness = (4 * 3.14159265 * area / perimeter**2) if perimeter > 0 else 0.0
     
         return {
-            "bbox_x": bbox_x,
-            "delta_bbox_x": 0,
+            "bbox_x": float(bbox_x),
+            "delta_bbox_x": 0.0,
             
-            "bbox_y": bbox_y,
-            "delta_bbox_y": 0,
+            "bbox_y": float(bbox_y),
+            "delta_bbox_y": 0.0,
             
-            "area": area,
-            "delta_area": 0,
+            "area": round(area,3),
+            "delta_area": 0.0,
             
-            "perimeter": perimeter,
-            "delta_perimeter": 0,
+            "perimeter": round(perimeter,3),
+            "delta_perimeter": 0.0,
             
-            "num_vertices": n,
-            "delta_num_vertices": 0,
+            "num_vertices": float(n),
+            "delta_num_vertices": 0.0,
             
-            "compactness": compactness,
-            "delta_compactness": 0
+            "compactness": round(compactness,3),
+            "delta_compactness": 0.0
         }
     
 

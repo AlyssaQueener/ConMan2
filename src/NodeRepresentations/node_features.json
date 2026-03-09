@@ -1,0 +1,114 @@
+[
+    {
+        "PrimaryNodes": {
+            "entity_type_index": "encoded ifc enitity",
+            "encoded_change_type": "encoded change type",
+            "delta_materials": "0 / 1"
+        }
+    },
+    {
+        "ConnectionNodes":{
+            "entity_type_index": "encoded ifc enitity",
+            "encoded_change_type": "encoded change type"
+        }
+    },
+    {
+        "SolidNode": {
+        
+            "encoded_change_type": "",
+            "direction": "of ExtrudedAreaSolid",
+            "delta_direction": "of ExtrudedAreaSolid",
+
+            "depth": "of ExtrudedAreaSolid",
+            "delta_depth": "of ExtrudedAreaSolid",
+
+            "volume": "of ExtrudedAreaSolid",
+            "delta_volume": "of ExtrudedAreaSolid",
+
+            "bbox_x": "of ExtrudedAreaSolid- swept Surface",
+            "delta_bbox_x": "of ExtrudedAreaSolid- swept Surface",
+
+            "bbox_y": "of ExtrudedAreaSolid - swept Surface",
+            "delta_bbox_y": "of ExtrudedAreaSolid - swept Surface",
+
+            "area": "of ExtrudedAreaSolid swept Surface",
+            "delta_area": "of ExtrudedAreaSolid swept Surface",
+
+            "perimeter": "of ExtrudedAreaSolid swept Surface",
+            "delta_perimeter": "of ExtrudedAreaSolid swept Surface",
+
+            "num_vertices": "of ExtrudedAreaSolid - swept- Surface",
+            "delta_num_vertices": "of ExtrudedAreaSolid - swept- Surface",
+
+            "compactness": "of ExtrudedAreaSolid - swept- Surface",
+            "delta_compactness": "of ExtrudedAreaSolid - swept- Surface"
+
+        }
+    },
+    {
+        "BrepNode": {
+
+        "encoded_change_type": "",
+        "total_surface_area": "of IfcPolygonalFaceSet",
+        "delta_total_surface_area": 0,
+                
+        "max_face_area": "of IfcPolygonalFaceSet",
+        "delta_max_face_area": 0,
+    
+        "min_face_area": "of IfcPolygonalFaceSet",
+                "delta_min_face_area": 0,
+    
+        "n_faces": "of IfcPolygonalFaceSet",
+                "delta_n_faces": 0,
+                
+        "n_vertices": "of IfcPolygonalFaceSet",
+        "delta_n_vertices": 0
+        }
+    },
+    {
+        "LocationNode": {
+
+            "encoded_change_type": "",
+            "bb_min_x": "",
+            "delta_bb_min_x": 0,
+                
+            "bb_min_y": "",
+            "delta_bb_min_y": 0,
+                
+            "bb_min_z": "",
+            "delta_bb_min_z": 0,
+                
+            "bb_max_x": "",
+            "delta_bb_max_x": 0,
+                
+            "bb_max_y": "",
+            "delta_bb_max_y": 0,
+                
+            "bb_max_z": "",
+            "delta_bb_max_z": 0
+        }
+    },
+    {
+        "SurfaceNode": {
+
+            "encoded_change_type": "",
+            "bbox_x": "",
+            "delta_bbox_x": 0,
+            
+            "bbox_y": "",
+            "delta_bbox_y": 0,
+            
+            "area": "",
+            "delta_area": 0,
+            
+            "perimeter": "",
+            "delta_perimeter": 0,
+            
+            "num_vertices": "",
+            "delta_num_vertices": 0,
+            
+            "compactness": "",
+            "delta_compactness": 0
+        }
+    }
+]
