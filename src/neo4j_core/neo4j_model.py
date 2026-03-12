@@ -15,6 +15,7 @@ class RelProperties(StructuredRel):
 
 class GeoRelProperties(StructuredRel):
     rel_type = StringProperty(required=True)
+    list_index = IntegerProperty()
 
 class Node(SemiStructuredNode):
     EntityType = StringProperty(required=True)

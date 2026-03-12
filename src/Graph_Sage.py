@@ -6,7 +6,7 @@ transformer = Transformer()
 
 # Just train and generate embeddings
 #transformer.easy_projection()
-result = transformer.project_graph_for_change_interpretation()
+result = transformer.projection_query_1()
 print("result projecting graph")
 print(result)
 transformer.drop_model()

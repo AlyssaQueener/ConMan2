@@ -78,10 +78,6 @@ class IfcEncodedGraphInterface:
         # Create Neo4J_Helper instance.
         neo4j_helper = Neo4J_Helper()
 
-        # Create index for p21_id and timestamp for faster lookup.
-        db.cypher_query("CREATE INDEX generic_p21_ts IF NOT EXISTS FOR (n:GenericNode) ON (n.p21_id, n.timestamp)")
-        # Wait until the index is online.
-        db.cypher_query("CALL db.awaitIndexes()")
 
         # Load IFC model.
         print("Loading IFC model.")
@@ -137,7 +133,7 @@ class IfcEncodedGraphInterface:
                 })
             geo_count+=1
             self.createGeoNodes(e, geo_nodes, geo_relationships, geo_count, timestamp)
-            self.create_surface_and_solid_nodes(e, surface_nodes, solid_nodes, surface_relationships, solid_relationships, brep_nodes, brep_relationships, timestamp)
+            self.create_surface_and_solid_nodes(e, surface_nodes, solid_nodes, surface_relationships, solid_relationships, brep_nodes, brep_relationships, timestamp, geo_count)
             primary_nodes.append(node)
 
         connection_nodes = []
@@ -270,7 +266,7 @@ class IfcEncodedGraphInterface:
         UNWIND $batch AS r
         MATCH (a:GenericNode {p21_id: r.source_p21_id, timestamp: r.timestamp})
         MATCH (b:GenericGeoNode {p21_id: r.target_p21_id, timestamp: r.timestamp})
-        CREATE (a)-[:GEO_RELATION_TO {rel_type: r.rel_type}]->(b)   
+        CREATE (a)-[:GEO_RELATION_TO {rel_type: r.rel_type, list_index: r.list_index}]->(b)   
         """
         
         print(f"Creating Location {len(geo_relationships)} relationships.")
@@ -429,23 +425,24 @@ class IfcEncodedGraphInterface:
             return None
         return info
     
-    def create_node_and_relationship(self, entity, item, geo_info, repIdentifier, timestamp, item_r):
+    def create_node_and_relationship(self, entity, item, geo_info, repIdentifier, timestamp, item_r, geo_count):
         ## EntityType -> IfcEntity of GeometryRepresentation
         ## Representation Identifier -> rel_type
         success = True
         sanitized_geo_info = self.sanitize_for_neo4j(geo_info)
         if sanitized_geo_info is None:
             return None, None, False
+        fake_p21_id = f"{item.id()}-{geo_count}-{item_r}"
         geo_node = {
                     "EntityType": item.is_a(),
-                    "p21_id": f"#{item.id()}",
+                    "p21_id": fake_p21_id,
                     "timestamp": timestamp,
                 }
         geo_node.update(self.sanitize_for_neo4j(geo_info))
         
         geo_relationship = {
                 "source_p21_id": f"#{entity.id()}",
-                "target_p21_id": f"#{item.id()}",
+                "target_p21_id": fake_p21_id,
                 "timestamp": timestamp,
                 "rel_type": repIdentifier,
                 "list_index": item_r
@@ -453,7 +450,7 @@ class IfcEncodedGraphInterface:
         return geo_node, geo_relationship, success
     
         
-    def process_ifc_entity_for_geometries(self,entity, surface_nodes, solid_nodes, surface_relationships, solid_relationships,brep_nodes, brep_relationships, timestamp):
+    def process_ifc_entity_for_geometries(self,entity, surface_nodes, solid_nodes, surface_relationships, solid_relationships,brep_nodes, brep_relationships, timestamp, geo_count):
         if hasattr(entity, "Representation") and entity.Representation is not None:
             ## IFC Product Representation (-> IfcTopologyRepresentation/ IfcShapeRepresentation)
             rep = entity.Representation
@@ -479,11 +476,8 @@ class IfcEncodedGraphInterface:
                             mapped_representation_items = item.MappingSource.MappedRepresentation.Items
                             for i in mapped_representation_items:
                                 geo_info, extruded = self.process_body_representations(i)
-                                geo_node, geo_rel, success = self.create_node_and_relationship(entity,i, geo_info, repIdentifier, timestamp, item_nr)
+                                geo_node, geo_rel, success = self.create_node_and_relationship(entity,i, geo_info, repIdentifier, timestamp, item_nr, geo_count)
                                 if success: 
-                                    geo_node.update({
-                                        "rep_item_nr": item_nr
-                                    })
                                     item_nr += 1
                                     solid_nodes.append(geo_node)
                                     solid_relationships.append(geo_rel)
@@ -491,11 +485,8 @@ class IfcEncodedGraphInterface:
                                     continue
                         else:
                             geo_info, extruded = self.process_body_representations(item)
-                            geo_node, geo_rel, success = self.create_node_and_relationship(entity,item, geo_info, repIdentifier, timestamp, True)
+                            geo_node, geo_rel, success = self.create_node_and_relationship(entity,item, geo_info, repIdentifier, timestamp, item_nr, geo_count)
                             if success:
-                                geo_node.update({
-                                        "rep_item_nr": item_nr
-                                    })
                                 item_nr += 1
                                 if extruded:
                                     solid_nodes.append(geo_node)
@@ -509,22 +500,16 @@ class IfcEncodedGraphInterface:
                             mapped_representation_items = item.MappingSource.MappedRepresentation.Items
                             for i in mapped_representation_items:
                                 geo_info = self.process_footprint_representation(i)
-                                geo_node, geo_rel,success = self.create_node_and_relationship(entity,i, geo_info, repIdentifier, timestamp, False)
+                                geo_node, geo_rel,success = self.create_node_and_relationship(entity,i, geo_info, repIdentifier, timestamp, item_nr, geo_count)
                                 if success:
-                                    geo_node.update({
-                                        "rep_item_nr": item_nr
-                                    })
                                     item_nr += 1
                                     surface_nodes.append(geo_node)
                                     surface_relationships.append(geo_rel)
                                 else: continue
                         else:
                             geo_info = self.process_footprint_representation(item)
-                            geo_node, geo_rel, success = self.create_node_and_relationship(entity,item, geo_info, repIdentifier, timestamp, False)
+                            geo_node, geo_rel, success = self.create_node_and_relationship(entity,item, geo_info, repIdentifier, timestamp, item_nr, geo_count)
                             if success:
-                                geo_node.update({
-                                    "rep_item_nr": item_nr
-                                })
                                 item_nr += 1
                                 surface_nodes.append(geo_node)
                                 surface_relationships.append(geo_rel)
@@ -552,9 +537,9 @@ class IfcEncodedGraphInterface:
                         "target_p21_id": fake_p21_id,
                         "timestamp": timestamp,
                         "rel_type": "world_location",
-                        "list_index": fake_p21_id
+                        "list_index": 1.0
                     })
                 
-    def create_surface_and_solid_nodes(self, entity, surface_nodes, solid_nodes, surface_relationships, solid_relationships, brep_nodes, brep_relationships, timestamp):
-        self.process_ifc_entity_for_geometries(entity, surface_nodes, solid_nodes, surface_relationships, solid_relationships, brep_nodes, brep_relationships, timestamp)
+    def create_surface_and_solid_nodes(self, entity, surface_nodes, solid_nodes, surface_relationships, solid_relationships, brep_nodes, brep_relationships, timestamp, geo_count):
+        self.process_ifc_entity_for_geometries(entity, surface_nodes, solid_nodes, surface_relationships, solid_relationships, brep_nodes, brep_relationships, timestamp, geo_count)
                    
