@@ -12,7 +12,7 @@ class Transformer:
     )
     def merge_msc_nodes(self, timestamp_init, graph_type):
         print ("###### MSC ###########")
-        msc = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=True).all() + GenericGeoNode.nodes.filter(timestamp=timestamp_init).has(equivalent_to=True).all() 
+        msc = Node.nodes.filter(timestamp=timestamp_init, graph_type=graph_type).has(equivalent_to=True).all() + GenericGeoNode.nodes.filter(timestamp=timestamp_init, graph_type=graph_type).has(equivalent_to=True).all() 
         for node in msc:
             equvivalent = node.equivalent_to.single()
             #print(node)
@@ -37,24 +37,14 @@ class Transformer:
     
             #print(f"Merged {node.EntityType} with {equvivalent.EntityType}")
 
-        msc_2 = Node.nodes.filter(timestamp="msc").all() + GenericGeoNode.nodes.filter(timestamp="msc").all()
+        msc_2 = Node.nodes.filter(timestamp="msc", graph_type=graph_type).all() + GenericGeoNode.nodes.filter(timestamp="msc", graph_type=graph_type).all()
         for node in msc_2:
             if hasattr(node, "change_type"): 
-                setattr(node, "graph_type", graph_type)
                 setattr(node, "encoded_change_type", [0.0, 1.0, 0.0, 0.0])
-                setattr(node, "unmodified", 0.0)
-                setattr(node, "modified", 1.0)
-                setattr(node, "ctdeleted", 0.0)
-                setattr(node, "added", 0.0)
             else:
                 setattr(node, "change_type", "msc")
                 setattr(node, "encoded_change_type", [1.0, 0.0, 0.0, 0.0])
-                setattr(node, "unmodified", 1.0)
-                setattr(node, "modified", 0.0)
-                setattr(node, "ctdeleted", 0.0)
-                setattr(node, "added", 0.0)
                 
-                setattr(node, "graph_type", graph_type)
             #print(node)
             node.save()
         self.db.cypher_query("MATCH ()-[r:EQUIVALENT_TO]->() DELETE r")
@@ -65,11 +55,6 @@ class Transformer:
         for node in pushout_nodes_init:
             setattr(node, "encoded_change_type", [0.0, 0.0, 1.0, 0.0])
             setattr(node, "change_type", "ctdeleted")
-            setattr(node, "unmodified", 0.0)
-            setattr(node, "modified", 0.0)
-            setattr(node, "ctdeleted", 1.0)
-            setattr(node, "added", 0.0)
-            setattr(node, "graph_type", graph_type)
             node.save()
         #print(pushout_nodes_init)
         print("######## Pushout updated ############")
@@ -77,11 +62,6 @@ class Transformer:
         for node in pushout_nodes_updt:
             setattr(node, "encoded_change_type", [0.0, 0.0, 0.0, 1.0])
             setattr(node, "change_type", "added")
-            setattr(node, "unmodified", 0.0)
-            setattr(node, "modified", 0.0)
-            setattr(node, "ctdeleted", 0.0)
-            setattr(node, "added", 1.0)
-            setattr(node, "graph_type", graph_type)
             node.save()
         #print(pushout_nodes_updt)
     def create_change_graph(self, timestamp_init, timestamp_updt, graph_type):
@@ -140,7 +120,7 @@ class Transformer:
         print("########## Training GraphSAGE ##########")
         train_query = """
         CALL gds.beta.graphSage.train(
-            'geometric_transformations',
+            'test',
             {
                 modelName: $model_name,
                 featureProperties: [
@@ -164,7 +144,7 @@ class Transformer:
                     'bb_max_y', 'delta_bb_max_y',
                     'bb_max_z', 'delta_bb_max_z'
                 ],
-                projectedFeatureDimension: 19,
+                projectedFeatureDimension: 18,
                 aggregator: 'mean',
                 activationFunction: 'relu',
                 sampleSizes: [25, 10],
@@ -191,7 +171,7 @@ class Transformer:
         print("########## Generating GraphSAGE Embeddings ##########")
         write_query = """
         CALL gds.beta.graphSage.write(
-            'geometric_transformations',
+            'test',
             {
                 modelName: $model_name,
                 writeProperty: 'graphsage_embedding'
@@ -342,6 +322,138 @@ class Transformer:
                 print(f"Dropped existing graph: {result[0][0]}")
         except Exception as e:
             print(f"No existing graph to drop: {e}")
+            
+    def train_graph_only_delta(self, model_name='geometric-change-interpreter'):
+        print("########## Training GraphSAGE ##########")
+        train_query = """
+        CALL gds.beta.graphSage.train(
+            'test',
+            {
+                modelName: $model_name,
+                featureProperties: [
+                    'entity_type_index', 'encoded_change_type', 'delta_materials',
+                    'delta_volume',
+                    'delta_bbox_x',
+                    'delta_bbox_y',
+                    'delta_area',
+                    'delta_perimeter',
+                    'delta_num_vertices',
+                    'delta_compactness',
+                    'delta_total_surface_area',
+                    'delta_max_face_area',
+                    'delta_min_face_area',
+                    'delta_n_faces',
+                    'delta_n_vertices',
+                    'delta_bb_min_x',
+                    'delta_bb_min_y',
+                    'delta_bb_min_z',
+                    'delta_bb_max_x',
+                    'delta_bb_max_y',
+                    'delta_bb_max_z'
+                ],
+                projectedFeatureDimension: 8,
+                aggregator: 'mean',
+                activationFunction: 'relu',
+                sampleSizes: [25, 10],
+                learningRate: 0.01,
+                tolerance: 0.0001,
+                epochs: 50,
+                embeddingDimension: 128,
+                randomSeed: 42
+            }
+        )
+        YIELD modelInfo, trainMillis
+        RETURN modelInfo, trainMillis
+        """
+        result, meta = self.db.cypher_query(train_query, {'model_name': model_name})
+        print(f"Training completed in {result[0][1]}ms")
+        print(f"Model info: {result[0][0]}")
+        return result
+            
+    def projection_query_only_delta(self):
+        query = """
+        CALL gds.graph.project(
+            'test',
+            {
+                
+                PrimaryNode: { properties: [
+                    'entity_type_index',
+                    'delta_materials',
+                    'encoded_change_type'
+                    ]
+                },
+                ConnectionNode: { properties:
+                    ['entity_type_index',
+                    'encoded_change_type']
+                },
+                SolidNode: { properties:
+                    [
+                        'encoded_change_type',
+                        'delta_volume',
+                        'delta_bbox_x',
+                        'delta_bbox_y',
+                        'delta_area',
+                        'delta_perimeter',
+                        'delta_num_vertices',
+                        'delta_compactness' 
+                    ]
+                },
+                BrepNode: { properties:
+                    [
+                        'encoded_change_type',
+                        'delta_total_surface_area',
+                        'delta_max_face_area',
+                        'delta_min_face_area',
+                        'delta_n_faces',
+                        'delta_n_vertices'   
+                    ]
+                },
+                LocationNode: { properties:
+                    [
+                        'encoded_change_type',
+                        'delta_bb_min_x',
+                        'delta_bb_min_y',
+                        'delta_bb_min_z',
+                        'delta_bb_max_x',
+                        'delta_bb_max_y',
+                        'delta_bb_max_z'
+                        
+                    ]
+                },
+                SurfaceNode: { properties:
+                    [
+                        'encoded_change_type',
+                        'delta_bbox_x',
+                        'delta_bbox_y',
+                        'delta_area',
+                        'delta_perimeter',
+                        'delta_num_vertices',
+                        'delta_compactness'
+                        
+                    ]
+                }
+
+            },
+            {
+                RELATION_TO: {orientation: 'UNDIRECTED', aggregation: 'SINGLE'},
+                GEO_RELATION_TO: {orientation: 'UNDIRECTED', aggregation: 'SINGLE'}
+            }
+        )
+        YIELD
+            graphName, nodeProjection, nodeCount AS nodes, relationshipCount AS rels
+        RETURN graphName, nodeProjection.SolidNode AS bookProjection, nodes, rels
+        """
+        result, meta = self.db.cypher_query(query)
+        print(f"Projected graph: {result[0][0]}, Nodes: {result[0][2]}, Relationships: {result[0][3]}")
+        return result
+    
+    
+    
+    
+
+
+
+
 
 
 

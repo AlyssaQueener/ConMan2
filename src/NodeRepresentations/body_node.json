@@ -9,53 +9,33 @@
     "graph_type": "",
     "change_type": "",
 
-    "swept_area": "type of ExtruedeAreaSolid",
+    "depth":3.0,
+    "delta_depth":0.0,
 
-    "direction": "of ExtrudedAreaSolid",
-    "delta_direction": "of ExtrudedAreaSolid",
-
-    "depth": "of ExtrudedAreaSolid",
-    "delta_depth": "of ExtrudedAreaSolid",
-
-    "volume": "of ExtrudedAreaSolid",
-    "delta_volume": "of ExtrudedAreaSolid",
-
-    "bbox_x": "of ExtrudedAreaSolid- swept Surface",
-    "delta_bbox_x": "of ExtrudedAreaSolid- swept Surface",
-
-    "bbox_y": "of ExtrudedAreaSolid - swept Surface",
-    "delta_bbox_y": "of ExtrudedAreaSolid - swept Surface",
-
-    "area": "of ExtrudedAreaSolid swept Surface",
-    "delta_area": "of ExtrudedAreaSolid swept Surface",
-
-    "perimeter": "of ExtrudedAreaSolid swept Surface",
-    "delta_perimeter": "of ExtrudedAreaSolid swept Surface",
-
-    "num_vertices": "of ExtrudedAreaSolid - swept- Surface",
-    "delta_num_vertices": "of ExtrudedAreaSolid - swept- Surface",
-
-    "compactness": "of ExtrudedAreaSolid - swept- Surface",
-    "delta_compactness": "of ExtrudedAreaSolid - swept- Surface"
+    "swept_area":"IfcArbitraryClosedProfileDef",
+    "length":0.3,
+    "delta_length":0.0,
+    "width":6.0,
+    "delta_width":0.0,
+    "area":1.8,
+    "delta_area":0.0,
+    "volume":5.4,
+    "delta_volume":0.0
 
 }
     },
 {
     "IfcPolygonalFaceSet": {
-    "total_surface_area": "of IfcPolygonalFaceSet",
-    "delta_total_surface_area": 0,
-            
-    "max_face_area": "of IfcPolygonalFaceSet",
-    "delta_max_face_area": 0,
-
-    "min_face_area": "of IfcPolygonalFaceSet",
-            "delta_min_face_area": 0,
-
-    "n_faces": "of IfcPolygonalFaceSet",
-            "delta_n_faces": 0,
-            
-    "n_vertices": "of IfcPolygonalFaceSet",
-    "delta_n_vertices": 0
+        "total_surface_area":5.357,
+        "delta_total_surface_area":0.0,
+        "width":1.1,
+        "delta_width":0.0,
+        "height":1.4,
+        "delta_height":0.0,
+        "volume":0.708,
+        "delta_volume":0.0,
+        "length":0.46,
+        "delta_length":0.0
     }
 }
 ]

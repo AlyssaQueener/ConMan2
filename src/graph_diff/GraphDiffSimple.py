@@ -47,24 +47,24 @@ class GraphDiffSimple:
     ### Main Functions ###
     ######################
 
-    def run_diff(self, timestamp_init:str, timestamp_updt:str):
+    def run_diff(self, timestamp_init:str, timestamp_updt:str, graph_type:str):
         """
         Recursively compares nodes on graph for equivalence and generates equivalent_to relations between them.
         """
-        project_init = Node.nodes.get(EntityType="IfcProject", timestamp=timestamp_init)
-        project_updt = Node.nodes.get(EntityType="IfcProject", timestamp=timestamp_updt)
+        project_init = Node.nodes.get(EntityType="IfcProject", timestamp=timestamp_init, graph_type=graph_type)
+        project_updt = Node.nodes.get(EntityType="IfcProject", timestamp=timestamp_updt, graph_type=graph_type)
         #Looks directed but is undirectedly treated.
         project_init.equivalent_to.connect(project_updt)
 
         # For PrimaryNodes, find partners using the globalid, then run the recursive function.
-        for primary_node_init in PrimaryNode.nodes.filter(timestamp=timestamp_init):
+        for primary_node_init in PrimaryNode.nodes.filter(timestamp=timestamp_init, graph_type=graph_type ):
             try:
-                primary_node_updt = PrimaryNode.nodes.get(GlobalId=primary_node_init.GlobalId, timestamp=timestamp_updt)
+                primary_node_updt = PrimaryNode.nodes.get(GlobalId=primary_node_init.GlobalId, timestamp=timestamp_updt, graph_type=graph_type)
             except:
                 continue
             primary_node_init.equivalent_to.connect(primary_node_updt)
             self.create_equvivalence_relationships_for_geo_nodes(primary_node_init, primary_node_updt)
         # For ConnectionNodes, find all in both models, then run the Intersection over Union function.
-        for connection_node_init in ConnectionNode.nodes.filter(timestamp=timestamp_init):
-            for connection_node_updt in ConnectionNode.nodes.filter(timestamp=timestamp_updt):
+        for connection_node_init in ConnectionNode.nodes.filter(timestamp=timestamp_init, graph_type=graph_type):
+            for connection_node_updt in ConnectionNode.nodes.filter(timestamp=timestamp_updt, graph_type=graph_type):
                 self.create_equivalence_relations_connection(connection_node_init, connection_node_updt)

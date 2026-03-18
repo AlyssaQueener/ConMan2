@@ -18,36 +18,23 @@ class GraphPatchSimple:
         # Delta properties per entity type
         DELTA_PROPERTIES = {
             "IfcExtrudedAreaSolid": {
-                "direction":    "delta_direction",
                 "depth":        "delta_depth",
-                "bbox_x":       "delta_bbox_x",
-                "bbox_y":       "delta_bbox_y",
+                "length":       "delta_length",
+                "width":       "delta_width",
                 "area":         "delta_area",
-                "perimeter":    "delta_perimeter",
-                "num_vertices": "delta_num_vertices",
-                "compactness":  "delta_compactness",
                 "volume":       "delta_volume"
             },
             "IfcIndexedPolyCurve": {
-                "bbox_x":       "delta_bbox_x",
-                "bbox_y":       "delta_bbox_y",
-                "area":         "delta_area",
-                "perimeter":    "delta_perimeter",
-                "num_vertices": "delta_num_vertices",
-                "compactness":  "delta_compactness",
-                "volume":       "delta_volume"
+               "length":       "delta_length",
+                "width":       "delta_width",
+                "area":         "delta_area"
             },
             "IfcPolygonalFaceSet": {
                 "total_surface_area": "delta_total_surface_area",
-            
-                "max_face_area": "delta_max_face_area",
-
-                "min_face_area": "delta_min_face_area",
-
-                "n_faces": "delta_n_faces",
-            
-                "n_vertices": "delta_n_vertices"
-                
+                "width": "delta_width",
+                "height": "delta_height",
+                "volume": "delta_volume",
+                "length":   "delta_length"
             },
             "IfcFacetedBrep": {
                 "direction":    "delta_direction",
@@ -97,7 +84,7 @@ class GraphPatchSimple:
                         delta = round(abs(float(property_value) - float(property_value_updt)), 3)
                         setattr(node_init, entity_delta_map[property_key], delta)
                     except (TypeError, ValueError):
-                        setattr(node_init, entity_delta_map[property_key], None)
+                        print("Delta calculation failed")
 
         if has_changes:
             setattr(node_init, "change_type", "modified")

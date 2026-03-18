@@ -141,128 +141,22 @@ class GraphEmbeddingCalculator:
         }
         
         return graph_embeddings_mean_statistic
-    
-graph_calc = GraphEmbeddingCalculator()
-
-full_result = {}
-
-
-complete_embedding_move_stairs = []
-complete_embedding_size_decke= []
-complete_embedding_move_long_column = []
-complete_embedding_type_geländer = []
-complete_embedding_type_fundament = []
-complete_embedding_move_door = []
-
-
-graph_type_list = ['move_stairs',
-'size_geschossdecke',
-'type_geländer',
-'move_door',
-'move_long_column',
-'type_fundament']
-for i,graph_type in enumerate(graph_type_list):
-    stats = graph_calc.calculate_mean_graph_embedding(graph_type)
-    
-    print(f"\n{graph_type}:")
-    #print(f"  Total nodes: {stats['Complete Graph']['node_count']}")
-    #print(f"  Total embedding: {stats['Complete Graph']['embedding']}")
-    #print(f"  Added: {stats['Graph Added']['node_count']}")
-    #print(f"  Added: {stats['Graph Added']['embedding']}")
-    #print(f"  Deleted: {stats['Graph Deleted']['node_count']}")
-    #print(f"  Deleted: {stats['Graph Deleted']['embedding']}")
-    #print(f"  Modified: {stats['Graph Modified']['node_count']}")
-    #print(f"  Modified: {stats['Graph Modified']['embedding']}")
-    #print(f"  MSC: {stats['Graph MSC']['node_count']}")
-    #print(f"  MSC: {stats['Graph MSC']['embedding']}")
-    #print(f"  Complete embedding dimension: {len(stats['Complete Graph']['embedding'])}")
-
-    if graph_type == "move_stairs":
-        complete_embedding_move_stairs = stats['All changes']['embedding']
-    if graph_type == "size_geschossdecke":
-        complete_embedding_size_decke= stats['All changes']['embedding']
-    if graph_type == "move_long_column":
-        complete_embedding_move_long_column = stats['All changes']['embedding']
-    if graph_type == "type_geländer":
-        complete_embedding_type_geländer= stats['All changes']['embedding']
-    if graph_type == "type_fundament":
-        complete_embedding_type_fundament= stats['All changes']['embedding']
-    if graph_type == "move_door":
-        complete_embedding_move_door= stats['All changes']['embedding']
-
-    full_result[graph_type] = stats
-
-
+   
 from scipy.spatial.distance import cosine
 
-
-
-
-similarity = 1 - cosine(complete_embedding_move_stairs, complete_embedding_size_decke)
-similarity_1 = 1 - cosine(complete_embedding_move_stairs, complete_embedding_move_long_column)
-similarity_2 = 1 - cosine(complete_embedding_move_stairs, complete_embedding_type_fundament)
-similarity_3 = 1 - cosine(complete_embedding_move_stairs, complete_embedding_type_geländer)
-similarity_4 = 1 - cosine(complete_embedding_move_stairs, complete_embedding_move_door)
-
-similarity_5 = 1 - cosine(complete_embedding_size_decke, complete_embedding_move_long_column )
-similarity_6 = 1 - cosine(complete_embedding_size_decke, complete_embedding_type_fundament)
-similarity_7 = 1 - cosine(complete_embedding_size_decke, complete_embedding_type_geländer)
-similarity_8 = 1 - cosine(complete_embedding_size_decke, complete_embedding_move_door)
-
-similarity_9 = 1 - cosine(complete_embedding_move_long_column , complete_embedding_type_fundament)
-similarity_10 = 1 - cosine(complete_embedding_move_long_column , complete_embedding_type_geländer)
-similarity_11 = 1 - cosine(complete_embedding_move_long_column , complete_embedding_move_door)
-
-similarity_12 = 1 - cosine(complete_embedding_type_fundament, complete_embedding_type_geländer)
-similarity_13 = 1 - cosine(complete_embedding_type_fundament, complete_embedding_move_door)
-
-similarity_14 = 1 - cosine(complete_embedding_type_geländer, complete_embedding_move_door)
-
-#print(f"Similarity between rotated and translated: {similarity}")
-
-print("Similarity Move Stairs - Size Decke")
-print(similarity)
-
-print("Similarity Move Stairs - Move Long Column")
-print(similarity_1)
-
-print("Similarity Move Stairs - Type Fundament")
-print(similarity_2)
-
-print("Similarity Move Stairs - Type Geländer")
-print(similarity_3)
-
-print("Similarity Move Stairs - Move DOOR")
-print(similarity_4)
-###
-print("Similarity Size Decke - Move Long Column")
-print(similarity_5)
-
-print("Similarity Size Decke - Type Fundament")
-print(similarity_6)
-
-print("Similarity Size Decke - Geländer")
-print(similarity_7)
-
-print("Similarity Size Decke - Move Door")
-print(similarity_8)
-###
-
-print("Similarity Move Long Column - Type Fundament")
-print(similarity_9)
-
-print("Similarity Move Long Column - Type Geländer")
-print(similarity_10)
-
-print("Similarity Move Long Column - MOVE Door")
-print(similarity_11)
-
-###
-print("Similarity Type Fundament - Type Geländer")
-print(similarity_12)
-
-print("Similarity Type Fundament - MOVE Door")
-print(similarity_13)
-
-print("Similarity Type Geländer - MOVE Door")
-print(similarity_14)
+doors = Node.nodes.filter(EntityType="IfcWall")
+len = len(doors)
+for i,door in enumerate(doors):
+    if i == len-1:
+        break
+    door_embedding = door.graphsage_embedding 
+    door_2 = doors[i+1]
+    door_embedding_2 = door_2.graphsage_embedding
+    
+    similarity = 1- cosine(door_embedding, door_embedding_2)
+    print(similarity)
+    if similarity < 0.7:
+        print("Unsimilar objects:")
+        print(door.GlobalId)
+        print(door_2.GlobalId)
+    

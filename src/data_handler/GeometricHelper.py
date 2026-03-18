@@ -62,7 +62,40 @@ class GeometricHelper:
         return area / 2.0
     
 
+    def get_Polygonal_Face_Set_w_openshell(self, item):
+        settings = ifcopenshell.geom.settings()
+        settings.set("use-world-coords", True)
+        try: 
+            shape = ifcopenshell.geom.create_shape(settings, item)
 
+            grouped_verts = ifcopenshell.util.shape.get_vertices(shape.geometry)
+
+        # Derive compact geometry features
+            bb_min = grouped_verts.min(axis=0)
+            bb_max = grouped_verts.max(axis=0)
+            #centroid = grouped_verts.mean(axis=0)
+            l = round(float(bb_max[0]),3)-round(float(bb_min[0]),3)
+            b = round(float(bb_max[1]),3)-round(float(bb_min[1]),3)
+            h = round(float(bb_max[2]),3)-round(float(bb_min[2]),3)
+            a = l*b
+            v = l*b*h
+            geo_info = {
+                "length": l,
+                "delta_length": 0.0,
+                "width": b,
+                "delta_width": 0.0,
+                "height": h,
+                "delta_height": 0.0,
+                "volume": v,
+                "delta_volume": 0.0
+                
+            }
+            return geo_info
+    
+            
+        except:
+            print(f"Shape failed for {item.is_a()} #{item.id()}")
+            return None
 
     def get_geometry_Ifc_Polygonal_Face_Set(self, item):
         coord_list = item.Coordinates.CoordList
@@ -99,6 +132,11 @@ class GeometricHelper:
         bbox_min = pts.min(axis=0)
         bbox_max = pts.max(axis=0)
         extents = bbox_max - bbox_min
+        
+        l = extents[0]
+        w = extents[1]
+        h = extents[2]
+        v = l*w*h
 
         geometry_info = {
             "closed": int(item.Closed) if item.Closed is not None else 0,
@@ -117,22 +155,20 @@ class GeometricHelper:
         }
         
         geo_info = {
-            "geometricRepresentation":[0,1],
-            
             "total_surface_area": round(float(sum(face_areas)),3),
             "delta_total_surface_area": 0.0,
             
-            "max_face_area": round(float(max(face_areas)),3),
-            "delta_max_face_area": 0.0,
+            "width": round(float(w),3),
+            "delta_width": 0.0,
 
-            "min_face_area": round(float(min(face_areas)),3),
-            "delta_min_face_area": 0.0,
+            "height": round(float(h),3),
+            "delta_height": 0.0,
 
-            "n_faces": float(len(resolved_faces)),
-            "delta_n_faces": 0.0,
+            "volume": round(float(v),3),
+            "delta_volume": 0.0,
             
-            "n_vertices": float(len(coord_list)),
-            "delta_n_vertices": 0.0
+            "length": round(float(l),3),
+            "delta_length": 0.0
             
         }
 
@@ -141,10 +177,10 @@ class GeometricHelper:
     def get_geometry_IfcExtruded_Area_Solid(self, item):
         ### -> RepresentationType = Extruded Area -> [1,0]
         depth = round(item.Depth,3)
+        direction = item.ExtrudedDirection.DirectionRatios
         geometry_info = {
-            "geometricRepresentation": [1,0],
-            "direction": item.ExtrudedDirection.DirectionRatios,
-            "depth": depth
+            "depth": depth,
+            "delta_depth": 0.0
         }
         sweptArea = item.SweptArea
         if sweptArea.is_a("IfcRectangleProfileDef"):
@@ -208,8 +244,8 @@ class GeometricHelper:
         segments = outer_curve.Segments
         if segments == None: 
             coords = [(round(p[0], 3), round(p[1], 3)) for p in points]
-            if coords[0] == coords[-1]:
-                coords = coords[:-1]  # remove closing duplicate
+            #if coords[0] == coords[-1]:
+                #coords = coords[:-1]  # remove closing duplicate
             return coords
         else:
             return None
@@ -218,23 +254,14 @@ class GeometricHelper:
         area = x_dim * y_dim
         perimeter = 2 * (x_dim + y_dim)
         return {
-            "bbox_x": float(x_dim),
-            "delta_bbox_x": 0.0,
+            "length": float(x_dim),
+            "delta_length": 0.0,
             
-            "bbox_y": float(y_dim),
-            "delta_bbox_y": 0.0,
+            "width": float(y_dim),
+            "delta_width": 0.0,
             
             "area": float(area),
             "delta_area": 0.0,
-
-            "perimeter": float(perimeter),
-            "delta_perimeter": 0.0,
-            
-            "num_vertices": 4.0,
-            "delta_num_vertices": 0.0,
-            
-            "compactness": round(((4 * 3.14159265 * area) / perimeter**2),3),
-            "delta_compactness": 0.0,
             
         }
         
@@ -268,23 +295,15 @@ class GeometricHelper:
         compactness = (4 * 3.14159265 * area / perimeter**2) if perimeter > 0 else 0.0
     
         return {
-            "bbox_x": float(bbox_x),
-            "delta_bbox_x": 0.0,
+            "length": float(bbox_x),
+            "delta_length": 0.0,
             
-            "bbox_y": float(bbox_y),
-            "delta_bbox_y": 0.0,
+            "width": float(bbox_y),
+            "delta_width": 0.0,
             
             "area": round(area,3),
             "delta_area": 0.0,
             
-            "perimeter": round(perimeter,3),
-            "delta_perimeter": 0.0,
-            
-            "num_vertices": float(n),
-            "delta_num_vertices": 0.0,
-            
-            "compactness": round(compactness,3),
-            "delta_compactness": 0.0
         }
     
 
