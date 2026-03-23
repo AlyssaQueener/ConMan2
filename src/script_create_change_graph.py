@@ -11,22 +11,23 @@ from data_handler.clean_up import Clean_up
 #path_updt = "src/01_sample_data/move-column-base-example-wall.ifc"
 
 
-path_init = "src/01_sample_data/base-example-wall-ifc4.ifc"
+#path_init = "src/01_sample_data/base-example-wall-ifc4.ifc"
+path_init="src/01_sample_data/move-column-base-example-wall.ifc"
 
 
 #path_updt = "src/01_sample_data/moved-wall.ifc"
-path_updt = "src/01_sample_data/scaled-wall.ifc"
+path_updt = "src/01_sample_data/change-wall-type.ifc"
 
 #project_id = "1ODmFv4Jv9ZO9fO_v2Tu_8"
-timestamp_init = "base_example_01"
+timestamp_init = "base_example_04"
 
-timestamp_updt = "change_size_wall"
-
-
+timestamp_updt = "updt_change_wall_type"
 
 
 
-graph_type= "change_size_wall"
+
+
+graph_type= "change_wall_type"
 #base_example
 
 

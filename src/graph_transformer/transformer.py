@@ -125,26 +125,34 @@ class Transformer:
                 modelName: $model_name,
                 featureProperties: [
                     'entity_type_index', 'encoded_change_type', 'delta_materials',
-                    'volume', 'delta_volume',
-                    'bbox_x', 'delta_bbox_x',
-                    'bbox_y', 'delta_bbox_y',
-                    'area', 'delta_area',
-                    'perimeter', 'delta_perimeter',
-                    'num_vertices', 'delta_num_vertices',
-                    'compactness', 'delta_compactness',
-                    'total_surface_area', 'delta_total_surface_area',
-                    'max_face_area', 'delta_max_face_area',
-                    'min_face_area', 'delta_min_face_area',
-                    'n_faces', 'delta_n_faces',
-                    'n_vertices', 'delta_n_vertices',
-                    'bb_min_x', 'delta_bb_min_x',
-                    'bb_min_y', 'delta_bb_min_y',
-                    'bb_min_z', 'delta_bb_min_z',
-                    'bb_max_x', 'delta_bb_max_x',
-                    'bb_max_y', 'delta_bb_max_y',
-                    'bb_max_z', 'delta_bb_max_z'
+                    'volume',
+                    'delta_volume',
+                    'depth',
+                    'delta_depth',
+                    'width',
+                    'delta_width',
+                    'area',
+                    'delta_area',
+                    'length',
+                    'delta_length',
+                    'total_surface_area',
+                    'delta_total_surface_area',
+                    'height',
+                    'delta_height',
+                    'bb_min_x',
+                    'delta_bb_min_x',
+                    'bb_min_y',
+                    'delta_bb_min_y',
+                    'bb_min_z',
+                    'delta_bb_min_z',
+                    'bb_max_x',
+                    'delta_bb_max_x',
+                    'bb_max_y',
+                    'delta_bb_max_y',
+                    'bb_max_z',
+                    'delta_bb_max_z'
                 ],
-                projectedFeatureDimension: 18,
+                projectedFeatureDimension: 31,
                 aggregator: 'mean',
                 activationFunction: 'relu',
                 sampleSizes: [25, 10],
@@ -225,18 +233,14 @@ class Transformer:
                         'encoded_change_type',
                         'volume',
                         'delta_volume',
-                        'bbox_x',
-                        'delta_bbox_x',
-                        'bbox_y',
-                        'delta_bbox_y',
+                        'depth',
+                        'delta_depth',
+                        'width',
+                        'delta_width',
                         'area',
                         'delta_area',
-                        'perimeter',
-                        'delta_perimeter',
-                        'num_vertices',
-                        'delta_num_vertices',
-                        'compactness',
-                        'delta_compactness' 
+                        'length',
+                        'delta_length'
                     ]
                 },
                 BrepNode: { properties:
@@ -244,14 +248,14 @@ class Transformer:
                         'encoded_change_type',
                         'total_surface_area',
                         'delta_total_surface_area',
-                        'max_face_area',
-                        'delta_max_face_area',
-                        'min_face_area',
-                        'delta_min_face_area',
-                        'n_faces',
-                        'delta_n_faces',
-                        'n_vertices',
-                        'delta_n_vertices'   
+                        'width',
+                        'delta_width',
+                        'height',
+                        'delta_height',
+                        'volume',
+                        'delta_volume',
+                        'length',
+                        'delta_length'
                     ]
                 },
                 LocationNode: { properties:
@@ -275,18 +279,12 @@ class Transformer:
                 SurfaceNode: { properties:
                     [
                         'encoded_change_type',
-                        'bbox_x',
-                        'delta_bbox_x',
-                        'bbox_y',
-                        'delta_bbox_y',
+                        'width',
+                        'delta_width',
                         'area',
                         'delta_area',
-                        'perimeter',
-                        'delta_perimeter',
-                        'num_vertices',
-                        'delta_num_vertices',
-                        'compactness',
-                        'delta_compactness'
+                        'length',
+                        'delta_length'
                         
                     ]
                 }
@@ -323,7 +321,7 @@ class Transformer:
         except Exception as e:
             print(f"No existing graph to drop: {e}")
             
-    def train_graph_only_delta(self, model_name='geometric-change-interpreter'):
+    def train_graph_delta(self, model_name='geometric-change-interpreter'):
         print("########## Training GraphSAGE ##########")
         train_query = """
         CALL gds.beta.graphSage.train(
@@ -333,17 +331,12 @@ class Transformer:
                 featureProperties: [
                     'entity_type_index', 'encoded_change_type', 'delta_materials',
                     'delta_volume',
-                    'delta_bbox_x',
-                    'delta_bbox_y',
+                    'delta_depth',
+                    'delta_width',
                     'delta_area',
-                    'delta_perimeter',
-                    'delta_num_vertices',
-                    'delta_compactness',
+                    'delta_length',
                     'delta_total_surface_area',
-                    'delta_max_face_area',
-                    'delta_min_face_area',
-                    'delta_n_faces',
-                    'delta_n_vertices',
+                    'delta_height',
                     'delta_bb_min_x',
                     'delta_bb_min_y',
                     'delta_bb_min_z',
@@ -351,7 +344,7 @@ class Transformer:
                     'delta_bb_max_y',
                     'delta_bb_max_z'
                 ],
-                projectedFeatureDimension: 8,
+                projectedFeatureDimension: 16,
                 aggregator: 'mean',
                 activationFunction: 'relu',
                 sampleSizes: [25, 10],
@@ -370,7 +363,7 @@ class Transformer:
         print(f"Model info: {result[0][0]}")
         return result
             
-    def projection_query_only_delta(self):
+    def projection_query_delta(self):
         query = """
         CALL gds.graph.project(
             'test',
@@ -390,22 +383,20 @@ class Transformer:
                     [
                         'encoded_change_type',
                         'delta_volume',
-                        'delta_bbox_x',
-                        'delta_bbox_y',
+                        'delta_depth',
+                        'delta_width',
                         'delta_area',
-                        'delta_perimeter',
-                        'delta_num_vertices',
-                        'delta_compactness' 
+                        'delta_length'
                     ]
                 },
                 BrepNode: { properties:
                     [
                         'encoded_change_type',
                         'delta_total_surface_area',
-                        'delta_max_face_area',
-                        'delta_min_face_area',
-                        'delta_n_faces',
-                        'delta_n_vertices'   
+                        'delta_width',
+                        'delta_height',
+                        'delta_volume',
+                        'delta_length'
                     ]
                 },
                 LocationNode: { properties:
@@ -423,12 +414,9 @@ class Transformer:
                 SurfaceNode: { properties:
                     [
                         'encoded_change_type',
-                        'delta_bbox_x',
-                        'delta_bbox_y',
+                        'delta_width',
                         'delta_area',
-                        'delta_perimeter',
-                        'delta_num_vertices',
-                        'delta_compactness'
+                        'delta_length'
                         
                     ]
                 }

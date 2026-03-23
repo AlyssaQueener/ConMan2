@@ -7,11 +7,11 @@ from data_handler.clean_up import Clean_up
 #Transform graph
 transformer = Transformer()
 transformer.drop_projection('test')
-result = transformer.projection_query_only_delta()
+result = transformer.projection_query_delta()
 print(result)
 
 transformer.drop_model()
-result_training = transformer.train_graph_only_delta()
+result_training = transformer.train_graph_delta()
 print("training result")
 print(result_training)
 transformer.generate_graphsage_embeddings()

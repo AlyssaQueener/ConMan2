@@ -2,30 +2,33 @@
     {
         "IfcExtrudedAreaSolid": 
     {
-    "EntityType": "IfcExtrudedAreaSolid",
-    "p_21_id": "id",
-    "timestamp": "timestamp",
+        "EntityType": "IfcExtrudedAreaSolid",
+        "p_21_id": "id",
+        "timestamp": "timestamp",
 
-    "graph_type": "",
-    "change_type": "",
+        "graph_type": "",
+        "change_type": "",
+        "swept_area":"IfcArbitraryClosedProfileDef",
 
-    "depth":3.0,
-    "delta_depth":0.0,
 
-    "swept_area":"IfcArbitraryClosedProfileDef",
-    "length":0.3,
-    "delta_length":0.0,
-    "width":6.0,
-    "delta_width":0.0,
-    "area":1.8,
-    "delta_area":0.0,
-    "volume":5.4,
-    "delta_volume":0.0
+        "encoded_change_type": "",
+
+        "depth":3.0,
+        "delta_depth":0.0,
+        "length":0.3,
+        "delta_length":0.0,
+        "width":6.0,
+        "delta_width":0.0,
+        "area":1.8,
+        "delta_area":0.0,
+        "volume":5.4,
+        "delta_volume":0.0
 
 }
     },
 {
     "IfcPolygonalFaceSet": {
+        "encoded_change_type": "",
         "total_surface_area":5.357,
         "delta_total_surface_area":0.0,
         "width":1.1,

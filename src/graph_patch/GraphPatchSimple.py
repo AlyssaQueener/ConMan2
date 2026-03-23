@@ -22,14 +22,19 @@ class GraphPatchSimple:
                 "length":       "delta_length",
                 "width":       "delta_width",
                 "area":         "delta_area",
-                "volume":       "delta_volume"
+                "volume":       "delta_volume",
+                "compactness":  "delta_compactness"
             },
             "IfcIndexedPolyCurve": {
                "length":       "delta_length",
                 "width":       "delta_width",
-                "area":         "delta_area"
+                "area":         "delta_area",
+                "compactness":  "delta_compactness"
             },
             "IfcPolygonalFaceSet": {
+                "max_face_area": "delta_max_face_area",
+                "min_face_area": "delta_min_face_area",
+                "n_faces": "delta_n_faces",
                 "total_surface_area": "delta_total_surface_area",
                 "width": "delta_width",
                 "height": "delta_height",
@@ -81,7 +86,7 @@ class GraphPatchSimple:
 
                 if property_key in entity_delta_map:
                     try:
-                        delta = round(abs(float(property_value) - float(property_value_updt)), 3)
+                        delta = round((float(property_value_updt) - float(property_value)), 3)
                         setattr(node_init, entity_delta_map[property_key], delta)
                     except (TypeError, ValueError):
                         print("Delta calculation failed")

@@ -144,19 +144,40 @@ class GraphEmbeddingCalculator:
    
 from scipy.spatial.distance import cosine
 
-doors = Node.nodes.filter(EntityType="IfcWall")
+doors = Node.nodes.filter(EntityType="IfcWall", graph_type="change_size_wall")
+doors2 = Node.nodes.filter(EntityType="IfcWall", graph_type="move_wall")
 len = len(doors)
 for i,door in enumerate(doors):
-    if i == len-1:
-        break
-    door_embedding = door.graphsage_embedding 
-    door_2 = doors[i+1]
-    door_embedding_2 = door_2.graphsage_embedding
+    for d in doors2:
     
-    similarity = 1- cosine(door_embedding, door_embedding_2)
-    print(similarity)
-    if similarity < 0.7:
-        print("Unsimilar objects:")
-        print(door.GlobalId)
-        print(door_2.GlobalId)
+        door_embedding = door.graphsage_embedding 
+        door_embedding_2 = d.graphsage_embedding
+        if door is None or d is None:
+            continue
+    
+        similarity = 1- cosine(door_embedding, door_embedding_2)
+        print("Similarity:")
+        print(f"     graph Type: {door.graph_type} GlobalId: {door.GlobalId}")
+        print(f"     graph Type: {d.graph_type} GlobalId: {d.GlobalId}")
+        print(similarity)
+        
+translated_door_move_wall = Node.nodes.filter(EntityType="IfcWall", graph_type="move_wall", GlobalId="2xTpq0AnTBDuXHntnfMZto")
+changed_geometry_move_wall = Node.nodes.filter(EntityType="IfcWall", graph_type="move_wall", GlobalId="1NKEjo6f5DGu9vYPthZUin")
+translate_column_move_c = Node.nodes.filter(GlobalId="1g_cPLSL93$u6luzpUwIYU", graph_type = "move_column")
+
+translated_door_move_wall = translated_door_move_wall[0]
+changed_geometry_move_wall = changed_geometry_move_wall[0]
+translate_column_move_c = translate_column_move_c[0]
+
+similarity = 1- cosine(translated_door_move_wall.graphsage_embedding , changed_geometry_move_wall.graphsage_embedding )
+print("Similarity of moved wall and changed geometry wall")
+print(f"    {similarity}")
+
+similarity1 = 1- cosine(translated_door_move_wall.graphsage_embedding , translate_column_move_c.graphsage_embedding )
+print("Similarity of moved wall and moved column")
+print(f"    {similarity1}")
+
+similarity2 = 1- cosine(changed_geometry_move_wall.graphsage_embedding , translate_column_move_c.graphsage_embedding )
+print("Similarity of moved column and changed geometry wall")
+print(f"    {similarity2}")
     

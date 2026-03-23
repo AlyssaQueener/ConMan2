@@ -62,17 +62,37 @@ class GraphEmbeddingCalculator:
                 else:
                     graph_embedding_modified = list(map(add, graph_embedding_modified, embedding))
                 count_modified += 1
-
+                
+        if graph_embedding_modified is None and graph_embedding_added is None and graph_embedding_deleted is None:
+            return "No changes"
+        
+        #####
         if graph_embedding_added is None:
             if graph_embedding_deleted is None:
                 graph_embedding_all_changes = graph_embedding_modified
+            elif graph_embedding_modified is None:
+                graph_embedding_all_changes = graph_embedding_deleted
             else:
                  graph_embedding_all_changes = list(map(add, graph_embedding_deleted, graph_embedding_modified))
         elif graph_embedding_deleted is None:
-            graph_embedding_all_changes = list(map(add, graph_embedding_added, graph_embedding_modified))
+            if graph_embedding_added is None:
+                graph_embedding_all_changes = graph_embedding_modified
+            elif graph_embedding_modified is None:
+                graph_embedding_all_changes = graph_embedding_added
+            else:
+                graph_embedding_all_changes = list(map(add, graph_embedding_added, graph_embedding_modified))
+        elif graph_embedding_modified is None:
+            if graph_embedding_added is None:
+                graph_embedding_all_changes = graph_embedding_deleted
+            if graph_embedding_deleted is None:
+                graph_embedding_all_changes = graph_embedding_added
+            else:
+                graph_embedding_all_changes = list(map(add, graph_embedding_added, graph_embedding_deleted))
         else:
             i = list(map(add, graph_embedding_added, graph_embedding_deleted))
             graph_embedding_all_changes = list(map(add, i, graph_embedding_modified))
+            
+        ####   
         count_all_changes = count_added + count_deleted + count_modified
         if graph_embedding_all_changes and count_all_changes > 0:
             graph_embedding_all_changes = [x / count_all_changes for x in graph_embedding_all_changes]
@@ -147,20 +167,19 @@ graph_calc = GraphEmbeddingCalculator()
 full_result = {}
 
 
-complete_embedding_move_stairs = []
-complete_embedding_size_decke= []
-complete_embedding_move_long_column = []
-complete_embedding_type_geländer = []
-complete_embedding_type_fundament = []
-complete_embedding_move_door = []
+complete_embedding_move_wall = []
+complete_embedding_change_size_wall= []
+complete_embedding_add_c = []
+complete_embedding_move_c= []
+complete_embedding_change_w_t = []
 
 
-graph_type_list = ['move_stairs',
-'size_geschossdecke',
-'type_geländer',
-'move_door',
-'move_long_column',
-'type_fundament']
+
+graph_type_list = ['move_wall',
+'change_size_wall',
+'add_column',
+'move_column',
+'change_wall_type']
 for i,graph_type in enumerate(graph_type_list):
     stats = graph_calc.calculate_mean_graph_embedding(graph_type)
     
@@ -177,18 +196,17 @@ for i,graph_type in enumerate(graph_type_list):
     #print(f"  MSC: {stats['Graph MSC']['embedding']}")
     #print(f"  Complete embedding dimension: {len(stats['Complete Graph']['embedding'])}")
 
-    if graph_type == "move_stairs":
-        complete_embedding_move_stairs = stats['All changes']['embedding']
-    if graph_type == "size_geschossdecke":
-        complete_embedding_size_decke= stats['All changes']['embedding']
-    if graph_type == "move_long_column":
-        complete_embedding_move_long_column = stats['All changes']['embedding']
-    if graph_type == "type_geländer":
-        complete_embedding_type_geländer= stats['All changes']['embedding']
-    if graph_type == "type_fundament":
-        complete_embedding_type_fundament= stats['All changes']['embedding']
-    if graph_type == "move_door":
-        complete_embedding_move_door= stats['All changes']['embedding']
+    if graph_type == "move_wall":
+        complete_embedding_move_wall = stats['All changes']['embedding']
+    if graph_type == "change_size_wall":
+        complete_embedding_change_size_wall= stats['All changes']['embedding']
+    if graph_type == "move_column":
+        complete_embedding_move_c = stats['All changes']['embedding']
+    if graph_type == "add_column":
+        complete_embedding_add_c= stats['All changes']['embedding']
+    if graph_type == "change_wall_type":
+        complete_embedding_change_w_t= stats['All changes']['embedding']
+   
 
     full_result[graph_type] = stats
 
@@ -198,71 +216,52 @@ from scipy.spatial.distance import cosine
 
 
 
-similarity = 1 - cosine(complete_embedding_move_stairs, complete_embedding_size_decke)
-similarity_1 = 1 - cosine(complete_embedding_move_stairs, complete_embedding_move_long_column)
-similarity_2 = 1 - cosine(complete_embedding_move_stairs, complete_embedding_type_fundament)
-similarity_3 = 1 - cosine(complete_embedding_move_stairs, complete_embedding_type_geländer)
-similarity_4 = 1 - cosine(complete_embedding_move_stairs, complete_embedding_move_door)
+similarity = 1 - cosine(complete_embedding_move_wall, complete_embedding_change_size_wall)
+similarity_1 = 1 - cosine(complete_embedding_move_wall, complete_embedding_add_c)
+similarity_2 = 1 - cosine(complete_embedding_move_wall, complete_embedding_move_c)
+similarity_3 = 1 - cosine(complete_embedding_move_wall, complete_embedding_change_w_t)
 
-similarity_5 = 1 - cosine(complete_embedding_size_decke, complete_embedding_move_long_column )
-similarity_6 = 1 - cosine(complete_embedding_size_decke, complete_embedding_type_fundament)
-similarity_7 = 1 - cosine(complete_embedding_size_decke, complete_embedding_type_geländer)
-similarity_8 = 1 - cosine(complete_embedding_size_decke, complete_embedding_move_door)
+similarity_4 = 1 - cosine(complete_embedding_change_size_wall, complete_embedding_add_c)
+similarity_5 = 1 - cosine(complete_embedding_change_size_wall, complete_embedding_move_c )
+similarity_6 = 1 - cosine(complete_embedding_change_size_wall, complete_embedding_change_w_t)
 
-similarity_9 = 1 - cosine(complete_embedding_move_long_column , complete_embedding_type_fundament)
-similarity_10 = 1 - cosine(complete_embedding_move_long_column , complete_embedding_type_geländer)
-similarity_11 = 1 - cosine(complete_embedding_move_long_column , complete_embedding_move_door)
+similarity_7 = 1 - cosine(complete_embedding_add_c, complete_embedding_move_c)
+similarity_8 = 1 - cosine(complete_embedding_add_c, complete_embedding_change_w_t)
 
-similarity_12 = 1 - cosine(complete_embedding_type_fundament, complete_embedding_type_geländer)
-similarity_13 = 1 - cosine(complete_embedding_type_fundament, complete_embedding_move_door)
+similarity_9 = 1 - cosine(complete_embedding_move_c, complete_embedding_change_w_t)
 
-similarity_14 = 1 - cosine(complete_embedding_type_geländer, complete_embedding_move_door)
+
 
 #print(f"Similarity between rotated and translated: {similarity}")
 
-print("Similarity Move Stairs - Size Decke")
+print("Similarity Move wall- Size wall")
 print(similarity)
 
-print("Similarity Move Stairs - Move Long Column")
+print("Similarity Move wall- add Column")
 print(similarity_1)
 
-print("Similarity Move Stairs - Type Fundament")
+print("Similarity Move wall - move column")
 print(similarity_2)
 
-print("Similarity Move Stairs - Type Geländer")
+print("Similarity Move wall - change wall type")
 print(similarity_3)
 
-print("Similarity Move Stairs - Move DOOR")
+print("Similarity size wall- add column")
 print(similarity_4)
 ###
-print("Similarity Size Decke - Move Long Column")
+print("Similarity Size wall - Move Column")
 print(similarity_5)
 
-print("Similarity Size Decke - Type Fundament")
+print("Similarity Size wall- change Type wall")
 print(similarity_6)
 
-print("Similarity Size Decke - Geländer")
+print("Similarity add column - move column")
 print(similarity_7)
 
-print("Similarity Size Decke - Move Door")
+print("Similarity add column - wall type")
 print(similarity_8)
 ###
 
-print("Similarity Move Long Column - Type Fundament")
+print("Similarity move column- wall typet")
 print(similarity_9)
 
-print("Similarity Move Long Column - Type Geländer")
-print(similarity_10)
-
-print("Similarity Move Long Column - MOVE Door")
-print(similarity_11)
-
-###
-print("Similarity Type Fundament - Type Geländer")
-print(similarity_12)
-
-print("Similarity Type Fundament - MOVE Door")
-print(similarity_13)
-
-print("Similarity Type Geländer - MOVE Door")
-print(similarity_14)

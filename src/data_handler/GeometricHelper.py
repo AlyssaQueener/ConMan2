@@ -154,9 +154,17 @@ class GeometricHelper:
             "coord_list": [tuple(c) for c in coord_list]
         }
         
+        
+        
         geo_info = {
-            "total_surface_area": round(float(sum(face_areas)),3),
-            "delta_total_surface_area": 0.0,
+            "max_face_area": round(float(max(face_areas)),3),
+            "delta_max_face_area": 0.0,
+            
+            "min_face_area": round(float(min(face_areas)),3),
+            "delta_min_face_area": 0.0,
+            
+            "n_faces": float(len(resolved_faces)),
+            "delta_n_faces": 0.0,
             
             "width": round(float(w),3),
             "delta_width": 0.0,
@@ -253,6 +261,8 @@ class GeometricHelper:
     def compute_profile_features_rectangle(self, x_dim, y_dim):
         area = x_dim * y_dim
         perimeter = 2 * (x_dim + y_dim)
+        # Compactness (isoperimetric quotient, 1.0 = perfect circle)
+        compactness = (4 * 3.14159265 * area / perimeter**2) if perimeter > 0 else 0.0
         return {
             "length": float(x_dim),
             "delta_length": 0.0,
@@ -262,6 +272,9 @@ class GeometricHelper:
             
             "area": float(area),
             "delta_area": 0.0,
+            
+            "compactness": round(compactness,3),
+            "delta_compactness": 0.0
             
         }
         
@@ -303,6 +316,9 @@ class GeometricHelper:
             
             "area": round(area,3),
             "delta_area": 0.0,
+            
+            "compactness": round(compactness,3),
+            "delta_compactness": 0.0
             
         }
     
