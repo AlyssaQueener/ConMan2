@@ -12,28 +12,30 @@ from data_handler.clean_up import Clean_up
 
 
 #path_init = "src/01_sample_data/base-example-wall-ifc4.ifc"
-path_init="src/01_sample_data/move-column-base-example-wall.ifc"
+#path_init="src/01_sample_data/add-column-base-example-wall.ifc"
+path_init = "src/05_SampleData/house-4/v1-house-4.ifc"
 
 
 #path_updt = "src/01_sample_data/moved-wall.ifc"
-path_updt = "src/01_sample_data/change-wall-type.ifc"
+#path_updt = "src/01_sample_data/add-column-base-example-wall.ifc"
+path_updt = "src/05_SampleData/house-4/v2-house-4.ifc"
 
 #project_id = "1ODmFv4Jv9ZO9fO_v2Tu_8"
-timestamp_init = "base_example_04"
+timestamp_init = "v2"
 
-timestamp_updt = "updt_change_wall_type"
-
-
+timestamp_updt = "v3"
 
 
 
-graph_type= "change_wall_type"
+
+
+graph_type= "v2-v3-l-h"
 #base_example
 
 
 
 db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
-#db.cypher_query("MATCH (n) DETACH DELETE n")
+db.cypher_query("MATCH (n) DETACH DELETE n")
 
 # Parse IFC to Graph
 creation_neo4j_ifc_interface = IfcEncodedGraphInterface()

@@ -4,7 +4,8 @@ from neomodel import (
     RelationshipTo,
     RelationshipFrom,
     Relationship,
-    IntegerProperty
+    IntegerProperty,
+    FloatProperty
 )
 from neomodel.contrib import SemiStructuredNode
 
@@ -25,6 +26,7 @@ class Node(SemiStructuredNode):
     
     relation_geo = Relationship('GenericGeoNode', 'GEO_RELATION_TO', model=GeoRelProperties)
     equivalent_to = Relationship('Node', 'EQUIVALENT_TO')
+    similar_to = RelationshipTo('Node', 'SIMILAR')
     
     graph_type = StringProperty()
     timestamp = StringProperty()
@@ -36,6 +38,7 @@ class GenericGeoNode(SemiStructuredNode):
     relation_geo = Relationship('Node', 'GEO_RELATION_TO', model=GeoRelProperties)  # same type as Node.relation_to_geo
     equivalent_to = Relationship('GenericGeoNode', 'EQUIVALENT_TO')
     
+    
     graph_type = StringProperty()
     timestamp = StringProperty()
 
@@ -45,6 +48,9 @@ class GenericNode(Node):
 
 class PrimaryNode(GenericNode):
     GlobalId = StringProperty(unique_index=True, required=True)
+    geo_modification = FloatProperty()
+
+    encoded_modified = FloatProperty()
     
     def __repr__(self):
         return f"PrimaryNode(GlobalId='{self.GlobalId}', EntityType='{self.EntityType}', timestamp='{self.timestamp}')"

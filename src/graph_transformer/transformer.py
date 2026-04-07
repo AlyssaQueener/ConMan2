@@ -39,11 +39,17 @@ class Transformer:
 
         msc_2 = Node.nodes.filter(timestamp="msc", graph_type=graph_type).all() + GenericGeoNode.nodes.filter(timestamp="msc", graph_type=graph_type).all()
         for node in msc_2:
-            if hasattr(node, "change_type"): 
-                setattr(node, "encoded_change_type", [0.0, 1.0, 0.0, 0.0])
+            if hasattr(node, "change_type"):
+                setattr(node, 'encoded_msc', 0.0)  
+                setattr(node, 'encoded_modified', 1.0) 
+                setattr(node, 'encoded_deleted', 0.0)       
+                setattr(node, 'encoded_added', 0.0) 
             else:
                 setattr(node, "change_type", "msc")
-                setattr(node, "encoded_change_type", [1.0, 0.0, 0.0, 0.0])
+                setattr(node, 'encoded_msc', 1.0)  
+                setattr(node, 'encoded_modified', 0.0) 
+                setattr(node, 'encoded_deleted', 0.0)       
+                setattr(node, 'encoded_added', 0.0)
                 
             #print(node)
             node.save()
@@ -53,14 +59,20 @@ class Transformer:
         print("######## Pushout init ############")
         pushout_nodes_init = Node.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all() + GenericGeoNode.nodes.filter(timestamp=timestamp_init).has(equivalent_to=False).all()
         for node in pushout_nodes_init:
-            setattr(node, "encoded_change_type", [0.0, 0.0, 1.0, 0.0])
+            setattr(node, 'encoded_msc', 0.0)  
+            setattr(node, 'encoded_modified', 0.0) 
+            setattr(node, 'encoded_deleted', 1.0)       
+            setattr(node, 'encoded_added', 0.0)
             setattr(node, "change_type", "ctdeleted")
             node.save()
         #print(pushout_nodes_init)
         print("######## Pushout updated ############")
         pushout_nodes_updt = Node.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all() + GenericGeoNode.nodes.filter(timestamp=timestamp_updt).has(equivalent_to=False).all()
         for node in pushout_nodes_updt:
-            setattr(node, "encoded_change_type", [0.0, 0.0, 0.0, 1.0])
+            setattr(node, 'encoded_msc', 0.0)  
+            setattr(node, 'encoded_modified', 0.0) 
+            setattr(node, 'encoded_deleted', 0.0)       
+            setattr(node, 'encoded_added', 1.0)
             setattr(node, "change_type", "added")
             node.save()
         #print(pushout_nodes_updt)
@@ -194,6 +206,52 @@ class Transformer:
     
         return result
     
+    def generate_graphsage_embeddings_one_hot(self, model_name='one_hot'):
+        """
+        Generate GraphSAGE embeddings and write them back to nodes
+        """
+    
+        print("########## Generating GraphSAGE Embeddings ##########")
+        write_query = """
+        CALL gds.beta.graphSage.write(
+            'one_hot',
+            {
+                modelName: $model_name,
+                writeProperty: 'graphsage_embedding_one_hot'
+            }
+        )
+        YIELD nodePropertiesWritten, computeMillis
+        RETURN nodePropertiesWritten, computeMillis
+        """
+    
+        result, meta = self.db.cypher_query(write_query, {'model_name': model_name})
+        print(f"Updated {result[0][0]} nodes with GraphSAGE embeddings in {result[0][1]}ms")
+    
+        return result
+    
+    def generate_graphsage_embeddings_no_entity(self, model_name='no_entity'):
+        """
+        Generate GraphSAGE embeddings and write them back to nodes
+        """
+    
+        print("########## Generating GraphSAGE Embeddings ##########")
+        write_query = """
+        CALL gds.beta.graphSage.write(
+            'no_entity',
+            {
+                modelName: $model_name,
+                writeProperty: 'graphsage_embedding_no_entity'
+            }
+        )
+        YIELD nodePropertiesWritten, computeMillis
+        RETURN nodePropertiesWritten, computeMillis
+        """
+    
+        result, meta = self.db.cypher_query(write_query, {'model_name': model_name})
+        print(f"Updated {result[0][0]} nodes with GraphSAGE embeddings in {result[0][1]}ms")
+    
+        return result
+    
     def drop_model(self,model_name='geometric-change-interpreter'):
         drop_query = """
         CALL gds.model.exists($model_name)
@@ -306,11 +364,11 @@ class Transformer:
     def drop_projection(self, graph_name):
         print("########## Cleaning up existing projection ##########")
         drop_query = f"""
-            CALL gds.graph.exists('test')
+            CALL gds.graph.exists('{graph_name}')
             YIELD exists
             WITH exists
             WHERE exists
-            CALL gds.graph.drop('test')
+            CALL gds.graph.drop('{graph_name}')
             YIELD graphName
             RETURN graphName
         """
@@ -329,13 +387,21 @@ class Transformer:
             {
                 modelName: $model_name,
                 featureProperties: [
-                    'entity_type_index', 'encoded_change_type', 'delta_materials',
+                    'entity_type_index', 
+                    'encoded_msc',
+                    'encoded_modified',
+                    'encoded_added',
+                    'encoded_deleted',
+                    'delta_materials',
                     'delta_volume',
                     'delta_depth',
                     'delta_width',
                     'delta_area',
+                    'delta_compactness',
                     'delta_length',
-                    'delta_total_surface_area',
+                    'delta_max_face_area',
+                    'delta_min_face_area',
+                    'delta_n_faces',
                     'delta_height',
                     'delta_bb_min_x',
                     'delta_bb_min_y',
@@ -344,14 +410,113 @@ class Transformer:
                     'delta_bb_max_y',
                     'delta_bb_max_z'
                 ],
-                projectedFeatureDimension: 16,
-                aggregator: 'mean',
+                projectedFeatureDimension: 22,
+                aggregator: 'pool',
                 activationFunction: 'relu',
                 sampleSizes: [25, 10],
-                learningRate: 0.01,
+                learningRate: 0.001,
                 tolerance: 0.0001,
-                epochs: 50,
-                embeddingDimension: 128,
+                epochs: 20,
+                embeddingDimension: 64,
+                randomSeed: 42
+            }
+        )
+        YIELD modelInfo, trainMillis
+        RETURN modelInfo, trainMillis
+        """
+        result, meta = self.db.cypher_query(train_query, {'model_name': model_name})
+        print(f"Training completed in {result[0][1]}ms")
+        print(f"Model info: {result[0][0]}")
+        return result
+    
+    def train_graph_delta_one_hot(self, model_name='one_hot'):
+        print("########## Training GraphSAGE ##########")
+        train_query = """
+        CALL gds.beta.graphSage.train(
+            'one_hot',
+            {
+                modelName: $model_name,
+                featureProperties: [
+                    'one_hot_entity', 
+                    'encoded_msc',
+                    'encoded_modified',
+                    'encoded_added',
+                    'encoded_deleted',
+                    'delta_materials',
+                    'delta_volume',
+                    'delta_depth',
+                    'delta_width',
+                    'delta_area',
+                    'delta_compactness',
+                    'delta_length',
+                    'delta_max_face_area',
+                    'delta_min_face_area',
+                    'delta_n_faces',
+                    'delta_height',
+                    'delta_bb_min_x',
+                    'delta_bb_min_y',
+                    'delta_bb_min_z',
+                    'delta_bb_max_x',
+                    'delta_bb_max_y',
+                    'delta_bb_max_z'
+                ],
+                projectedFeatureDimension: 440,
+                aggregator: 'pool',
+                activationFunction: 'relu',
+                sampleSizes: [25, 10],
+                learningRate: 0.001,
+                tolerance: 0.0001,
+                epochs: 20,
+                embeddingDimension: 64,
+                randomSeed: 42
+            }
+        )
+        YIELD modelInfo, trainMillis
+        RETURN modelInfo, trainMillis
+        """
+        result, meta = self.db.cypher_query(train_query, {'model_name': model_name})
+        print(f"Training completed in {result[0][1]}ms")
+        print(f"Model info: {result[0][0]}")
+        return result
+    
+    def train_graph_delta_n_entities(self, model_name='no_entity'):
+        print("########## Training GraphSAGE ##########")
+        train_query = """
+        CALL gds.beta.graphSage.train(
+            'no_entity',
+            {
+                modelName: $model_name,
+                featureProperties: [
+                    'encoded_msc',
+                    'encoded_modified',
+                    'encoded_added',
+                    'encoded_deleted', 
+                    'delta_materials',
+                    'delta_volume',
+                    'delta_depth',
+                    'delta_width',
+                    'delta_area',
+                    'delta_compactness',
+                    'delta_length',
+                    'delta_max_face_area',
+                    'delta_min_face_area',
+                    'delta_n_faces',
+                    'delta_height',
+                    'delta_bb_min_x',
+                    'delta_bb_min_y',
+                    'delta_bb_min_z',
+                    'delta_bb_max_x',
+                    'delta_bb_max_y',
+                    'delta_bb_max_z'
+                ],
+                projectedFeatureDimension: 21,
+                aggregator: 'pool',
+                activationFunction: 'relu',
+                sampleSizes: [25, 10],
+                learningRate: 0.001,
+                tolerance: 0.0001,
+                epochs: 20,
+                embeddingDimension: 64,
                 randomSeed: 42
             }
         )
@@ -372,27 +537,42 @@ class Transformer:
                 PrimaryNode: { properties: [
                     'entity_type_index',
                     'delta_materials',
-                    'encoded_change_type'
+                    'encoded_msc',
+                    'encoded_modified',
+                    'encoded_added',
+                    'encoded_deleted'
                     ]
                 },
                 ConnectionNode: { properties:
                     ['entity_type_index',
-                    'encoded_change_type']
+                    'encoded_msc',
+                    'encoded_modified',
+                    'encoded_added',
+                    'encoded_deleted']
                 },
                 SolidNode: { properties:
                     [
-                        'encoded_change_type',
+                        'encoded_msc',
+                        'encoded_modified',
+                        'encoded_added',
+                        'encoded_deleted',
                         'delta_volume',
                         'delta_depth',
                         'delta_width',
                         'delta_area',
-                        'delta_length'
+                        'delta_length',
+                        'delta_compactness'
                     ]
                 },
                 BrepNode: { properties:
                     [
-                        'encoded_change_type',
-                        'delta_total_surface_area',
+                        'delta_max_face_area',
+                        'delta_min_face_area',
+                        'delta_n_faces',
+                        'encoded_msc',
+                        'encoded_modified',
+                        'encoded_added',
+                        'encoded_deleted',
                         'delta_width',
                         'delta_height',
                         'delta_volume',
@@ -401,7 +581,10 @@ class Transformer:
                 },
                 LocationNode: { properties:
                     [
-                        'encoded_change_type',
+                        'encoded_msc',
+                        'encoded_modified',
+                        'encoded_added',
+                        'encoded_deleted',
                         'delta_bb_min_x',
                         'delta_bb_min_y',
                         'delta_bb_min_z',
@@ -413,10 +596,14 @@ class Transformer:
                 },
                 SurfaceNode: { properties:
                     [
-                        'encoded_change_type',
+                        'encoded_msc',
+                        'encoded_modified',
+                        'encoded_added',
+                        'encoded_deleted',
                         'delta_width',
                         'delta_area',
-                        'delta_length'
+                        'delta_length',
+                        'delta_compactness'
                         
                     ]
                 }
@@ -434,6 +621,195 @@ class Transformer:
         result, meta = self.db.cypher_query(query)
         print(f"Projected graph: {result[0][0]}, Nodes: {result[0][2]}, Relationships: {result[0][3]}")
         return result
+    
+    def projection_query_delta_one_hot(self):
+        query = """
+        CALL gds.graph.project(
+            'one_hot',
+            {
+                
+                PrimaryNode: { properties: [
+                    'one_hot_entity',
+                    'delta_materials',
+                    'encoded_msc',
+                    'encoded_modified',
+                    'encoded_added',
+                    'encoded_deleted'
+                    ]
+                },
+                ConnectionNode: { properties:
+                    ['one_hot_entity',
+                    'encoded_msc',
+                    'encoded_modified',
+                    'encoded_added',
+                    'encoded_deleted']
+                },
+                SolidNode: { properties:
+                    [
+                        'encoded_msc',
+                        'encoded_modified',
+                        'encoded_added',
+                        'encoded_deleted',
+                        'delta_volume',
+                        'delta_depth',
+                        'delta_width',
+                        'delta_area',
+                        'delta_length',
+                        'delta_compactness'
+                    ]
+                },
+                BrepNode: { properties:
+                    [
+                        'delta_max_face_area',
+                        'delta_min_face_area',
+                        'delta_n_faces',
+                        'encoded_msc',
+                        'encoded_modified',
+                        'encoded_added',
+                        'encoded_deleted',
+                        'delta_width',
+                        'delta_height',
+                        'delta_volume',
+                        'delta_length'
+                    ]
+                },
+                LocationNode: { properties:
+                    [
+                        'encoded_msc',
+                        'encoded_modified',
+                        'encoded_added',
+                        'encoded_deleted',
+                        'delta_bb_min_x',
+                        'delta_bb_min_y',
+                        'delta_bb_min_z',
+                        'delta_bb_max_x',
+                        'delta_bb_max_y',
+                        'delta_bb_max_z'
+                        
+                    ]
+                },
+                SurfaceNode: { properties:
+                    [
+                        'encoded_msc',
+                        'encoded_modified',
+                        'encoded_added',
+                        'encoded_deleted',
+                        'delta_width',
+                        'delta_area',
+                        'delta_length',
+                        'delta_compactness'
+                        
+                    ]
+                }
+
+            },
+            {
+                RELATION_TO: {orientation: 'UNDIRECTED', aggregation: 'SINGLE'},
+                GEO_RELATION_TO: {orientation: 'UNDIRECTED', aggregation: 'SINGLE'}
+            }
+        )
+        YIELD
+            graphName, nodeProjection, nodeCount AS nodes, relationshipCount AS rels
+        RETURN graphName, nodeProjection.SolidNode AS bookProjection, nodes, rels
+        """
+        result, meta = self.db.cypher_query(query)
+        print(f"Projected graph: {result[0][0]}, Nodes: {result[0][2]}, Relationships: {result[0][3]}")
+        return result
+    
+    def projection_query_delta_w_entity(self):
+        query = """
+        CALL gds.graph.project(
+            'no_entity',
+            {
+                
+                PrimaryNode: { properties: [
+                    'delta_materials',
+                    'encoded_msc',
+                    'encoded_modified',
+                    'encoded_added',
+                    'encoded_deleted'
+                    ]
+                },
+                ConnectionNode: { properties:
+                    [
+                    'encoded_msc',
+                    'encoded_modified',
+                    'encoded_added',
+                    'encoded_deleted'
+                    ]
+                },
+                SolidNode: { properties:
+                    [
+                        'encoded_msc',
+                        'encoded_modified',
+                        'encoded_added',
+                        'encoded_deleted',
+                        'delta_volume',
+                        'delta_depth',
+                        'delta_width',
+                        'delta_area',
+                        'delta_length',
+                        'delta_compactness'
+                    ]
+                },
+                BrepNode: { properties:
+                    [
+                        'delta_max_face_area',
+                        'delta_min_face_area',
+                        'delta_n_faces',
+                        'encoded_msc',
+                        'encoded_modified',
+                        'encoded_added',
+                        'encoded_deleted',
+                        'delta_width',
+                        'delta_height',
+                        'delta_volume',
+                        'delta_length'
+                    ]
+                },
+                LocationNode: { properties:
+                    [
+                        'encoded_msc',
+                        'encoded_modified',
+                        'encoded_added',
+                        'encoded_deleted',
+                        'delta_bb_min_x',
+                        'delta_bb_min_y',
+                        'delta_bb_min_z',
+                        'delta_bb_max_x',
+                        'delta_bb_max_y',
+                        'delta_bb_max_z'
+                        
+                    ]
+                },
+                SurfaceNode: { properties:
+                    [
+                        'encoded_msc',
+                        'encoded_modified',
+                        'encoded_added',
+                        'encoded_deleted',
+                        'delta_width',
+                        'delta_area',
+                        'delta_length',
+                        'delta_compactness'
+                        
+                    ]
+                }
+
+            },
+            {
+                RELATION_TO: {orientation: 'UNDIRECTED', aggregation: 'SINGLE'},
+                GEO_RELATION_TO: {orientation: 'UNDIRECTED', aggregation: 'SINGLE'}
+            }
+        )
+        YIELD
+            graphName, nodeProjection, nodeCount AS nodes, relationshipCount AS rels
+        RETURN graphName, nodeProjection.SolidNode AS bookProjection, nodes, rels
+        """
+        result, meta = self.db.cypher_query(query)
+        return result
+    
+        
     
     
     

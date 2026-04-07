@@ -2,6 +2,7 @@
 import ifcopenshell
 import ifcopenshell.geom
 import ifcopenshell.util.shape
+import json
 
 
 
@@ -135,17 +136,30 @@ for entity in primary_entities_object_definitions:
                     
                     
             
-            
+def build_one_hot(index: dict) -> dict[str, list[int]]:
+    n = len(index)
+    encodings = {}
+    for entity, idx in index.items():
+        vec = [0] * n
+        vec[idx] = 1
+        encodings[entity] = vec
+    return encodings
         
-        #for i in traversed:
-            #print(f"   {i}")
-    
+with open("src/ifc_schema/ifc_encodings.json") as f:
+            one_hot = json.load(f)
+with open("src/ifc_schema/ifc_entity_index.json") as f:
+            entity_encodings = json.load(f)
+            
+e = "IfcColumn" #43
+entity_type_index = (entity_encodings.get(e, -1))
 
-#print(resources)
+n = 419
+vec = [0.0]*n
+vec[entity_type_index] = 1.0
+print(entity_type_index)
+print(len(vec))
+print(vec[0])
+print(vec[43])
+print(vec)
 
-
-print("Placements:")
-print()
-print()
-#print(resources2)
 

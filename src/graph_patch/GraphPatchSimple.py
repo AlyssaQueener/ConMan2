@@ -92,6 +92,11 @@ class GraphPatchSimple:
                         print("Delta calculation failed")
 
         if has_changes:
+            entity_node = node_init.relation_geo.all()[0]
+            if entity_node:
+                setattr(entity_node, "geo_modification", 1.0)
+                setattr(entity_node, "change_type", "modified")
+                entity_node.save()
             setattr(node_init, "change_type", "modified")
             node_init.save()
         
@@ -106,14 +111,17 @@ class GraphPatchSimple:
 
             for property_key, property_value in node_init.__properties__.items():
                 # Exclude checking for the attributes timestamp and node id, as these are supposed to be different..
-                if property_key not in ["timestamp", "element_id_property", "p21_id"]:
+                if property_key in ["materials", "material_count"]:
                     # Compare the attribute values.
                     property_value_updt = node_updt.__properties__.get(property_key)
                     if property_value != property_value_updt:
                         setattr(node_init, "change_type", "modified")
-                        setattr(node_init, "delta_materials", 1.0)
                         setattr(node_init, "old_value", property_value )
                         setattr(node_init, "new_value", property_value_updt )
+                        if property_key == "materials":
+                            setattr(node_init, "delta_materials", 1.0)
+                        if property_key == "material_count":
+                            setattr(node_init, "delta_material_count", 1.0)
                         node_init.save()
                         pattern = {
                             "EntityType" : node_init.EntityType,

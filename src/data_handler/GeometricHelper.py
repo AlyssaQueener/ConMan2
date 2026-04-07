@@ -3,6 +3,10 @@ import ifcopenshell
 import ifcopenshell.geom
 import ifcopenshell.util.shape
 import numpy as np
+import math
+from math import pi
+
+
 
 
 class GeometricHelper:
@@ -248,6 +252,7 @@ class GeometricHelper:
     def get_coordinates_Ifc_Indexed_Poly_Curve(self, outer_curve):
          ### not done yet
         points = outer_curve.Points.CoordList
+        
         ### if segments == None -> the poly curve is a line
         segments = outer_curve.Segments
         if segments == None: 
@@ -255,8 +260,31 @@ class GeometricHelper:
             #if coords[0] == coords[-1]:
                 #coords = coords[:-1]  # remove closing duplicate
             return coords
+        elif len(segments) == 2 and segments[0].is_a("IfcArcIndex") and segments[1].is_a("IfcArcIndex"):
+            coords= {}
+            arc_1 = segments[0]
+            arc_2 = segments[1]
+            if arc_1.wrappedValue[0] == arc_2.wrappedValue[2] and arc_1.wrappedValue[2] == arc_2.wrappedValue[0] and len(arc_1.wrappedValue)==3: ##cirle
+                index_start_arc = arc_1.wrappedValue[0]-1
+                index_end_arc = arc_1.wrappedValue[2]-1
+                point_start_arc = points[index_start_arc]
+                point_end_arc = points[index_end_arc]
+                dist = math.sqrt((point_end_arc[0] - point_start_arc[0])**2 + (point_end_arc[1] - point_start_arc[1])**2)
+                radius = dist/2
+                coords[0] = "circle"
+                coords[1] = radius
+                return coords
+            else:
+                print("unhandled segments")
+                return None
         else:
-            return None
+            coords = [(round(p[0], 3), round(p[1], 3)) for p in points]
+            print("unhandled segments- return normal coordinates and assume rectangular shape")
+            return coords
+        
+                
+            
+                
                 
     def compute_profile_features_rectangle(self, x_dim, y_dim):
         area = x_dim * y_dim
@@ -280,6 +308,26 @@ class GeometricHelper:
         
 
     def compute_profile_features(self, coords: list[tuple]) -> dict:
+        if coords[0] == "circle":
+            radius = round(coords[1],3)
+            area = pi * radius**2
+            perimeter = 2 * pi * radius
+            compactness = (4 * 3.14159265 * area / perimeter**2) if perimeter > 0 else 0.0
+
+            return {
+                "length": float(radius*2),
+                "delta_length": 0.0,
+            
+                "width": float(radius*2),
+                "delta_width": 0.0,
+            
+                "area": round(area,3),
+                "delta_area": 0.0,
+            
+                "compactness": round(compactness,3),
+                "delta_compactness": 0.0
+            
+            }
         n = len(coords)
     
         # Bounding box — works with negative coords naturally

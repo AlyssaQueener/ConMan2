@@ -89,7 +89,7 @@ class IfcEncodedGraphInterface:
         #secondary_entities = [e for e in model if e.id() != 0 and e.id() not in prim_conn_ids]
         with open("src/ifc_schema/ifc_entity_index.json") as f:
             entity_encodings = json.load(f)
-
+        
 
         # Create a list of node dicts that can be used for batch creation with UNWIND.
         ## Location nodes
@@ -117,21 +117,25 @@ class IfcEncodedGraphInterface:
                 "EntityType": e.is_a(),
                 "p21_id": f"#{e.id()}",
                 "timestamp": timestamp,
-                "entity_type_index": float(entity_encodings.get(e.is_a(), -1)),
+                "entity_type_index": float((entity_encodings.get(e.is_a(), -1)/100)),
+                "one_hot_entity": self.build_one_hot(entity_encodings.get(e.is_a(), -1)),
                 "delta_materials": 0.0,
+                "delta_material_count": 0.0,
                 "graph_type": graph_type
             }
             material = self.getMaterial(e)
             if material:
+                count = len(material)
                 node.update({
-                    "materials": material
+                    "materials": material,
+                    "material_count": count
                 })
             geo_count+=1
             self.createLocationNodes(e, geo_nodes, geo_relationships, geo_count, timestamp, graph_type)
             self.create_surface_and_solid_nodes(e, surface_nodes, solid_nodes, surface_relationships, solid_relationships, brep_nodes, brep_relationships, timestamp, geo_count, graph_type, printed)
             primary_nodes.append(node)
 
-        print(printed)
+        #print(printed)
         connection_nodes = []
         for e in connection_entities:
             if e.is_a("IfcRelDefinesByProperties"):
@@ -142,7 +146,8 @@ class IfcEncodedGraphInterface:
                     "EntityType": e.is_a(),
                     "p21_id": f"#{e.id()}",
                     "timestamp": timestamp,
-                    "entity_type_index": float(entity_encodings.get(e.is_a(), -1)),
+                    "entity_type_index": float((entity_encodings.get(e.is_a(), -1))/100),
+                    "one_hot_entity": self.build_one_hot(entity_encodings.get(e.is_a(), -1)),
                     "graph_type": graph_type
                 }
                 connection_nodes.append(node)
@@ -258,16 +263,20 @@ class IfcEncodedGraphInterface:
         neo4j_helper.bulk_cypher_query(query_geo_relationships, solid_relationships, batch_size)
         
         # Bulk create relationships from Geo relationsships
-        print(f"Creating surface {len(surface_relationships)} relationships.")
+        print(f"Creating surface node {len(surface_relationships)} relationships.")
         neo4j_helper.bulk_cypher_query(query_geo_relationships, surface_relationships, batch_size)
         
-        print(f"Creating Breü {len(brep_relationships)} relationships.")
+        print(f"Creating Brep {len(brep_relationships)} relationships.")
         neo4j_helper.bulk_cypher_query(query_geo_relationships, brep_relationships, batch_size)
 
 
         print("Finished IFC parsing.")
         
-        
+    def build_one_hot(self,index):
+        n=419
+        vec = [0.0]*n
+        vec[index] = 1.0
+        return vec
 
     def getMaterial(self, entity):
         try:
@@ -500,7 +509,7 @@ class IfcEncodedGraphInterface:
                                 surface_relationships.append(geo_rel)
                             else: continue
                     else:
-                        print(f"    not recoginzed Items:   {item}")
+                        print(f"   for {entity}, representation Identifier: {repIdentifier} not recoginzed Items:   {item}")
                 printed[f"{entity.is_a()}  GuidID: f{entity.GlobalId}"] = geometric_representation_item_json
         
         
