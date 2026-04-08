@@ -5,11 +5,12 @@ knn = KNN()
 #print("*****+ Result Projection Query **********")
 #print(result_p)
 r = knn.run_knn_filtered()
+#r = knn.run_cluster_stream_one_hot()
 print(r)
-#result_k = knn.run_cluster_write_no_entity()
+#result_k = knn.run_cluster_write_one_hot()
 print("*****+ Result KNN **********")
 result = knn.write_similarity()
-print(result)
+#print(result)
 
 
 

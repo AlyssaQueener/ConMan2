@@ -31,11 +31,11 @@ class KNN:
     def run_knn_filtered(self):
         print("########## Running KNN ##########")
         train_query = """
-        CALL gds.knn.filtered.stream('knn_no_entity', {
+        CALL gds.knn.filtered.stream('knn_one_hot', {
             nodeLabels: ['PrimaryNode'],
             topK: 3,
             nodeProperties: {
-                graphsage_embedding_no_entity: 'COSINE'
+                graphsage_embedding_one_hot: 'COSINE'
             },
             randomSeed: 42,
             concurrency: 1,
@@ -72,7 +72,7 @@ class KNN:
         stream_query = """
         CALL gds.kmeans.stream('knn_one_hot', {
         nodeProperty: 'graphsage_embedding_one_hot',
-        k: 6,
+        k: 15,
         randomSeed: 42
         })
         YIELD nodeId, communityId
@@ -87,7 +87,7 @@ class KNN:
         stream_query = """
         CALL gds.kmeans.stream('knn_no_entity', {
         nodeProperty: 'graphsage_embedding_no_entity',
-        k: 6,
+        k: 10,
         randomSeed: 42
         })
         YIELD nodeId, communityId
@@ -130,9 +130,9 @@ class KNN:
         query = """
         CALL gds.kmeans.write('knn_one_hot', {
         nodeProperty: 'graphsage_embedding_one_hot',
-        k: 6,
+        k: 15,
         randomSeed: 42,
-        writeProperty: 'kmeans_one_hot'
+        writeProperty: 'kmeans_one_hot_new'
         })
         YIELD nodePropertiesWritten
         """
@@ -144,9 +144,9 @@ class KNN:
         query = """
         CALL gds.kmeans.write('knn_no_entity', {
         nodeProperty: 'graphsage_embedding_no_entity',
-        k: 6,
+        k: 10,
         randomSeed: 42,
-        writeProperty: 'kmeans_no_entity'
+        writeProperty: 'kmeans_no_entity_new'
         })
         YIELD nodePropertiesWritten
         """

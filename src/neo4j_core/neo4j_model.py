@@ -34,6 +34,8 @@ class Node(SemiStructuredNode):
 class GenericGeoNode(SemiStructuredNode):
     p21_id = StringProperty(required=True)
     EntityType = StringProperty(required=True)
+    encoded_modified = FloatProperty()
+
     
     relation_geo = Relationship('Node', 'GEO_RELATION_TO', model=GeoRelProperties)  # same type as Node.relation_to_geo
     equivalent_to = Relationship('GenericGeoNode', 'EQUIVALENT_TO')

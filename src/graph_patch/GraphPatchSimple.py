@@ -10,6 +10,8 @@ class GraphPatchSimple:
     ########################
     ### Helper Functions ###
     ########################
+    
+        
 
                             
     def calculate_modifications_for_geo_node(self, node_init, node_updt, semantic_patch_pattern):
@@ -111,7 +113,7 @@ class GraphPatchSimple:
 
             for property_key, property_value in node_init.__properties__.items():
                 # Exclude checking for the attributes timestamp and node id, as these are supposed to be different..
-                if property_key in ["materials", "material_count"]:
+                if property_key not in ["timestamp", "element_id_property", "p21_id"]:
                     # Compare the attribute values.
                     property_value_updt = node_updt.__properties__.get(property_key)
                     if property_value != property_value_updt:
@@ -122,6 +124,8 @@ class GraphPatchSimple:
                             setattr(node_init, "delta_materials", 1.0)
                         if property_key == "material_count":
                             setattr(node_init, "delta_material_count", 1.0)
+                        if property_key == "Name":
+                            setattr(node_init, "name_change", 1.0)
                         node_init.save()
                         pattern = {
                             "EntityType" : node_init.EntityType,

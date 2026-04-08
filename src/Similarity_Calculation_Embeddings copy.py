@@ -146,11 +146,52 @@ class GraphEmbeddingCalculator:
 modified = PrimaryNode.nodes.filter(encoded_modified=1.0)
 
 for m in modified:
-    print(m.EntityType)
-    print(m.delta_materials)
+    print(f"Node: {m.EntityType} - change type: {m.change_type}")
     similar_nodes = m.similar_to.all()
     for s in similar_nodes:
-        print(s.EntityType)
-        print(s.change_type)    
+        print(f"   similar: {s.EntityType} changetype: {s.change_type}")
+        if s.geo_modification == 1.0 and m.geo_modification == 1.0:
+            geo_nodes_s = s.relation_geo.all()
+            geo_nodes_m = m.relation_geo.all()
+            for n in geo_nodes_s:
+                if n.change_type == "modified":
+                    print(n)
+        
+from collections import Counter
 
+all_nodes = PrimaryNode.nodes.all()
+dist = Counter(n.change_type for n in all_nodes)
+print(dist)
+
+total = 611 + 143 + 140 + 66  # = 960
+baselines = {
+    'msc':       611 / total,  # 0.636
+    'modified':  143 / total,  # 0.149
+    'added':     140 / total,  # 0.146
+    'ctdeleted':  66 / total,  # 0.069
+}
+print("Random baselines:")
+for ct, b in baselines.items():
+    print(f"  {ct}: {b:.3f}")
+    
+from collections import defaultdict
+
+all_nodes = PrimaryNode.nodes.all()
+results = defaultdict(list)
+
+for node in all_nodes:
+    if not node.change_type:
+        continue
+    similar = node.similar_to.all()
+    if not similar:
+        continue
+    matches = sum(1 for s in similar if s.change_type == node.change_type)
+    results[node.change_type].append(matches / len(similar))
+
+print(f"{'type':<12} {'recall@3':>10} {'baseline':>10} {'lift':>10} {'n':>6}")
+for ct, recalls in results.items():
+    mean = sum(recalls) / len(recalls)
+    base = baselines[ct]
+    lift = mean / base
+    print(f"{ct:<12} {mean:>10.3f} {base:>10.3f} {lift:>10.2f}x {len(recalls):>6}")
         
