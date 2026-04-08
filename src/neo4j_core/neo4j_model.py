@@ -13,6 +13,10 @@ from neomodel.contrib import SemiStructuredNode
 class RelProperties(StructuredRel):
     rel_type = StringProperty(required=True)
     list_index = IntegerProperty()
+    score = FloatProperty()
+    
+class SimilarRelProperties(StructuredRel):
+    score = FloatProperty()
 
 class GeoRelProperties(StructuredRel):
     rel_type = StringProperty(required=True)
@@ -26,7 +30,7 @@ class Node(SemiStructuredNode):
     
     relation_geo = Relationship('GenericGeoNode', 'GEO_RELATION_TO', model=GeoRelProperties)
     equivalent_to = Relationship('Node', 'EQUIVALENT_TO')
-    similar_to = RelationshipTo('Node', 'SIMILAR')
+    similar_to = RelationshipTo('Node', 'SIMILAR',model=SimilarRelProperties)
     
     graph_type = StringProperty()
     timestamp = StringProperty()

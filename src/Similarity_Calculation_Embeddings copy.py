@@ -143,19 +143,24 @@ class GraphEmbeddingCalculator:
         return graph_embeddings_mean_statistic
    
 
-modified = PrimaryNode.nodes.filter(encoded_modified=1.0)
+modified = PrimaryNode.nodes.filter(encoded_modified=1.0, graph_type="v1-v2-test")
 
 for m in modified:
     print(f"Node: {m.EntityType} - change type: {m.change_type}")
+    print(f"GlobalId: {m.GlobalId}")
     similar_nodes = m.similar_to.all()
     for s in similar_nodes:
-        print(f"   similar: {s.EntityType} changetype: {s.change_type}")
-        if s.geo_modification == 1.0 and m.geo_modification == 1.0:
-            geo_nodes_s = s.relation_geo.all()
-            geo_nodes_m = m.relation_geo.all()
-            for n in geo_nodes_s:
-                if n.change_type == "modified":
-                    print(n)
+        rel = m.similar_to.relationship(s)
+        score = rel.score
+
+        if hasattr(s, "label"):
+            print(f"   similar: {s.EntityType} changetype: {s.change_type}")
+
+            print(f"  Similarity Score: {score}")
+            print(s.EntityType)
+            print(s.change_type)
+            print(s.label)
+        
         
 from collections import Counter
 
