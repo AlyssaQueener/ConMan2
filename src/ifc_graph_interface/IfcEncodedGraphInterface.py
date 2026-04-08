@@ -83,10 +83,7 @@ class IfcEncodedGraphInterface:
         prim_conn_entities = primary_entities + connection_entities
 
         prim_conn_ids = {e.id() for e in prim_conn_entities}
-        ## get all material/ placement related resources
-        secondary_entities = model.by_type("IfcMaterialDefinition") + model.by_type("IfcObjectPlacement")
-        ## with localization: + model.by_type("IfcObjectPlacement")
-        #secondary_entities = [e for e in model if e.id() != 0 and e.id() not in prim_conn_ids]
+       
         with open("src/ifc_schema/ifc_entity_index.json") as f:
             entity_encodings = json.load(f)
         
@@ -379,9 +376,10 @@ class IfcEncodedGraphInterface:
     def process_body_representations(self, item):
         helper = GeometricHelper()
         geometric_rep = {}
-        #if item.is_a("IfcFacetedBrep"):
-            #geometric_rep = helper.get_geometry_IfcFacetedBrep(item)
-        if item.is_a("IfcExtrudedAreaSolid"):
+        if item.is_a("IfcFacetedBrep"):
+            geometric_rep = helper.get_geometry_IfcFacetedBrep(item)
+            extruded = False
+        elif item.is_a("IfcExtrudedAreaSolid"):
             geometric_rep = helper.get_geometry_IfcExtruded_Area_Solid(item)
             extruded = True
         elif item.is_a("IfcPolygonalFaceSet"):

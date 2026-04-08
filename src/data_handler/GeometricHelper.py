@@ -33,6 +33,44 @@ class GeometricHelper:
             points_coordinates.append(p.Coordinates)
         return points_coordinates
     
+    def calculate_polygon_area(self, coordinates):
+        """Shoelace formula for 2D polygon area."""
+        n = len(coordinates)
+        if n < 3:
+            return 0.0
+
+        area = 0.0
+        for i in range(n):
+            j = (i + 1) % n
+            area += coordinates[i][0] * coordinates[j][1]
+            area -= coordinates[j][0] * coordinates[i][1]
+
+        return abs(area) / 2.0
+    
+    def calculate_3d_polygon_area(self, coordinates):
+        """Area of a 3D polygon using the cross-product method."""
+        coords = np.array(coordinates)
+        n = len(coords)
+        if n < 3:
+            return 0.0
+
+        # Compute the normal via Newell's method
+        normal = np.zeros(3)
+        for i in range(n):
+            j = (i + 1) % n
+            normal[0] += (coords[i][1] - coords[j][1]) * (coords[i][2] + coords[j][2])
+            normal[1] += (coords[i][2] - coords[j][2]) * (coords[i][0] + coords[j][0])
+            normal[2] += (coords[i][0] - coords[j][0]) * (coords[i][1] + coords[j][1])
+
+        # Area = 0.5 * |sum of cross products| projected onto the normal
+        total_cross = np.zeros(3)
+        for i in range(n):
+            j = (i + 1) % n
+            total_cross += np.cross(coords[i], coords[j])
+
+        area = abs(np.dot(total_cross, normal)) / (2.0 * np.linalg.norm(normal))
+        return area
+    
     def get_IfcBBox(self, item):
         bbox = item
         geo_representation = {
@@ -231,6 +269,8 @@ class GeometricHelper:
         geometry_info = {}
         outer = item.Outer #IfcClosedShell
         cfsFaces = outer.CfsFaces #CfsFaces -> set of IfcFaces
+        coordinates = []
+        face_areas = []
         for i,face in enumerate(cfsFaces):
             bounds = face.Bounds #IfcBound -> Boundris of the face
             face_bounds = []
@@ -238,15 +278,64 @@ class GeometricHelper:
                 orientation = bound.Orientation #Orientation of bound, True or False
                 actual_bound = bound.Bound ## for facetedBrep always Polyloop (Polygon defined by Points)
                 polygon_coordinates = self.get_coordinates_Ifc_polygon(actual_bound.Polygon)
+                dimension_coordinates = len(polygon_coordinates[0])
+                if dimension_coordinates == 2:
+                    poly_area = self.calculate_polygon_area(polygon_coordinates)
+                    face_areas.append(poly_area)
+                else:
+                    poly_area = self.calculate_3d_polygon_area(polygon_coordinates)
+                    face_areas.append(poly_area)
+
                 face_bound = {
                     "orientation": orientation,
                     "polygon_coordinates": polygon_coordinates
                 }
+                coordinates.append(polygon_coordinates)
                 face_bounds.append(face_bound)
                             #print(f"      Polygon: {polygon_coordinates}")
                             #print(f"      Orientation: {orientation}")
+                            
             geometry_info[str(i)]=face_bounds
-        return geometry_info
+             # Fixed-size feature vector
+        # With this:
+        all_points = [pt for face_coords in coordinates for pt in face_coords]
+        pts = np.array(all_points)
+        centroid = pts.mean(axis=0)
+        bbox_min = pts.min(axis=0)
+        bbox_max = pts.max(axis=0)
+        extents = bbox_max - bbox_min
+        
+        l = extents[0]
+        w = extents[1]
+        h = extents[2]
+        v = l*w*h
+
+        
+        geo_info = {
+            "max_face_area": round(float(max(face_areas)),3),
+            "delta_max_face_area": 0.0,
+            
+            "min_face_area": round(float(min(face_areas)),3),
+            "delta_min_face_area": 0.0,
+            
+            "n_faces": float(len(face_areas)),
+            "delta_n_faces": 0.0,
+            
+            "width": round(float(w),3),
+            "delta_width": 0.0,
+
+            "height": round(float(h),3),
+            "delta_height": 0.0,
+
+            "volume": round(float(v),3),
+            "delta_volume": 0.0,
+            
+            "length": round(float(l),3),
+            "delta_length": 0.0
+            
+         }
+
+        return geo_info
     
     
     def get_coordinates_Ifc_Indexed_Poly_Curve(self, outer_curve):

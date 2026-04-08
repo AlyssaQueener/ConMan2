@@ -3,6 +3,8 @@ import ifcopenshell
 import ifcopenshell.geom
 import ifcopenshell.util.shape
 import json
+from data_handler.GeometricHelper import GeometricHelper  # import the class from the module
+
 
 
 
@@ -136,30 +138,45 @@ for entity in primary_entities_object_definitions:
                     
                     
             
-def build_one_hot(index: dict) -> dict[str, list[int]]:
-    n = len(index)
-    encodings = {}
-    for entity, idx in index.items():
-        vec = [0] * n
-        vec[idx] = 1
-        encodings[entity] = vec
-    return encodings
+
+model = ifcopenshell.open("src/06_TestData/2026-03-SampleData-ChangeInterpretation-v1.ifc")
+primary_entities = model.by_type("IfcObjectDefinition")
+geo_help = GeometricHelper()
+
+for entity in primary_entities:
+    if hasattr(entity, "Representation") and entity.Representation is not None:
+        #print(f"IfcEntity: {entity}")
+        #print(ifcopenshell.util.element.get_material(entity))
         
-with open("src/ifc_schema/ifc_encodings.json") as f:
-            one_hot = json.load(f)
-with open("src/ifc_schema/ifc_entity_index.json") as f:
-            entity_encodings = json.load(f)
-            
-e = "IfcColumn" #43
-entity_type_index = (entity_encodings.get(e, -1))
-
-n = 419
-vec = [0.0]*n
-vec[entity_type_index] = 1.0
-print(entity_type_index)
-print(len(vec))
-print(vec[0])
-print(vec[43])
-print(vec)
-
-
+        ## IFC Product Representation (-> IfcTopologyRepresentation/ IfcShapeRepresentation)
+        rep = entity.Representation
+        
+        ## IfcShapeRepresentation
+        representation = entity.Representation.Representations
+        
+        for i,rep in enumerate(representation):
+        ## IfcShapeRepresentaion - Type
+            #print(f"   {i+1}. IfcShapeRepresentaion:")
+            repType = rep.RepresentationType
+            #print(f"   IfcShapeRepresentaion - Type: {repType}")
+        
+        ## IfcShapeRepresentaion - Identifier
+            repIdnetifier = rep.RepresentationIdentifier
+            #print(f"   IfcShapeRepresentaion - Identifier: {repIdnetifier}")
+        
+        
+        ## IfcShapeRepresentation - IfcRepresentationItems
+            repItems = rep.Items
+            for item in repItems:
+                
+                #print(f"   IfcShapeRepresentaion - RepresentationItems: {repItems}")
+                if item.is_a("IfcFacetedBrep"):
+                    rep = geo_help.get_geometry_IfcFacetedBrep(item)
+                else:
+                    continue    
+                    
+                
+                        
+                    
+                        
+                
