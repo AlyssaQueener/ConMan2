@@ -144,29 +144,97 @@ class GraphEmbeddingCalculator:
    
 
 modified = PrimaryNode.nodes.filter(encoded_modified=1.0, graph_type="v1-v2-test")
+modified_2 = PrimaryNode.nodes.filter(encoded_modified=1.0, graph_type="v2-v3-test") 
+modified_3 = PrimaryNode.nodes.filter(encoded_modified=1.0, graph_type="v3-v4-test") 
 
 for m in modified:
-    print(f"Node: {m.EntityType} - change type: {m.change_type}")
-    print(f"GlobalId: {m.GlobalId}")
+    if hasattr(m,"label"):
+        print("*********")
+        print(f"Node: {m.EntityType} - change type: {m.change_type}")
+        print(f"GlobalId: {m.GlobalId}")
+        print(f"Label: {m.label}")
+        print(f"Label Info: {m.label_info}")
+
+    
     similar_nodes = m.similar_to.all()
+    scored = []
     for s in similar_nodes:
-        rel = m.similar_to.relationship(s)
-        score = rel.score
-
         if hasattr(s, "label"):
-            print(f"   similar: {s.EntityType} changetype: {s.change_type}")
+            rel = m.similar_to.relationship(s)
+            scored.append((s, rel.score))
+    
+    # Sort by score descending, take top 3
+    top3 = sorted(scored, key=lambda x: x[1], reverse=True)[:3]
+    
+    for s, score in top3:
+        if score>0.9 and m.GlobalId != s.GlobalId :
+            print(f"    {score}")
 
-            print(f"  Similarity Score: {score}")
-            print(s.EntityType)
-            print(s.change_type)
-            print(s.label)
-        
+            print(f"    {s.EntityType} - {s.change_type}")
+            print(f"    Label: {s.label}")
+            print(f"    Label Info: {s.label_info}")
+   
+print("VERSION V2-v3")         
+for m in modified_2:
+    if hasattr(m,"label"):
+        print("************")
+        print(f"Node: {m.EntityType} - change type: {m.change_type}")
+        print(f"GlobalId: {m.GlobalId}")
+        print(f"Label: {m.label}")
+        print(f"Label Info: {m.label_info}")
+
+    
+    similar_nodes = m.similar_to.all()
+    scored = []
+    for s in similar_nodes:
+        if hasattr(s, "label"):
+            rel = m.similar_to.relationship(s)
+            scored.append((s, rel.score))
+    
+    # Sort by score descending, take top 3
+    top3 = sorted(scored, key=lambda x: x[1], reverse=True)[:3]
+    
+    for s, score in top3:
+        if score>0.9:
+            print(f"    {score}")
+
+            print(f"    {s.EntityType} - {s.change_type}")
+            print(f"    Label: {s.label}")
+            print(f"    Label Info: {s.label_info}")
+            
+print("VERSION V3-v4")         
+for m in modified_3:
+    if hasattr(m,"label"):
+        print("************")
+        print(f"Node: {m.EntityType} - change type: {m.change_type}")
+        print(f"GlobalId: {m.GlobalId}")
+        print(f"Label: {m.label}")
+        print(f"Label Info: {m.label_info}")
+
+    
+    similar_nodes = m.similar_to.all()
+    scored = []
+    for s in similar_nodes:
+        if hasattr(s, "label"):
+            rel = m.similar_to.relationship(s)
+            scored.append((s, rel.score))
+    
+    # Sort by score descending, take top 3
+    top3 = sorted(scored, key=lambda x: x[1], reverse=True)[:3]
+    
+    for s, score in top3:
+        if score>0.9:
+            print(f"    {score}")
+
+            print(f"    {s.EntityType} - {s.change_type}")
+            print(f"    Label: {s.label}")
+            print(f"    Label Info: {s.label_info}")
         
 from collections import Counter
 
 all_nodes = PrimaryNode.nodes.all()
 dist = Counter(n.change_type for n in all_nodes)
-print(dist)
+#print(dist)
 
 total = 611 + 143 + 140 + 66  # = 960
 baselines = {
