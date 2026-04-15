@@ -33,7 +33,7 @@ class KNN:
         train_query = """
         CALL gds.knn.filtered.stream('knn_one_hot', {
             nodeLabels: ['PrimaryNode'],
-            topK: 10,
+            topK: 1,
             nodeProperties: {
                 graphsage_embedding_one_hot: 'COSINE'
             },
@@ -162,7 +162,7 @@ class KNN:
         print("########## Write similar rel ##########")
         write_query = """
         CALL gds.knn.write('knn_one_hot', {
-            topK: 10,
+            topK: 1,
             nodeProperties: ['graphsage_embedding_one_hot'],
             writeRelationshipType: 'SIMILAR',
             writeProperty: 'score',

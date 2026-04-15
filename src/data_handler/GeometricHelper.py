@@ -261,6 +261,29 @@ class GeometricHelper:
                     "delta_volume": 0.0
                 })
             return geometry_info
+        elif sweptArea.is_a("IfcCircleProfileDef"):
+            radius = round(sweptArea.Radius,3)
+            area = pi * radius**2
+            volume = area*depth
+            perimeter = 2 * pi * radius
+            compactness = (4 * 3.14159265 * area / perimeter**2) if perimeter > 0 else 0.0
+            geometry_info.update({
+                "length": float(radius*2),
+                "delta_length": 0.0,
+            
+                "width": float(radius*2),
+                "delta_width": 0.0,
+            
+                "area": round(area,3),
+                "delta_area": 0.0,
+            
+                "compactness": round(compactness,3),
+                "delta_compactness": 0.0,
+                
+                "volume": round(volume,3),
+                "delta_volume": 0.0
+            }) 
+            return geometry_info
         else:
          ## TO BE IMPLEMENTED
             return None

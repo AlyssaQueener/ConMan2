@@ -9,7 +9,14 @@ db = Neo4jConnection(username="neo4j", password="password", hostname="localhost"
 
 models = [
     {
-        "path_init": "src/05_SampleData/house-3/v2-house3.ifc",
+        "path_init": "src/05_SampleData/house-3/v1-house3.ifc",
+        "timestamp_init": "v1-house-3",
+        "path_updt": "src/05_SampleData/house-3/v2-house-3.ifc",
+        "timestamp_updt": "v2-house-3-updt",
+        "graph_type": "v1-v2-house-3"
+    },
+    {
+        "path_init": "src/05_SampleData/house-3/v2-house-3.ifc",
         "timestamp_init": "v2-house-3",
         "path_updt": "src/05_SampleData/house-3/v3-house-3.ifc",
         "timestamp_updt": "v3-house-3-updt",

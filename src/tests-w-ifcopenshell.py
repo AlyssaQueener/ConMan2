@@ -135,45 +135,108 @@ for entity in primary_entities_object_definitions:
                             if element.is_a("IfcPolyline"):
                                 coordinates = get_coordinates_poly_line(element)
                                 print(f"     Coordinates: {coordinates}")
-                    
-                    
-            
+                                
+                                
+                                
+def process_body_representations(item):
+        helper = GeometricHelper()
+        geometric_rep = {}
+        if item.is_a("IfcFacetedBrep"):
+            geometric_rep = helper.get_geometry_IfcFacetedBrep(item)
+            extruded = False
+        elif item.is_a("IfcExtrudedAreaSolid"):
+            geometric_rep = helper.get_geometry_IfcExtruded_Area_Solid(item)
+            extruded = True
+        elif item.is_a("IfcPolygonalFaceSet"):
+            geometric_rep = helper.get_geometry_Ifc_Polygonal_Face_Set(item)
+            #geometric_rep = helper.get_Polygonal_Face_Set_w_openshell(item)
+            extruded = False
+        else:
+            print(f"Body representation Not yet implemented: {item}")
+            return None, None
+        return geometric_rep, extruded
 
-model = ifcopenshell.open("src/06_TestData/2026-03-SampleData-ChangeInterpretation-v1.ifc")
+def process_footprint_representation(item):
+    helper = GeometricHelper()
+    info = {}
+        #if item.is_a("IfcPolyline"):
+
+    if item.is_a("IfcIndexedPolyCurve"):
+        coords = helper.get_coordinates_Ifc_Indexed_Poly_Curve(item)
+        profile_features = helper.compute_profile_features(coords)
+        info.update(profile_features)  
+        #elif item.is_a("IfcGeometricCurveSet"):
+            
+    else: 
+        print(f"footprint representation not yet implement: {item} ") 
+        return None
+    return info
+                    
+                    
+def create_surface_and_solid_nodes(entity, surface_nodes, solid_nodes, surface_relationships, solid_relationships,brep_nodes, brep_relationships, timestamp, geo_count, graph_type, printed):
+        if hasattr(entity, "Representation") and entity.Representation is not None:
+            ## IFC Product Representation (-> IfcTopologyRepresentation/ IfcShapeRepresentation)
+            rep = entity.Representation
+        
+            ## IfcShapeRepresentation
+            representation = entity.Representation.Representations
+        
+            for i,rep in enumerate(representation):
+            ## IfcShapeRepresentaion - Type
+                repType = rep.RepresentationType
+        
+            ## IfcShapeRepresentaion - Identifier
+                repIdentifier = rep.RepresentationIdentifier ### Body, Footprint
+        
+            ## IfcShapeRepresentation - IfcRepresentationItems
+                repItems = rep.Items
+                item_nr = 1
+                geometric_representation_item_json = []
+                for item in repItems:
+                    
+                
+                    if repIdentifier == "Body":
+                        if repType == "MappedRepresentation":
+                            mapped_representation_items = item.MappingSource.MappedRepresentation.Items
+                            for i in mapped_representation_items:
+                                geo_info, extruded = process_body_representations(i)
+                                geometric_representation_item_json.append(geo_info)
+                        else:
+                            geo_info, extruded = process_body_representations(item)
+                            geometric_representation_item_json.append(geo_info)
+                    elif repIdentifier == "FootPrint":            
+                        if repType == "MappedRepresentation":
+                            mapped_representation_items = item.MappingSource.MappedRepresentation.Items
+                            for i in mapped_representation_items:
+                                geo_info = process_footprint_representation(i)
+                                geometric_representation_item_json.append(geo_info)
+                        else:
+                            geo_info = process_footprint_representation(item)
+                            geometric_representation_item_json.append(geo_info)
+                    else:
+                        print(f"   for {entity}, representation Identifier: {repIdentifier} not recoginzed Items:   {item}")
+                print(geometric_representation_item_json)
+        
+        
+
+model = ifcopenshell.open("src/06_TestData/2026-03-SampleData-ChangeInterpretation-v3.ifc")
 primary_entities = model.by_type("IfcObjectDefinition")
 geo_help = GeometricHelper()
 
 for entity in primary_entities:
     if hasattr(entity, "Representation") and entity.Representation is not None:
-        #print(f"IfcEntity: {entity}")
-        #print(ifcopenshell.util.element.get_material(entity))
-        
-        ## IFC Product Representation (-> IfcTopologyRepresentation/ IfcShapeRepresentation)
-        rep = entity.Representation
-        
-        ## IfcShapeRepresentation
-        representation = entity.Representation.Representations
-        
-        for i,rep in enumerate(representation):
-        ## IfcShapeRepresentaion - Type
-            #print(f"   {i+1}. IfcShapeRepresentaion:")
-            repType = rep.RepresentationType
-            #print(f"   IfcShapeRepresentaion - Type: {repType}")
-        
-        ## IfcShapeRepresentaion - Identifier
-            repIdnetifier = rep.RepresentationIdentifier
-            #print(f"   IfcShapeRepresentaion - Identifier: {repIdnetifier}")
-        
-        
-        ## IfcShapeRepresentation - IfcRepresentationItems
-            repItems = rep.Items
-            for item in repItems:
-                
-                #print(f"   IfcShapeRepresentaion - RepresentationItems: {repItems}")
-                if item.is_a("IfcFacetedBrep"):
-                    rep = geo_help.get_geometry_IfcFacetedBrep(item)
-                else:
-                    continue    
+        s = []
+        a = [] 
+        b= []
+        c=[]
+        d=[]
+        e=[]
+        f=[]
+        g=""
+        h="2"
+        j=1
+        k=[]
+        create_surface_and_solid_nodes(entity,a,k,b,c,d,e,g,j,h,f)
                     
                 
                         
