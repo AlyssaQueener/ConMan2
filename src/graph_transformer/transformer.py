@@ -252,7 +252,7 @@ class Transformer:
     
         return result
     
-    def drop_model(self,model_name='geometric-change-interpreter'):
+    def drop_model(self,model_name='one_hot'):
         drop_query = """
         CALL gds.model.exists($model_name)
         YIELD exists
@@ -465,7 +465,7 @@ class Transformer:
                 activationFunction: 'relu',
                 sampleSizes: [25, 10],
                 learningRate: 0.001,
-                tolerance: 0.0001,
+                tolerance: 0.00001,
                 epochs: 20,
                 embeddingDimension: 64,
                 randomSeed: 42

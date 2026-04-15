@@ -143,92 +143,57 @@ class GraphEmbeddingCalculator:
         return graph_embeddings_mean_statistic
    
 
-modified = PrimaryNode.nodes.filter(encoded_modified=1.0, graph_type="v1-v2-test")
-modified_2 = PrimaryNode.nodes.filter(encoded_modified=1.0, graph_type="v2-v3-test") 
-modified_3 = PrimaryNode.nodes.filter(encoded_modified=1.0, graph_type="v3-v4-test") 
+import json
 
-for m in modified:
-    if hasattr(m,"label"):
-        print("*********")
-        print(f"Node: {m.EntityType} - change type: {m.change_type}")
-        print(f"GlobalId: {m.GlobalId}")
-        print(f"Label: {m.label}")
-        print(f"Label Info: {m.label_info}")
+change_library = ["tc", "rotation", "translation", "size"]
+test_versions = ["v1-v2-test", "v2-v3-test", "v3-v4-test"]
 
-    
-    similar_nodes = m.similar_to.all()
-    scored = []
-    for s in similar_nodes:
-        if hasattr(s, "label"):
-            rel = m.similar_to.relationship(s)
-            scored.append((s, rel.score))
-    
-    # Sort by score descending, take top 3
-    top3 = sorted(scored, key=lambda x: x[1], reverse=True)[:3]
-    
-    for s, score in top3:
-        if score>0.9 and m.GlobalId != s.GlobalId :
-            print(f"    {score}")
+all_results = []
 
-            print(f"    {s.EntityType} - {s.change_type}")
-            print(f"    Label: {s.label}")
-            print(f"    Label Info: {s.label_info}")
-   
-print("VERSION V2-v3")         
-for m in modified_2:
-    if hasattr(m,"label"):
-        print("************")
-        print(f"Node: {m.EntityType} - change type: {m.change_type}")
-        print(f"GlobalId: {m.GlobalId}")
-        print(f"Label: {m.label}")
-        print(f"Label Info: {m.label_info}")
+for version in test_versions:
+    modified = PrimaryNode.nodes.filter(encoded_modified=1.0, graph_type=version)
+    
+    for m in modified:
+        modified_node = {
+            "Entity": m.EntityType,
+            "change_type": m.change_type,
+            "graph_version": m.graph_type,
+            "GlobalId": m.GlobalId,
+            "top_k": []
+        }
+        
+        for s in m.similar_to.all():
+            if s.graph_type in change_library:
+                rel = m.similar_to.relationship(s)
+                s_info = {
+                    "EntityType": s.EntityType,
+                    "change_type": s.change_type,
+                    "label": s.label,
+                    "graph_type": s.graph_type,
+                    "score": rel.score
+                }
+                if hasattr(s, "label_info"):
+                    s_info["label_info"] = s.label_info
+                if hasattr(s, "label_info_material"):
+                    s_info["label_info_material"] = s.label_info_material
+                modified_node["top_k"].append(s_info)
+                
+        
+        modified_node["top_k"].sort(key=lambda x: x["score"], reverse=True)
+        
+        if modified_node["top_k"]:
+            labels = [n["graph_type"] for n in modified_node["top_k"]]
+            modified_node["predicted"] = max(set(labels), key=labels.count)
+        else:
+            modified_node["predicted"] = "no_library_match"
+        
+        all_results.append(modified_node)
 
-    
-    similar_nodes = m.similar_to.all()
-    scored = []
-    for s in similar_nodes:
-        if hasattr(s, "label"):
-            rel = m.similar_to.relationship(s)
-            scored.append((s, rel.score))
-    
-    # Sort by score descending, take top 3
-    top3 = sorted(scored, key=lambda x: x[1], reverse=True)[:3]
-    
-    for s, score in top3:
-        if score>0.9:
-            print(f"    {score}")
+# Write to JSON
+with open("knn_classification_results.json", "w") as f:
+    json.dump(all_results, f, indent=2, default=str)
 
-            print(f"    {s.EntityType} - {s.change_type}")
-            print(f"    Label: {s.label}")
-            print(f"    Label Info: {s.label_info}")
-            
-print("VERSION V3-v4")         
-for m in modified_3:
-    if hasattr(m,"label"):
-        print("************")
-        print(f"Node: {m.EntityType} - change type: {m.change_type}")
-        print(f"GlobalId: {m.GlobalId}")
-        print(f"Label: {m.label}")
-        print(f"Label Info: {m.label_info}")
-
-    
-    similar_nodes = m.similar_to.all()
-    scored = []
-    for s in similar_nodes:
-        if hasattr(s, "label"):
-            rel = m.similar_to.relationship(s)
-            scored.append((s, rel.score))
-    
-    # Sort by score descending, take top 3
-    top3 = sorted(scored, key=lambda x: x[1], reverse=True)[:3]
-    
-    for s, score in top3:
-        if score>0.9:
-            print(f"    {score}")
-
-            print(f"    {s.EntityType} - {s.change_type}")
-            print(f"    Label: {s.label}")
-            print(f"    Label Info: {s.label_info}")
+print(f"Wrote {len(all_results)} results to knn_classification_results.json")
         
 from collections import Counter
 
@@ -238,10 +203,10 @@ dist = Counter(n.change_type for n in all_nodes)
 
 total = 611 + 143 + 140 + 66  # = 960
 baselines = {
-    'msc':       611 / total,  # 0.636
-    'modified':  143 / total,  # 0.149
-    'added':     140 / total,  # 0.146
-    'ctdeleted':  66 / total,  # 0.069
+    'msc':       824/ total,  # 0.636
+    'modified':  194 / total,  # 0.149
+    'added':     172 / total,  # 0.146
+    'ctdeleted':  78/ total,  # 0.069
 }
 print("Random baselines:")
 for ct, b in baselines.items():
@@ -260,7 +225,7 @@ for node in all_nodes:
         continue
     matches = sum(1 for s in similar if s.change_type == node.change_type)
     results[node.change_type].append(matches / len(similar))
-
+print(results)
 print(f"{'type':<12} {'recall@3':>10} {'baseline':>10} {'lift':>10} {'n':>6}")
 for ct, recalls in results.items():
     mean = sum(recalls) / len(recalls)

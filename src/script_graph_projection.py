@@ -10,7 +10,7 @@ transformer.drop_projection('one_hot')
 result = transformer.projection_query_delta_one_hot()
 print(result)
 
-#transformer.drop_model()
+transformer.drop_model()
 result_training = transformer.train_graph_delta_one_hot()
 print("training result")
 print(result_training)
