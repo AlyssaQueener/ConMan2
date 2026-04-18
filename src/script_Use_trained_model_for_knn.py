@@ -11,11 +11,11 @@ transformer = Transformer()
 #print(result)
 
 #transformer.generate_graphsage_embeddings_one_hot()
-
+"graphsage_embedding_no_entity"
 from change_interpreter.knn import KNN
 knn = KNN()
-knn.drop_projection('knn_one_hot')
-result_p = knn.projection_query_knn_one_hot()
+knn.drop_projection('knn_no_entity')
+result_p = knn.projection_query_knn_no_entity()
 
 r = knn.run_knn_filtered()
 #r = knn.run_cluster_stream_one_hot()

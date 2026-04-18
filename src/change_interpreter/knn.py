@@ -31,11 +31,11 @@ class KNN:
     def run_knn_filtered(self):
         print("########## Running KNN ##########")
         train_query = """
-        CALL gds.knn.filtered.stream('knn_one_hot', {
+        CALL gds.knn.filtered.stream('knn_no_entity', {
             nodeLabels: ['PrimaryNode'],
-            topK: 10,
+            topK: 15,
             nodeProperties: {
-                graphsage_embedding_one_hot: 'COSINE'
+                graphsage_embedding_no_entity: 'COSINE'
             },
             randomSeed: 42,
             concurrency: 1,
@@ -161,9 +161,9 @@ class KNN:
     
         print("########## Write similar rel ##########")
         write_query = """
-        CALL gds.knn.write('knn_one_hot', {
-            topK: 10,
-            nodeProperties: ['graphsage_embedding_one_hot'],
+        CALL gds.knn.write('knn_no_entity', {
+            topK: 15,
+            nodeProperties: ['graphsage_embedding_no_entity'],
             writeRelationshipType: 'SIMILAR',
             writeProperty: 'score',
             randomSeed: 42,
@@ -253,7 +253,7 @@ class KNN:
             YIELD exists
             WITH exists
             WHERE exists
-            CALL gds.graph.drop('knn_one_hot')
+            CALL gds.graph.drop('knn_no_entity')
             YIELD graphName
             RETURN graphName
         """

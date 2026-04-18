@@ -6,15 +6,15 @@ from graph_transformer.transformer import Transformer
 from data_handler.clean_up import Clean_up
 #Transform graph
 transformer = Transformer()
-transformer.drop_projection('one_hot')
-result = transformer.projection_query_delta_one_hot()
+transformer.drop_projection('no_entity')
+result = transformer.projection_query_delta_w_entity()
 print(result)
 
 transformer.drop_model()
-result_training = transformer.train_graph_delta_one_hot()
+result_training = transformer.train_graph_delta_n_entities()
 print("training result")
 print(result_training)
-transformer.generate_graphsage_embeddings_one_hot()
+transformer.generate_graphsage_embeddings_no_entity()
 
 
 
