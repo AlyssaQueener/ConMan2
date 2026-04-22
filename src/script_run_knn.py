@@ -1,9 +1,8 @@
 from change_interpreter.knn import KNN
 knn = KNN()
-#knn.drop_projection('knn_no_entity')
-#result_p = knn.projection_query_knn_one_hot()
-#print("*****+ Result Projection Query **********")
-#print(result_p)
+knn.drop_projection('knn_no_entity')
+result_p = knn.projection_query_knn_no_entity()
+
 r = knn.run_knn_filtered()
 #r = knn.run_cluster_stream_one_hot()
 #print(r)
@@ -11,6 +10,5 @@ r = knn.run_knn_filtered()
 print("*****+ Result KNN **********")
 result = knn.write_similarity()
 #print(result)
-
 
 

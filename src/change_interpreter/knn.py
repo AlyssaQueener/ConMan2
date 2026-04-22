@@ -225,6 +225,25 @@ class KNN:
         print(f"Projected graph: {result[0][0]}, Nodes: {result[0][2]}, Relationships: {result[0][3]}")
         return result
     
+    def projection_query_for_certain_graph_types(self):
+        query = """
+        CALL gds.graph.project.cypher(
+            'knn_no_entity',
+            'MATCH (n:PrimaryNode) 
+            WHERE n.graph_type IN $allowed_types 
+            RETURN id(n) AS id, labels(n) AS labels, 
+            n.graphsage_embedding_no_entity AS graphsage_embedding_no_entity',
+            MATCH (a)-[r]->(b) RETURN id(a) AS source, id(b) AS target, type(r) AS type',
+            {parameters: {allowed_types: ["tc", "rotation", "translation", "size", 
+                                   "rotation-2", "size-2", "room-size", "translation-2",
+                                   "v1-v2-test", "v2-v3-test", "v3-v4-test"]}
+                                   }
+            )
+        """
+        result, meta = self.db.cypher_query(query)
+        print(f"Projected graph: {result[0][0]}, Nodes: {result[0][2]}, Relationships: {result[0][3]}")
+        return result
+    
     def projection_query_knn_no_entity(self):
         query = """
         CALL gds.graph.project(

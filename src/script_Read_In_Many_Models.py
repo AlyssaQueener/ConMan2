@@ -6,7 +6,6 @@ from graph_transformer.transformer import Transformer
 from data_handler.clean_up import Clean_up
 
 db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
-db.cypher_query("MATCH (n) DETACH DELETE n")
 
 models = [
     {
@@ -71,6 +70,13 @@ models = [
         "path_updt": "src/05_SampleData/house-2/v3-house-2.ifc",
         "timestamp_updt": "v3-house-2-updt",
         "graph_type": "v2-v3-house-2"
+    },
+    {
+        "path_init": "src/05_SampleData/house-3/v1-house3.ifc",
+        "timestamp_init": "v1-house-3",
+        "path_updt": "src/05_SampleData/house-3/v2-house-3.ifc",
+        "timestamp_updt": "v2-house-3-updt",
+        "graph_type": "v1-v2-house-3"
     }
 ]
 

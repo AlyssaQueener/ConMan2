@@ -6,11 +6,13 @@ from graph_transformer.transformer import Transformer
 from data_handler.clean_up import Clean_up
 #Transform graph
 transformer = Transformer()
+transformer.drop_projection('no_entity')
+result = transformer.projection_query_delta_w_entity()
 #transformer.drop_projection('one_hot')
 #result = transformer.projection_query_delta_one_hot()
-#print(result)
+print(result)
 
-#transformer.generate_graphsage_embeddings_one_hot()
+transformer.generate_graphsage_embeddings_no_entity()
 "graphsage_embedding_no_entity"
 from change_interpreter.knn import KNN
 knn = KNN()

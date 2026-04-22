@@ -252,7 +252,7 @@ class Transformer:
     
         return result
     
-    def drop_model(self,model_name='one_hot'):
+    def drop_model(self,model_name='no_entity'):
         drop_query = """
         CALL gds.model.exists($model_name)
         YIELD exists

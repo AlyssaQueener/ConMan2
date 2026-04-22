@@ -7,7 +7,9 @@ from data_handler.clean_up import Clean_up
 
 db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
 
-models = [
+labels = "TC,Translation, Rotation, Size"
+
+models_Original = [
     {
         "path_init": "src/07_VersionWithLabel/BaseTC.ifc",
         "timestamp_init": "v1-tc",
@@ -38,6 +40,17 @@ models = [
         "path_updt": "src/07_VersionWithLabel/size-2.ifc",
         "timestamp_updt": "v2-size",
         "graph_type": "size",
+        "label": "Size"
+    }
+]
+
+models= [
+    {
+        "path_init": "src/07_VersionWithLabel/base-size-2.ifc",
+        "timestamp_init": "v1-size-2",
+        "path_updt": "src/07_VersionWithLabel/size-3.ifc",
+        "timestamp_updt": "v2-size-2",
+        "graph_type": "size-2",
         "label": "Size"
     }
 ]
