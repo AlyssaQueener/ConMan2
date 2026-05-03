@@ -45,7 +45,7 @@ class Transformer:
                 setattr(node, 'encoded_deleted', 0.0)       
                 setattr(node, 'encoded_added', 0.0) 
             else:
-                setattr(node, "change_type", "msc")
+                setattr(node, "change_type", "unmodified")
                 setattr(node, 'encoded_msc', 1.0)  
                 setattr(node, 'encoded_modified', 0.0) 
                 setattr(node, 'encoded_deleted', 0.0)       
