@@ -43,7 +43,7 @@ creation_neo4j_ifc_interface.ifc_2_graph(path_updt, timestamp=timestamp_updt,gra
 print(f"Running diff.")
 creation_graph_diff = GraphDiffSimple()
 creation_graph_diff.run_diff(timestamp_init, timestamp_updt, graph_type)
-#input("Diff created")
+input("Diff created")
 
 # Create Patch
 print(f"Creating patch.")

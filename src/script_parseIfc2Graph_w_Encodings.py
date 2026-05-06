@@ -38,5 +38,5 @@ creation_neo4j_ifc_interface = IfcEncodedGraphInterface()
 print(f"Parsing {path_init} with timestamp {timestamp_init}.")
 creation_neo4j_ifc_interface.ifc_2_graph(path_init, timestamp=timestamp_init, graph_type=graph_type)
 print(f"Parsing {path_updt} with timestamp {timestamp_updt}.")
-creation_neo4j_ifc_interface.ifc_2_graph(path_updt, timestamp=timestamp_updt,graph_type=graph_type)
+#creation_neo4j_ifc_interface.ifc_2_graph(path_updt, timestamp=timestamp_updt,graph_type=graph_type)
 
