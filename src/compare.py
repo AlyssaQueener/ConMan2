@@ -2,7 +2,7 @@ import json
 from sklearn.metrics import accuracy_score, f1_score, classification_report
 
 # Load data
-with open("knn_classification_results.json") as f:
+with open("knn_classification_results_no-entity-classify-with-trained-model.json") as f:
     predictions = json.load(f)
 
 with open("ground_truth.json") as f:

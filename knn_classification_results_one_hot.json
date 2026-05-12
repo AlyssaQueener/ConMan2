@@ -1,0 +1,3371 @@
+[
+  {
+    "Entity": "IfcBeam",
+    "change_type": "modified",
+    "graph_version": "v1-v2-test",
+    "GlobalId": "0Czv28JAHDuepx33rj$lAZ",
+    "top_k": [
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9601859227160343,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9592667344794282,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Size"
+  },
+  {
+    "Entity": "IfcColumn",
+    "change_type": "modified",
+    "graph_version": "v1-v2-test",
+    "GlobalId": "0Czv28JAHDuepx33rj$YHL",
+    "top_k": [
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9974834046778505,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9974380719927489,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9973863372981406,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9973775000077653,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9973230478542903,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9972071574763242,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.997177893548227,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9971655204701144,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9971285272901114,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9970501951072357,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.997027125552489,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9969778821477171,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Size"
+  },
+  {
+    "Entity": "IfcColumn",
+    "change_type": "modified",
+    "graph_version": "v1-v2-test",
+    "GlobalId": "0Czv28JAHDuepx33rj$Y9H",
+    "top_k": [
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9987918986978959,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9987918986978959,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9984646407428188,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9984552644164485,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9981262945969862,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9980580257428746,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9980576933167304,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9980409353231808,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9980151996974227,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9980151996974227,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9980029660109411,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9980029660109411,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Rotation"
+  },
+  {
+    "Entity": "IfcWallStandardCase",
+    "change_type": "modified",
+    "graph_version": "v1-v2-test",
+    "GlobalId": "1_Of2cNtvD08yufwhq01Lb",
+    "top_k": [],
+    "predicted": "no_library_match"
+  },
+  {
+    "Entity": "IfcWallStandardCase",
+    "change_type": "modified",
+    "graph_version": "v1-v2-test",
+    "GlobalId": "1_Of2cNtvD08yufwhq02$P",
+    "top_k": [],
+    "predicted": "no_library_match"
+  },
+  {
+    "Entity": "IfcSpace",
+    "change_type": "modified",
+    "graph_version": "v1-v2-test",
+    "GlobalId": "2peUtgbOnEzB3L0UEmOh1d",
+    "top_k": [
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9813410594824181,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9622967450305372,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9622967450305372,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9622967450305372,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9622967450305372,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "TC"
+  },
+  {
+    "Entity": "IfcSpace",
+    "change_type": "modified",
+    "graph_version": "v1-v2-test",
+    "GlobalId": "2peUtgbOnEzB3L0UEmOh1a",
+    "top_k": [
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9718521494048951,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9644894542523512,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9617695449016737,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9506753649407431,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9506753649407431,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9506753649407431,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9506753649407431,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "TC"
+  },
+  {
+    "Entity": "IfcSpace",
+    "change_type": "modified",
+    "graph_version": "v1-v2-test",
+    "GlobalId": "2peUtgbOnEzB3L0UEmOh1f",
+    "top_k": [
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9846293336648264,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9753294886697992,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9683638543512647,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9634983886927884,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9606768151507099,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9606768151507099,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9606768151507099,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "TC"
+  },
+  {
+    "Entity": "IfcColumnType",
+    "change_type": "modified",
+    "graph_version": "v1-v2-test",
+    "GlobalId": "0Czv28JAHDuepx13rj$YHL",
+    "top_k": [],
+    "predicted": "no_library_match"
+  },
+  {
+    "Entity": "IfcColumn",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "0Czv28JAHDuepx33rj$YHL",
+    "top_k": [
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9973210048674287,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9973210048674287,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9965624623949585,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9965624623949585,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9963162480349215,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9963162480349215,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9963162480349215,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9959172194527932,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9959172194527932,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9942153362856385,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9933567097921483,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9933567097921483,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9933567097921483,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9925244937199201,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      }
+    ],
+    "predicted": "TC"
+  },
+  {
+    "Entity": "IfcColumn",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "0Ub9unpn5C8BOKVjRECdZ9",
+    "top_k": [
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.999500198609897,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9994879668069685,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9994400678956261,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9994400678956261,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9994280037411456,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9994140405678291,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9994053108101568,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.999376373739362,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9992659661878232,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9992568958191543,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9991438683889795,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9991268776249399,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9991268776249399,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9991176569143532,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9990979925015095,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Rotation"
+  },
+  {
+    "Entity": "IfcColumn",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "0Ub9unpn5C8BOKVjRECdXz",
+    "top_k": [
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9996167943540313,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9993618661533374,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9993559155080072,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9993404029381183,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9990050199252085,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.999003627431787,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9988623097412341,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9986762307602622,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9985536783846143,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9985530802364335,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.998523377542943,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9983554600604716,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.998258498361591,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.998152213593895,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9981062809752435,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Rotation"
+  },
+  {
+    "Entity": "IfcDoor",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "1PMKBbwxj4h9qpcKN2SQEz",
+    "top_k": [
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9886286849588897,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9866947076383534,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9866947076383534,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9865635300828307,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9863483095814392,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9853033740578273,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9850840564039787,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9848576339875206,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9845386427919343,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9839598494155799,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9836374146960385,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.98271740241457,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9805212109643968,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9800507058074789,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Rotation"
+  },
+  {
+    "Entity": "IfcDoor",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "1PMKBbwxj4h9qpcKN2SQDU",
+    "top_k": [
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9887224111058055,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9887224111058055,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9887224111058055,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9872996367876594,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9832911118040655,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9831473879776566,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9817432014377064,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9816966590899876,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9813125962796896,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9811188318110848,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9801490858924544,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9801490858924544,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Rotation"
+  },
+  {
+    "Entity": "IfcWallStandardCase",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "0Czv28JAHDuepx33rj$YVo",
+    "top_k": [
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9334968136955233,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.933136599633369,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9315338859562956,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9304943493976704,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9175039088586746,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9155573339414438,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9155367921764975,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9149084682727604,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9135687532678509,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9115895246005223,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Translation"
+  },
+  {
+    "Entity": "IfcWallStandardCase",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "0Czv28JAHDuepx33rj$YUn",
+    "top_k": [
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9254639947001715,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9239549383539369,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9239549383539369,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9236332147382225,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.923629620091563,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9233271283855276,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9232613656276554,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9232613656276554,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9230827810156087,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9194112058674357,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9190331921372761,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9184017700638927,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Rotation"
+  },
+  {
+    "Entity": "IfcWallStandardCase",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "0Czv28JAHDuepx33rj$iyh",
+    "top_k": [
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.950082364638303,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9492276757825664,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9484336163428623,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9462184630782271,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9457205315162842,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9455511779933758,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9455511779933758,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9454949147726492,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9454800156415148,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9454800156415148,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Rotation"
+  },
+  {
+    "Entity": "IfcWindow",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "1PMKBbwxj4h9qpcKN2SS1Y",
+    "top_k": [
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.997857946292625,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9906166158008839,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9856641918496921,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9817933153797568,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9805103283360685,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9801781738842394,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9790852840732853,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9785407478972008,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9785407478972008,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9777250939027777,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.977466807442905,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.977466807442905,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.97732262284611,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Rotation"
+  },
+  {
+    "Entity": "IfcWindow",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "2peUtgbOnEzB3L0UEmOhC3",
+    "top_k": [
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9936762405355121,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9883427730877188,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9741590566513165,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.974156313257172,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9734137798462588,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9714376625500902,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9694851346841777,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9691716486352263,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9671121771474036,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9671121771474036,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Translation"
+  },
+  {
+    "Entity": "IfcWindow",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "2peUtgbOnEzB3L0UEmOhEV",
+    "top_k": [
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.994757723316885,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9841965708563543,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9755347962246737,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9746293572577998,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9736658198168278,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9666202356736976,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9663045586831375,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9654920978271815,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9643690211281972,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9643690211281972,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Translation"
+  },
+  {
+    "Entity": "IfcOpeningElement",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "3iIrdOYEVMbVb3XYveO8Fv",
+    "top_k": [
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9982790956643262,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9959575630514338,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9763368486101205,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9725126361570133,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9721603630803649,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9692592791857637,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9623680370777333,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9469549413806171,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Translation"
+  },
+  {
+    "Entity": "IfcOpeningElement",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "25gnWDYVA3FCNbXczqmOKe",
+    "top_k": [
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.998272127099397,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9959482507713442,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9763397186665672,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9725644941137808,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9722115777298797,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9693008351323267,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9624115083730784,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9469630178928343,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Translation"
+  },
+  {
+    "Entity": "IfcOpeningElement",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "0He0wm6i$IeN07e_mSfcof",
+    "top_k": [
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.998973966887876,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9944942300330792,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.984511131901431,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9734135168443736,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9720739446187447,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.962984461581651,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9625819599048688,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.956483030012568,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9557673642290765,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Translation"
+  },
+  {
+    "Entity": "IfcOpeningElement",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "1CT6OJKI11R4pQZGeruxVY",
+    "top_k": [
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9987448098240765,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9730908525230277,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9700830601534198,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9671457482563679,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9641157417521671,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.964003700776141,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9554441370852763,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9528066768695009,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Translation"
+  },
+  {
+    "Entity": "IfcSpace",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "2peUtgbOnEzB3L0UEmOh1d",
+    "top_k": [
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9994148180100141,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9957817984989157,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9749917379370527,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9749917379370527,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9730003195114544,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9730003195114544,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWall",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation-2",
+        "score": 0.9697105000981352,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWall",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation-2",
+        "score": 0.9697105000981352,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWall",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation-2",
+        "score": 0.9697105000981352,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWall",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation-2",
+        "score": 0.9697105000981352,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWall",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation-2",
+        "score": 0.9697105000981352,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWall",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation-2",
+        "score": 0.9690184189450037,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWall",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation-2",
+        "score": 0.9690184189450037,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Translation"
+  },
+  {
+    "Entity": "IfcSpace",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "2peUtgbOnEzB3L0UEmOh1a",
+    "top_k": [
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9682044323302668,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9675399390007566,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.966346821494935,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9604555696976771,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size",
+        "score": 0.9487542001087015,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9455874821173029,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Size"
+  },
+  {
+    "Entity": "IfcColumnType",
+    "change_type": "modified",
+    "graph_version": "v2-v3-test",
+    "GlobalId": "0Czv28JAHDuepx13rj$YHL",
+    "top_k": [],
+    "predicted": "no_library_match"
+  },
+  {
+    "Entity": "IfcBeam",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "0Czv28JAHDuepx33rj$lAZ",
+    "top_k": [
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9624178520456321,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9618938177147865,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9618938177147865,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcStair",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.961027015808409
+      },
+      {
+        "EntityType": "IfcStair",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.961027015808409
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9604406652374962,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.959953412249412,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.959953412249412,
+        "label_info": "Geometry",
+        "label_info_material": "Material"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9595939627552373,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9595757229168318,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "TC"
+  },
+  {
+    "Entity": "IfcColumn",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "0Czv28JAHDuepx33rj$YHL",
+    "top_k": [
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9907848204830225,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9896413097112495,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9894302498295087,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9892851994625919,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9892093636792304,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9891964770562396,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9891383121943345,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.989119792175444,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9890042799173766,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9888493912551801,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Size"
+  },
+  {
+    "Entity": "IfcColumn",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "0Czv28JAHDuepx33rj$Y9H",
+    "top_k": [
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9971379912818997,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9970697777229507,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9970517300520667,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.996698278426072,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9966300903436764,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9966208365374516,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9962651392486713,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9962373109226834,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9961407478979545,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9960172424799701,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9959194038855519,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9954811959902166,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9953217286624974,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9952942122082833,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9951853767678687,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Rotation"
+  },
+  {
+    "Entity": "IfcColumn",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "0Ub9unpn5C8BOKVjRECdZ9",
+    "top_k": [
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9969560655850443,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9968816233198967,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9967077497706005,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9966788164319897,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9966592747218893,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9966456927822626,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9966456927822626,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9965958888059645,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9965958888059645,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9960017505874637,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9959654880024671,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Rotation"
+  },
+  {
+    "Entity": "IfcColumn",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "0Ub9unpn5C8BOKVjRECdXz",
+    "top_k": [
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9967909262882026,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9966342126616546,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9965809412019686,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9965267195511005,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9964178276812548,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9963735540628431,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9962419065996373,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9962262958310119,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.996223145746326,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9961854929484208,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9961775545975597,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Size"
+  },
+  {
+    "Entity": "IfcWallStandardCase",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "0Czv28JAHDuepx33rj$YVo",
+    "top_k": [
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size",
+        "score": 0.9557642256914605,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9458332665574768,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9443675437340522,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size",
+        "score": 0.9432822927444078,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Size"
+  },
+  {
+    "Entity": "IfcWallStandardCase",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "0Czv28JAHDuepx33rj$YUn",
+    "top_k": [
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9730174031139631,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.972938035715317,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.972866339639052,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9728491298515185,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.9728119846729442,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.972665196845452,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size-2",
+        "score": 0.972296737372571,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Size"
+  },
+  {
+    "Entity": "IfcWallStandardCase",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "0Czv28JAHDuepx33rj$iyh",
+    "top_k": [],
+    "predicted": "no_library_match"
+  },
+  {
+    "Entity": "IfcWallStandardCase",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "0Czv28JAHDuepx33rj$lK6",
+    "top_k": [],
+    "predicted": "no_library_match"
+  },
+  {
+    "Entity": "IfcWallStandardCase",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "1PMKBbwxj4h9qpcKN2SRRD",
+    "top_k": [],
+    "predicted": "no_library_match"
+  },
+  {
+    "Entity": "IfcWallStandardCase",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "1PMKBbwxj4h9qpcKN2SRQH",
+    "top_k": [],
+    "predicted": "no_library_match"
+  },
+  {
+    "Entity": "IfcWallStandardCase",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "1PMKBbwxj4h9qpcKN2SRPp",
+    "top_k": [],
+    "predicted": "no_library_match"
+  },
+  {
+    "Entity": "IfcWindow",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "07CEJ4wWD2hhOq8ppwgL78",
+    "top_k": [
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9523141781229515,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9465612014706702,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9448582113232538,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9448582113232538,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9447553511613613,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation-2",
+        "score": 0.9447553511613613,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9445901608254985,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Rotation",
+        "graph_type": "rotation",
+        "score": 0.9442995183291307,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Rotation"
+  },
+  {
+    "Entity": "IfcFlowTerminal",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "1PMKBbwxj4h9qpcKN2SQB_",
+    "top_k": [
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9611476623623467,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9540153126407103,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9527656891257017,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9515482062428298,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9480274989998998,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcRailing",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9462657889754584,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcStairFlight",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9455341012691936,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9434766237844197,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9394957324754207,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Translation"
+  },
+  {
+    "Entity": "IfcFlowTerminal",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "1PMKBbwxj4h9qpcKN2SQ9K",
+    "top_k": [
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9611574396626155,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9540154576116973,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcWindow",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9527754955613101,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9515376233718181,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9480164988278438,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcRailing",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9462651088835814,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcStairFlight",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9455119925959288,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcDoor",
+        "change_type": "modified",
+        "label": "Translation",
+        "graph_type": "translation",
+        "score": 0.9434659347135523,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9394804047823802,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Translation"
+  },
+  {
+    "Entity": "IfcOpeningElement",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "0JocLfQId8mr6ZYPl0MoYl",
+    "top_k": [
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.985589918425164,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9847847862427882,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9830122118149309,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9830122118149309,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.982858134488817,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9822912394821721,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9820445134512472,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "TC"
+  },
+  {
+    "Entity": "IfcSpace",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "2peUtgbOnEzB3L0UEmOh1T",
+    "top_k": [
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.981379081232842,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9607867543387751,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9607867543387751,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9607867543387751,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9607867543387751,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "TC"
+  },
+  {
+    "Entity": "IfcSpace",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "2peUtgbOnEzB3L0UEmOh1d",
+    "top_k": [
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9801921495408852,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.971181013663081,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9610531652728682,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9599061790929047,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9531707447375972,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.947087304542233,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9451728969273696,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Size"
+  },
+  {
+    "Entity": "IfcSpace",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "2peUtgbOnEzB3L0UEmOh1p",
+    "top_k": [
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9545862389762951,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.954453725273529,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.952281381232972,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9394692980279828,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size",
+        "score": 0.9387396773775638,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9364830570434952,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Size"
+  },
+  {
+    "Entity": "IfcSpace",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "2peUtgbOnEzB3L0UEmOh1m",
+    "top_k": [
+      {
+        "EntityType": "IfcWall",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size",
+        "score": 0.949625334814445,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9318084714877116,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size",
+        "score": 0.9290546968583442,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size",
+        "score": 0.920041058307836,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9172610110134201,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9162300299893623,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Size"
+  },
+  {
+    "Entity": "IfcSpace",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "2peUtgbOnEzB3L0UEmOh1w",
+    "top_k": [
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9650533647314574,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9649736778538862,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9634981682006336,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcOpeningElement",
+        "change_type": "modified",
+        "label": "TC",
+        "graph_type": "tc",
+        "score": 0.9559411223259426,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcColumn",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "size",
+        "score": 0.9488744467149643,
+        "label_info": "Geometry"
+      },
+      {
+        "EntityType": "IfcSpace",
+        "change_type": "modified",
+        "label": "Size",
+        "graph_type": "room-size",
+        "score": 0.9472266558594689,
+        "label_info": "Geometry"
+      }
+    ],
+    "predicted": "Size"
+  },
+  {
+    "Entity": "IfcColumnType",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "0Czv28JAHDuepx13rj$YHL",
+    "top_k": [],
+    "predicted": "no_library_match"
+  },
+  {
+    "Entity": "IfcColumnType",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "0Ub9unpn5C8BOKTjRECdZ9",
+    "top_k": [],
+    "predicted": "no_library_match"
+  },
+  {
+    "Entity": "IfcColumnType",
+    "change_type": "modified",
+    "graph_version": "v3-v4-test",
+    "GlobalId": "0Ub9unpn5C8BOKTjRECdXz",
+    "top_k": [],
+    "predicted": "no_library_match"
+  }
+]

@@ -53,6 +53,31 @@ class KNN:
         print(result)
         return result
     
+    def run_knn_filtered_one_hot(self):
+        print("########## Running KNN ##########")
+        train_query = """
+        CALL gds.knn.filtered.stream('knn_one_hot', {
+            nodeLabels: ['PrimaryNode'],
+            topK: 15,
+            nodeProperties: {
+                graphsage_embedding_one_hot: 'COSINE'
+            },
+            randomSeed: 42,
+            concurrency: 1,
+            sampleRate: 1.0,
+            deltaThreshold: 0.0
+        })
+        YIELD node1, node2, similarity
+        RETURN gds.util.asNode(node1).EntityType AS node1Type,
+        gds.util.asNode(node2).EntityType AS node2Type,
+        similarity
+        ORDER BY similarity DESC
+        LIMIT 50
+        """
+        result, meta = self.db.cypher_query(train_query)
+        print(result)
+        return result
+    
     def run_cluster_stream(self):
         stream_query = """
         CALL gds.kmeans.stream('knn', {
@@ -180,6 +205,33 @@ class KNN:
     
         return result
     
+    def write_similarity_one_hot(self):
+        """
+        Generate GraphSAGE embeddings and write them back to nodes
+        """
+    
+        print("########## Write similar rel ##########")
+        write_query = """
+        CALL gds.knn.write('knn_one_hot', {
+            topK: 15,
+            nodeProperties: ['graphsage_embedding_one_hot'],
+            writeRelationshipType: 'SIMILAR',
+            writeProperty: 'score',
+            randomSeed: 42,
+            concurrency: 1,
+            sampleRate: 1.0,
+            deltaThreshold: 0.0
+        })
+        YIELD nodesCompared, relationshipsWritten, similarityDistribution
+        RETURN nodesCompared, relationshipsWritten, similarityDistribution.mean AS meanSimilarity
+        """
+    
+        result, meta = self.db.cypher_query(write_query)
+        print(result)
+    
+        return result
+    
+    
             
     
     def projection_query_knn(self):
@@ -272,7 +324,7 @@ class KNN:
             YIELD exists
             WITH exists
             WHERE exists
-            CALL gds.graph.drop('knn_no_entity')
+            CALL gds.graph.drop('{graph_name}')
             YIELD graphName
             RETURN graphName
         """

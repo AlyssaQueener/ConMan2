@@ -27,11 +27,27 @@ models_Original = [
         "label": "Translation"
     },
     {
+        "path_init": "src/07_VersionWithLabel/base-translation-2.ifc",
+        "timestamp_init": "v1-translation-2",
+        "path_updt": "src/07_VersionWithLabel/translated-2.ifc",
+        "timestamp_updt": "v2-translation-2",
+        "graph_type": "translation-2",
+        "label": "Translation"
+    },
+    {
         "path_init": "src/07_VersionWithLabel/rotation-base.ifc",
         "timestamp_init": "v1-rotation",
         "path_updt": "src/07_VersionWithLabel/rotated1.ifc",
         "timestamp_updt": "v2-rotation",
         "graph_type": "rotation",
+        "label": "Rotation"
+    },
+    {
+        "path_init": "src/07_VersionWithLabel/base-rotation-2.ifc",
+        "timestamp_init": "v1-rotation-2",
+        "path_updt": "src/07_VersionWithLabel/rotation-2.ifc",
+        "timestamp_updt": "v2-rotation-2",
+        "graph_type": "rotation-2",
         "label": "Rotation"
     },
     {
@@ -41,10 +57,7 @@ models_Original = [
         "timestamp_updt": "v2-size",
         "graph_type": "size",
         "label": "Size"
-    }
-]
-
-models= [
+    },
     {
         "path_init": "src/07_VersionWithLabel/base-size-2.ifc",
         "timestamp_init": "v1-size-2",
@@ -52,10 +65,20 @@ models= [
         "timestamp_updt": "v2-size-2",
         "graph_type": "size-2",
         "label": "Size"
+    },
+    {
+        "path_init": "src/07_VersionWithLabel/base-room-size.ifc",
+        "timestamp_init": "v1-size-room",
+        "path_updt": "src/07_VersionWithLabel/room-size.ifc",
+        "timestamp_updt": "v2-size-room",
+        "graph_type": "room-size",
+        "label": "Size"
     }
 ]
 
-for m in models:
+
+
+for m in models_Original:
     path_init = m["path_init"]
     timestamp_init = m["timestamp_init"]
     path_updt = m["path_updt"]

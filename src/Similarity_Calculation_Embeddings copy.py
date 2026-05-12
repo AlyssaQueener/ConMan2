@@ -3,6 +3,8 @@ from neo4j_core.neo4j_model import *
 from operator import add
 
 import json
+db = Neo4jConnection(username="neo4j", password="password", hostname="localhost", port=7687)
+
 
 change_library = ["tc", "rotation", "translation", "size", "rotation-2","size-2","room-size","translation-2"]
 test_versions = ["v1-v2-test", "v2-v3-test", "v3-v4-test"]
@@ -50,7 +52,7 @@ for version in test_versions:
         
         all_results.append(modified_node)
 
-with open("knn_classification_results.json", "w") as f:
+with open("knn_classification_results_no-entity-second-rund.json", "w") as f:
     json.dump(all_results, f, indent=2, default=str)
 
 print(f"Wrote {len(all_results)} results to knn_classification_results.json")
